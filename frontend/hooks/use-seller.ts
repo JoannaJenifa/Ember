@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { Seller, getSeller, isVerifiedSeller, isRegisteredSeller } from '@/lib/ember/queries';
+import { Seller, getSeller, isRegisteredSeller } from '@/lib/ember/queries';
 import { Product, getSellerProductsFull } from '@/lib/ember/product-queries';
 
 interface UseSellerReturn {
@@ -97,11 +97,9 @@ export function useIsVerifiedSeller(address: string | null): UseIsVerifiedSeller
     const check = async () => {
       setLoading(true);
       try {
-        const [verified, registered] = await Promise.all([
-          isVerifiedSeller(address),
-          isRegisteredSeller(address),
-        ]);
-        setIsVerified(verified);
+        const registered = await isRegisteredSeller(address);
+        // For hackathon: skip verification, treat registered as verified
+        setIsVerified(registered);
         setIsRegistered(registered);
       } finally {
         setLoading(false);

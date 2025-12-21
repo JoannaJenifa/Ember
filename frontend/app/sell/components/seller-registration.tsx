@@ -13,10 +13,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Loader2, Store } from 'lucide-react';
+import { Loader2, Store, ExternalLink } from 'lucide-react';
 import { toast } from 'sonner';
 import { useWalletContext } from '@/hooks/use-wallet-context';
 import { registerSeller } from '@/lib/ember/seller-transactions';
+import { getExplorerUrl } from '@/lib/aptos';
 
 const CATEGORIES = [
   { value: 0, label: 'Fashion & Apparel' },
@@ -64,8 +65,14 @@ export function SellerRegistration({ walletAddress }: SellerRegistrationProps) {
           signAndSubmitTransaction: signAndSubmitTransaction || undefined,
         }
       );
-      toast.success('Registration submitted successfully!');
-      window.location.reload();
+      toast.success('Registration submitted successfully!', {
+        action: {
+          label: 'View Tx',
+          onClick: () => window.open(getExplorerUrl(txHash), '_blank'),
+        },
+        duration: 5000,
+      });
+      setTimeout(() => window.location.reload(), 2000);
     } catch (err) {
       console.error('Registration failed:', err);
       toast.error(err instanceof Error ? err.message : 'Registration failed');
