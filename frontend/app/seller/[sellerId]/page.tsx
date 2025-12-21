@@ -99,15 +99,37 @@ export default function SellerPage({ params }: SellerPageProps) {
   return (
     <div className="min-h-[calc(100vh-64px)] bg-background">
       {/* Banner */}
-      <div className="h-32 md:h-48 bg-gradient-to-r from-ember/30 to-ember/10" />
+      {seller.coverImage ? (
+        <div className="h-32 md:h-48 relative">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={seller.coverImage}
+            alt="Cover"
+            className="w-full h-full object-cover"
+          />
+        </div>
+      ) : (
+        <div className="h-32 md:h-48 bg-gradient-to-r from-ember/30 to-ember/10" />
+      )}
 
       {/* Profile Header */}
       <div className="max-w-4xl mx-auto px-6">
         <div className="flex flex-col md:flex-row md:items-end gap-4 -mt-12 mb-8">
           <div className="flex-shrink-0">
-            <div className="w-24 h-24 md:w-32 md:h-32 rounded-full bg-ember/10 border-4 border-background flex items-center justify-center">
-              <Store className="h-12 w-12 text-ember" />
-            </div>
+            {seller.profileImage ? (
+              <div className="w-24 h-24 md:w-32 md:h-32 rounded-full border-4 border-background overflow-hidden">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={seller.profileImage}
+                  alt={seller.shopName}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            ) : (
+              <div className="w-24 h-24 md:w-32 md:h-32 rounded-full bg-ember/10 border-4 border-background flex items-center justify-center">
+                <Store className="h-12 w-12 text-ember" />
+              </div>
+            )}
           </div>
 
           <div className="flex-1 pt-16 md:pt-20">
