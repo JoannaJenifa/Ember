@@ -24,7 +24,7 @@ interface TipFormProps {
 
 export function TipForm({ streamerAddress, onSuccess, className }: TipFormProps) {
   const [amount, setAmount] = useState<string>('0.1');
-  const [message, setMessage] = useState('Great stream! Keep up the awesome content!');
+  const [message, setMessage] = useState('Love your skincare tutorials! Your tips always work wonders!');
   const [isLoading, setIsLoading] = useState(false);
 
   const { walletAddress, isConnected, isPrivy, publicKeyHex, signAndSubmitTransaction } = useWalletContext();

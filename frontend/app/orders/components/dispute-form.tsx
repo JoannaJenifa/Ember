@@ -43,7 +43,7 @@ export function DisputeForm({ orderId, onClose, onSuccess }: DisputeFormProps) {
   const { walletAddress, isPrivy, publicKeyHex, signAndSubmitTransaction } = useWalletContext();
   const [loading, setLoading] = useState(false);
   const [reason, setReason] = useState('not_as_described');
-  const [description, setDescription] = useState('The product I received does not match the description. The color is different from what was shown in the listing.');
+  const [description, setDescription] = useState('The serum I received has a different consistency than shown in the demo. It seems thinner and the scent is different from what was described.');
 
   const handleSubmit = async () => {
     if (!walletAddress) return;

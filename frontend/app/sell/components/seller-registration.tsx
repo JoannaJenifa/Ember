@@ -39,12 +39,12 @@ export function SellerRegistration({ walletAddress }: SellerRegistrationProps) {
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [formData, setFormData] = useState({
-    shopName: 'Ember Demo Store',
-    description: 'Premium quality products for live commerce enthusiasts. Fast shipping and great customer service!',
+    shopName: 'Glow Beauty Studio',
+    description: 'Your destination for premium Korean skincare and makeup. Cruelty-free, dermatologist-tested products for radiant skin.',
     profileImage: '',
     coverImage: '',
-    category: '3',
-    youtubeChannel: 'https://youtube.com/@emberdemo',
+    category: '1',
+    youtubeChannel: 'https://youtube.com/@glowbeautystudio',
   });
 
   const handleSubmit = async (e: React.FormEvent) => {

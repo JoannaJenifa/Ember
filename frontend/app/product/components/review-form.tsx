@@ -25,7 +25,7 @@ export function ReviewForm({ productId, sellerAddress, onSuccess }: ReviewFormPr
   const { account, signAndSubmitTransaction, connected } = useWallet();
   const [rating, setRating] = useState(5);
   const [hoverRating, setHoverRating] = useState(0);
-  const [content, setContent] = useState('Amazing product! Fast delivery and exactly as described. Highly recommend this seller!');
+  const [content, setContent] = useState('My skin has never looked better! The serum absorbs quickly and leaves my face so hydrated and glowy. Will definitely repurchase!');
   const [loading, setLoading] = useState(false);
   const [eligibleOrderId, setEligibleOrderId] = useState<number | null>(null);
 

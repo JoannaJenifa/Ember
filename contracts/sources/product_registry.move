@@ -83,7 +83,7 @@ module ember::product_registry {
         });
     }
 
-    /// Create a new product (verified sellers only)
+    /// Create a new product (registered sellers only - hackathon: skip verification)
     public entry fun create_product(
         seller: &signer,
         title: String,
@@ -94,7 +94,7 @@ module ember::product_registry {
         category: u8,
     ) acquires ProductRegistry {
         let seller_addr = signer::address_of(seller);
-        assert!(seller_registry::is_verified_seller(seller_addr),
+        assert!(seller_registry::is_registered_seller(seller_addr),
             errors::seller_not_verified());
         assert!(price > 0, errors::invalid_price());
 

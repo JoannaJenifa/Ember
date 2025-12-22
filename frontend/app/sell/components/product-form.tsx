@@ -43,12 +43,12 @@ export function ProductForm({ sellerAddress, productId, onCancel, onSuccess }: P
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [formData, setFormData] = useState({
-    title: 'Wireless Gaming Headset Pro',
-    description: 'Premium wireless headset with active noise cancellation, 40-hour battery life, and crystal-clear audio for gaming and music.',
+    title: 'Hydrating Rose Serum',
+    description: 'Luxurious hydrating serum with Bulgarian rose extract and hyaluronic acid. Deeply nourishes skin for a dewy, glass-skin glow. Suitable for all skin types.',
     imageUrl: '',
-    price: '2.5',
-    inventory: '50',
-    category: '3',
+    price: '0.5',
+    inventory: '100',
+    category: '1',
   });
 
   const isEditing = productId !== null;
