@@ -82,7 +82,7 @@ export function ActivityFeed({
   };
 
   const formatAddress = (addr: string) => `${addr.slice(0, 6)}...${addr.slice(-4)}`;
-  const formatAmount = (amount: number) => (amount / 1e8).toFixed(2);
+  const formatAmount = (amount: number) => (amount / 1e6).toFixed(2);
   const formatTime = (timestamp: number) => {
     const date = new Date(timestamp * 1000);
     const now = new Date();
@@ -146,7 +146,7 @@ function ActivityRow({ activity }: { activity: ActivityItem }) {
   const iconColor = isPurchase ? 'text-green-500' : isTip ? 'text-pink-500' : 'text-amber-500';
 
   const formatAddress = (addr: string) => `${addr.slice(0, 6)}...${addr.slice(-4)}`;
-  const formatAmount = (amount: number) => (amount / 1e8).toFixed(2);
+  const formatAmount = (amount: number) => (amount / 1e6).toFixed(2);
   const formatTime = (timestamp: number) => {
     const diff = (Date.now() / 1000 - timestamp);
     if (diff < 60) return 'now';
@@ -164,7 +164,7 @@ function ActivityRow({ activity }: { activity: ActivityItem }) {
           <span className="text-muted-foreground">sent</span>
           {isTip && (
             <Badge variant="outline" className="text-xs">
-              {formatAmount(activity.amount || 0)} MOVE
+              ${formatAmount(activity.amount || 0)}
             </Badge>
           )}
           {isGift && activity.giftType !== undefined && (

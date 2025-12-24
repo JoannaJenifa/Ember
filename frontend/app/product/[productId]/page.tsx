@@ -56,7 +56,7 @@ export default function ProductDetailPage({ params }: PageProps) {
     fetchData();
   }, [productId, t]);
 
-  const formatPrice = (price: number) => (price / 1e8).toFixed(4);
+  const formatPrice = (price: number) => (price / 1e6).toFixed(2);
 
   const avgRating = product && product.ratingCount > 0
     ? product.ratingSum / product.ratingCount
@@ -116,8 +116,7 @@ export default function ProductDetailPage({ params }: PageProps) {
             </div>
 
             <div className="flex items-baseline gap-2">
-              <span className="text-3xl font-bold text-ember">{formatPrice(product.price)}</span>
-              <span className="text-lg text-muted-foreground">MOVE</span>
+              <span className="text-3xl font-bold text-ember">${formatPrice(product.price)}</span>
             </div>
 
             {seller && (

@@ -29,7 +29,7 @@ export function GiftSelector({ streamerAddress, onSuccess, className }: GiftSele
   const isPrivyAvailable = usePrivyAvailable();
   const privyHook = isPrivyAvailable ? usePrivy() : null;
 
-  const formatPrice = (price: number) => (price / 1e8).toFixed(0);
+  const formatPrice = (price: number) => (price / 1e6).toFixed(0);
 
   const selectedPrice = selectedGift !== null ? prices[selectedGift]?.price || 0 : 0;
   const totalCost = selectedPrice * quantity;
@@ -172,7 +172,7 @@ export function GiftSelector({ streamerAddress, onSuccess, className }: GiftSele
                 <div className="flex items-center justify-between mb-3">
                   <span className="text-sm text-muted-foreground">Total</span>
                   <span className="font-bold text-ember">
-                    {formatPrice(totalCost)} MOVE
+                    ${formatPrice(totalCost)}
                   </span>
                 </div>
                 <Button

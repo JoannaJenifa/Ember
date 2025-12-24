@@ -24,7 +24,7 @@ export function ProductOverlay({ products, onBuy, className }: ProductOverlayPro
   const hasMore = products.length > 3;
 
   const formatPrice = (price: number) => {
-    return (price / 1e8).toFixed(2);
+    return (price / 1e6).toFixed(2);
   };
 
   const handleProductClick = (product: Product) => {
@@ -60,7 +60,7 @@ export function ProductOverlay({ products, onBuy, className }: ProductOverlayPro
                 />
               </div>
               <p className="text-xs font-medium truncate">{product.title}</p>
-              <p className="text-xs text-ember font-bold">{formatPrice(product.price)} MOVE</p>
+              <p className="text-xs text-ember font-bold">${formatPrice(product.price)}</p>
             </Card>
           ))}
           {hasMore && (
@@ -106,7 +106,7 @@ export function ProductOverlay({ products, onBuy, className }: ProductOverlayPro
                 </div>
                 <p className="text-sm font-medium truncate">{product.title}</p>
                 <div className="flex items-center justify-between mt-1">
-                  <p className="text-sm text-ember font-bold">{formatPrice(product.price)} MOVE</p>
+                  <p className="text-sm text-ember font-bold">${formatPrice(product.price)}</p>
                   {product.inventory < 10 && (
                     <Badge variant="outline" className="text-xs">Low stock</Badge>
                   )}
@@ -140,7 +140,7 @@ export function ProductOverlay({ products, onBuy, className }: ProductOverlayPro
                       {selectedProduct.description}
                     </p>
                     <p className="text-lg text-ember font-bold mt-1">
-                      {formatPrice(selectedProduct.price)} MOVE
+                      ${formatPrice(selectedProduct.price)}
                     </p>
                   </div>
                 </div>
@@ -179,7 +179,7 @@ export function ProductOverlay({ products, onBuy, className }: ProductOverlayPro
                   <div className="flex items-center justify-between mb-4">
                     <span className="font-medium">Total</span>
                     <span className="text-xl font-bold text-ember">
-                      {formatPrice(selectedProduct.price * quantity)} MOVE
+                      ${formatPrice(selectedProduct.price * quantity)}
                     </span>
                   </div>
                   <Button className="w-full" onClick={handleBuy}>

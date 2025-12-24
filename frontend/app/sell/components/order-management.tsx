@@ -25,7 +25,7 @@ import { toast } from 'sonner';
 import { useSellerOrders } from '@/hooks/use-orders';
 import { useWalletContext } from '@/hooks/use-wallet-context';
 import { markShipped } from '@/lib/ember/order-transactions';
-import { formatMoveAmount } from '@/lib/aptos';
+import { formatUsdcAmount } from '@/lib/aptos';
 import { OrderStatus } from '@/lib/ember/order-queries';
 
 const STATUS_CONFIG = {
@@ -140,7 +140,7 @@ export function OrderManagement({ sellerAddress }: OrderManagementProps) {
                     </div>
                     <div className="flex items-center gap-3">
                       <span className="text-ember font-semibold">
-                        {formatMoveAmount(order.totalPrice)} MOVE
+                        ${formatUsdcAmount(order.totalPrice)}
                       </span>
                       {isExpanded ? (
                         <ChevronUp className="h-4 w-4 text-muted-foreground" />

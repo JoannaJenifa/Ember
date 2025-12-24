@@ -26,7 +26,7 @@ import { TipForm } from '@/app/live/components/tip-form';
 import { GiftSelector } from '@/app/live/components/gift-selector';
 import { useStream } from '@/lib/hooks/use-stream';
 import { useWalletContext } from '@/hooks/use-wallet-context';
-import { formatMoveAmount } from '@/lib/aptos';
+import { formatUsdcAmount } from '@/lib/aptos';
 import { Product } from '@/lib/ember/product-queries';
 
 interface StreamPageProps {
@@ -304,7 +304,7 @@ function ProductItem({
       <div className="flex-1 min-w-0">
         <p className="text-sm font-medium line-clamp-1">{product.title}</p>
         <p className="text-sm font-bold text-ember">
-          {formatMoveAmount(product.price)} <span className="text-xs font-normal">MOVE</span>
+          ${formatUsdcAmount(product.price)}
         </p>
       </div>
       <Button

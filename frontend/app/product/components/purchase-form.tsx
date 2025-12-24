@@ -25,7 +25,7 @@ export function PurchaseForm({ product }: PurchaseFormProps) {
   const [loading, setLoading] = useState(false);
   const [showForm, setShowForm] = useState(false);
 
-  const totalPrice = (product.price * quantity) / 1e8;
+  const totalPrice = (product.price * quantity) / 1e6;
   const maxQuantity = Math.min(product.inventory, 10);
 
   const handleQuantityChange = (delta: number) => {
@@ -142,7 +142,7 @@ export function PurchaseForm({ product }: PurchaseFormProps) {
 
       <div className="flex items-baseline justify-between pt-2 border-t border-border">
         <span className="text-muted-foreground">{t('order.total')}:</span>
-        <span className="text-2xl font-bold text-ember">{totalPrice.toFixed(4)} MOVE</span>
+        <span className="text-2xl font-bold text-ember">${totalPrice.toFixed(2)}</span>
       </div>
 
       <div className="flex gap-2">

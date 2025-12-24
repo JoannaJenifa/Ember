@@ -68,7 +68,7 @@ export function TipForm({ streamerAddress, onSuccess, className }: TipFormProps)
 
       toast.dismiss(loadingToast);
       toast.success('Tip sent!', {
-        description: `${amountNum} MOVE sent successfully`,
+        description: `$${amountNum} sent successfully`,
         action: {
           label: 'View TX',
           onClick: () => window.open(`https://explorer.movementnetwork.xyz/txn/${txHash}`, '_blank'),
@@ -117,7 +117,7 @@ export function TipForm({ streamerAddress, onSuccess, className }: TipFormProps)
                 size="sm"
                 onClick={() => handlePresetClick(preset)}
               >
-                {preset} MOVE
+                ${preset}
               </Button>
             ))}
           </div>
@@ -149,7 +149,7 @@ export function TipForm({ streamerAddress, onSuccess, className }: TipFormProps)
           ) : (
             <Send className="h-4 w-4 mr-2" />
           )}
-          Send {amount ? `${amount} MOVE` : 'Tip'}
+          Send {amount ? `$${amount}` : 'Tip'}
         </Button>
       </form>
     </Card>
