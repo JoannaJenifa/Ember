@@ -1538,6 +1538,8 @@ export type Database = {
           id: string
           is_seller: boolean | null
           message: string
+          message_type: string | null
+          metadata: Json | null
           sender_address: string
           sender_name: string | null
           stream_id: string
@@ -1547,6 +1549,8 @@ export type Database = {
           id?: string
           is_seller?: boolean | null
           message: string
+          message_type?: string | null
+          metadata?: Json | null
           sender_address: string
           sender_name?: string | null
           stream_id: string
@@ -1556,6 +1560,8 @@ export type Database = {
           id?: string
           is_seller?: boolean | null
           message?: string
+          message_type?: string | null
+          metadata?: Json | null
           sender_address?: string
           sender_name?: string | null
           stream_id?: string
