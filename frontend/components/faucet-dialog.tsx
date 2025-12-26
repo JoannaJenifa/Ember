@@ -224,22 +224,6 @@ function MintForm({
           </>
         )}
       </Button>
-
-      {/* Native MOVE Faucet Link */}
-      <div className="pt-2 border-t">
-        <p className="text-xs text-muted-foreground mb-2">
-          {t('faucet.needGas')}
-        </p>
-        <a
-          href="https://faucet.movementnetwork.xyz/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-1 text-sm text-primary hover:underline"
-        >
-          {t('faucet.getMove')}
-          <ExternalLink className="h-3 w-3" />
-        </a>
-      </div>
     </div>
   );
 }
