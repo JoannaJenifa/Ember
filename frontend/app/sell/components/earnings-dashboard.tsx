@@ -171,12 +171,6 @@ export function EarningsDashboard({ sellerAddress }: EarningsDashboardProps) {
               <p className="text-muted-foreground">Total Reviews</p>
               <p className="text-lg font-bold text-foreground">{seller.ratingCount}</p>
             </div>
-            <div>
-              <p className="text-muted-foreground">Member Since</p>
-              <p className="text-lg font-bold text-foreground">
-                {new Date(seller.createdAt * 1000).toLocaleDateString()}
-              </p>
-            </div>
           </div>
         </Card>
       )}
