@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { StreamWithSeller } from '@/lib/types/stream'
 import { getSeller } from '@/lib/ember/queries'
+import { PRODUCT_CATEGORIES } from '@/lib/types/product'
 
 interface SupabaseStream {
   id: string
@@ -56,7 +57,7 @@ export function useLiveStreams(category?: string) {
               total_orders: Number(seller.totalOrders),
               created_at: stream.created_at,
             } : null,
-            category: seller?.category?.toString(),
+            category: seller?.category !== undefined ? PRODUCT_CATEGORIES[seller.category] : undefined,
           }
         })
       )
