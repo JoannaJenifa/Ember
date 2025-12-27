@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Send, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { sendChatMessage } from '@/lib/supabase';
 
 interface ChatInputProps {
   streamId: string;
@@ -39,13 +38,16 @@ export function ChatInput({
 
     setIsSending(true);
     try {
-      await sendChatMessage(
-        streamId,
-        userAddress,
-        username || null,
-        trimmedMessage,
-        isSeller
-      );
+      await fetch(`/api/streams/${streamId}/chat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          sender_address: userAddress,
+          sender_name: username || null,
+          message: trimmedMessage,
+          is_seller: isSeller,
+        }),
+      });
       setMessage('');
     } catch (error) {
       console.error('Failed to send message:', error);

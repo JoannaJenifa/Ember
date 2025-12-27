@@ -1,24 +1,19 @@
 'use client';
 
-import { useEffect, useRef, useState, memo } from 'react';
+import { useEffect, useRef, useState, useCallback, memo } from 'react';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { MessageCircle, Crown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import {
-  getChatMessages,
-  subscribeToChat,
-  ChatMessage as SupabaseChatMessage,
-} from '@/lib/supabase';
 
-export interface ChatMessage {
+interface ChatMessage {
   id: string;
-  senderAddress: string;
-  senderName: string | null;
+  sender_address: string;
+  sender_name: string | null;
   message: string;
-  isSeller: boolean;
-  createdAt: Date;
+  is_seller: boolean;
+  created_at: string;
 }
 
 interface StreamChatProps {
@@ -26,35 +21,60 @@ interface StreamChatProps {
   className?: string;
 }
 
+const POLL_INTERVAL = 3000; // Poll every 3 seconds
+
 export function StreamChat({ streamId, className }: StreamChatProps) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isConnected, setIsConnected] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const lastMessageIdRef = useRef<string | null>(null);
 
-  // Fetch initial messages and subscribe to realtime
-  useEffect(() => {
-    let subscription: ReturnType<typeof subscribeToChat> | null = null;
+  const fetchMessages = useCallback(async (since?: string) => {
+    try {
+      const url = since
+        ? `/api/streams/${streamId}/chat?since=${since}`
+        : `/api/streams/${streamId}/chat?limit=100`;
 
-    async function init() {
-      // Fetch existing messages
-      const existingMessages = await getChatMessages(streamId);
-      setMessages(existingMessages.map(mapToMessage));
-      setIsConnected(true);
+      const res = await fetch(url);
+      if (!res.ok) return;
 
-      // Subscribe to new messages
-      subscription = subscribeToChat(streamId, (newMessage) => {
-        setMessages((prev) => [...prev, mapToMessage(newMessage)]);
-      });
-    }
+      const data = await res.json();
+      const newMessages: ChatMessage[] = data.messages || [];
 
-    init();
-
-    return () => {
-      if (subscription) {
-        subscription.unsubscribe();
+      if (since && newMessages.length > 0) {
+        // Append new messages
+        setMessages((prev) => [...prev, ...newMessages]);
+        lastMessageIdRef.current = newMessages[newMessages.length - 1].id;
+      } else if (!since) {
+        // Initial load
+        setMessages(newMessages);
+        if (newMessages.length > 0) {
+          lastMessageIdRef.current = newMessages[newMessages.length - 1].id;
+        }
       }
-    };
+
+      setIsConnected(true);
+    } catch (error) {
+      console.error('Failed to fetch messages:', error);
+      setIsConnected(false);
+    }
   }, [streamId]);
+
+  // Initial fetch
+  useEffect(() => {
+    fetchMessages();
+  }, [fetchMessages]);
+
+  // Polling for new messages
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (lastMessageIdRef.current) {
+        fetchMessages(lastMessageIdRef.current);
+      }
+    }, POLL_INTERVAL);
+
+    return () => clearInterval(interval);
+  }, [fetchMessages]);
 
   // Auto-scroll to bottom on new messages
   useEffect(() => {
@@ -97,23 +117,23 @@ const ChatMessageItem = memo(function ChatMessageItem({
 }: {
   message: ChatMessage;
 }) {
-  const displayName = message.senderName || maskAddress(message.senderAddress);
+  const displayName = message.sender_name || maskAddress(message.sender_address);
 
   return (
     <div className="flex gap-2 text-sm">
       <div className="flex items-center gap-1 shrink-0">
-        {message.isSeller && (
+        {message.is_seller && (
           <Crown className="h-3 w-3 text-amber-500" />
         )}
         <span
           className={cn(
             'font-medium',
-            message.isSeller ? 'text-amber-500' : 'text-ember'
+            message.is_seller ? 'text-amber-500' : 'text-ember'
           )}
         >
           {displayName}
         </span>
-        {message.isSeller && (
+        {message.is_seller && (
           <Badge variant="outline" className="text-[10px] px-1 py-0 text-amber-500 border-amber-500">
             Seller
           </Badge>
@@ -123,17 +143,6 @@ const ChatMessageItem = memo(function ChatMessageItem({
     </div>
   );
 });
-
-function mapToMessage(row: SupabaseChatMessage): ChatMessage {
-  return {
-    id: row.id,
-    senderAddress: row.sender_address,
-    senderName: row.sender_name,
-    message: row.message,
-    isSeller: row.is_seller,
-    createdAt: new Date(row.created_at),
-  };
-}
 
 function maskAddress(address: string): string {
   if (!address || address.length < 10) return address;

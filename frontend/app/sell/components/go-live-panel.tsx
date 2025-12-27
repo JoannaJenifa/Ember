@@ -10,13 +10,14 @@ import { Video, Copy, ExternalLink, Package, CheckCircle, Loader2 } from 'lucide
 import { toast } from 'sonner';
 import { useSellerProducts } from '@/hooks/use-seller';
 import { formatMoveAmount } from '@/lib/aptos';
-import {
-  createStream,
-  endStream,
-  getActiveStream,
-  updateFeaturedProducts,
-  Stream,
-} from '@/lib/supabase';
+
+interface Stream {
+  id: string;
+  seller_address: string;
+  youtube_url: string;
+  featured_product_ids: number[];
+  is_live: boolean;
+}
 
 interface GoLivePanelProps {
   sellerAddress: string;
@@ -38,11 +39,16 @@ export function GoLivePanel({ sellerAddress }: GoLivePanelProps) {
   useEffect(() => {
     async function loadActiveStream() {
       setIsLoadingStream(true);
-      const stream = await getActiveStream(sellerAddress);
-      if (stream) {
-        setActiveStream(stream);
-        setYoutubeUrl(stream.youtube_url);
-        setSelectedProducts(stream.featured_product_ids);
+      try {
+        const res = await fetch(`/api/streams/seller/${sellerAddress}`);
+        const data = await res.json();
+        if (data.stream) {
+          setActiveStream(data.stream);
+          setYoutubeUrl(data.stream.youtube_url);
+          setSelectedProducts(data.stream.featured_product_ids || []);
+        }
+      } catch (error) {
+        console.error('Failed to load stream:', error);
       }
       setIsLoadingStream(false);
     }
@@ -58,7 +64,11 @@ export function GoLivePanel({ sellerAddress }: GoLivePanelProps) {
 
     // If live, update featured products in real-time
     if (activeStream?.is_live) {
-      await updateFeaturedProducts(activeStream.id, newSelected);
+      await fetch(`/api/streams/${activeStream.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ featured_product_ids: newSelected }),
+      });
     }
   };
 
@@ -73,14 +83,28 @@ export function GoLivePanel({ sellerAddress }: GoLivePanelProps) {
     }
 
     setIsStarting(true);
-    const stream = await createStream(sellerAddress, youtubeUrl, selectedProducts);
-
-    if (stream) {
-      setActiveStream(stream);
-      toast.success('You are now live!', {
-        description: 'Share your stream link with viewers',
+    try {
+      const res = await fetch('/api/streams', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          seller_address: sellerAddress,
+          youtube_url: youtubeUrl,
+          featured_product_ids: selectedProducts,
+        }),
       });
-    } else {
+
+      const data = await res.json();
+      if (data.stream) {
+        setActiveStream(data.stream);
+        toast.success('You are now live!', {
+          description: 'Share your stream link with viewers',
+        });
+      } else {
+        toast.error('Failed to start stream');
+      }
+    } catch (error) {
+      console.error('Failed to start stream:', error);
       toast.error('Failed to start stream');
     }
     setIsStarting(false);
@@ -90,12 +114,19 @@ export function GoLivePanel({ sellerAddress }: GoLivePanelProps) {
     if (!activeStream) return;
 
     setIsEnding(true);
-    const success = await endStream(activeStream.id);
+    try {
+      const res = await fetch(`/api/streams/${activeStream.id}`, {
+        method: 'DELETE',
+      });
 
-    if (success) {
-      setActiveStream(null);
-      toast.success('Stream ended');
-    } else {
+      if (res.ok) {
+        setActiveStream(null);
+        toast.success('Stream ended');
+      } else {
+        toast.error('Failed to end stream');
+      }
+    } catch (error) {
+      console.error('Failed to end stream:', error);
       toast.error('Failed to end stream');
     }
     setIsEnding(false);

@@ -210,6 +210,167 @@ export type Database = {
           },
         ]
       }
+      agent_pay_api_keys: {
+        Row: {
+          can_manage_services: boolean | null
+          can_view_analytics: boolean | null
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          key_hash: string
+          last_used_at: string | null
+          name: string | null
+          owner_address: string
+        }
+        Insert: {
+          can_manage_services?: boolean | null
+          can_view_analytics?: boolean | null
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          key_hash: string
+          last_used_at?: string | null
+          name?: string | null
+          owner_address: string
+        }
+        Update: {
+          can_manage_services?: boolean | null
+          can_view_analytics?: boolean | null
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          key_hash?: string
+          last_used_at?: string | null
+          name?: string | null
+          owner_address?: string
+        }
+        Relationships: []
+      }
+      agent_pay_services: {
+        Row: {
+          category: string | null
+          created_at: string | null
+          description: string | null
+          endpoint_url: string
+          headers: Json | null
+          icon_url: string | null
+          id: string
+          input_schema: Json | null
+          is_active: boolean | null
+          is_verified: boolean | null
+          method: string | null
+          name: string
+          output_schema: Json | null
+          owner_address: string
+          price_per_request: number
+          tags: string[] | null
+          total_requests: number | null
+          total_revenue: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string | null
+          description?: string | null
+          endpoint_url: string
+          headers?: Json | null
+          icon_url?: string | null
+          id?: string
+          input_schema?: Json | null
+          is_active?: boolean | null
+          is_verified?: boolean | null
+          method?: string | null
+          name: string
+          output_schema?: Json | null
+          owner_address: string
+          price_per_request: number
+          tags?: string[] | null
+          total_requests?: number | null
+          total_revenue?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          category?: string | null
+          created_at?: string | null
+          description?: string | null
+          endpoint_url?: string
+          headers?: Json | null
+          icon_url?: string | null
+          id?: string
+          input_schema?: Json | null
+          is_active?: boolean | null
+          is_verified?: boolean | null
+          method?: string | null
+          name?: string
+          output_schema?: Json | null
+          owner_address?: string
+          price_per_request?: number
+          tags?: string[] | null
+          total_requests?: number | null
+          total_revenue?: number | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      agent_pay_usage: {
+        Row: {
+          amount: number
+          created_at: string | null
+          demo_mode: boolean | null
+          id: string
+          latency_ms: number | null
+          owner_address: string
+          payer_address: string
+          payment_verified: boolean | null
+          request_body: Json | null
+          request_timestamp: string | null
+          response_preview: string | null
+          response_status: number | null
+          service_id: string | null
+          tx_hash: string | null
+        }
+        Insert: {
+          amount: number
+          created_at?: string | null
+          demo_mode?: boolean | null
+          id?: string
+          latency_ms?: number | null
+          owner_address: string
+          payer_address: string
+          payment_verified?: boolean | null
+          request_body?: Json | null
+          request_timestamp?: string | null
+          response_preview?: string | null
+          response_status?: number | null
+          service_id?: string | null
+          tx_hash?: string | null
+        }
+        Update: {
+          amount?: number
+          created_at?: string | null
+          demo_mode?: boolean | null
+          id?: string
+          latency_ms?: number | null
+          owner_address?: string
+          payer_address?: string
+          payment_verified?: boolean | null
+          request_body?: Json | null
+          request_timestamp?: string | null
+          response_preview?: string | null
+          response_status?: number | null
+          service_id?: string | null
+          tx_hash?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "agent_pay_usage_service_id_fkey"
+            columns: ["service_id"]
+            isOneToOne: false
+            referencedRelation: "agent_pay_services"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       agents: {
         Row: {
           avatar_url: string | null
@@ -1368,6 +1529,77 @@ export type Database = {
           username?: string | null
           wallet_address?: string
           wins?: number | null
+        }
+        Relationships: []
+      }
+      ember_chat_messages: {
+        Row: {
+          created_at: string | null
+          id: string
+          is_seller: boolean | null
+          message: string
+          sender_address: string
+          sender_name: string | null
+          stream_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          is_seller?: boolean | null
+          message: string
+          sender_address: string
+          sender_name?: string | null
+          stream_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          is_seller?: boolean | null
+          message?: string
+          sender_address?: string
+          sender_name?: string | null
+          stream_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ember_chat_messages_stream_id_fkey"
+            columns: ["stream_id"]
+            isOneToOne: false
+            referencedRelation: "ember_streams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ember_streams: {
+        Row: {
+          created_at: string | null
+          ended_at: string | null
+          featured_product_ids: number[] | null
+          id: string
+          is_live: boolean | null
+          seller_address: string
+          started_at: string | null
+          youtube_url: string
+        }
+        Insert: {
+          created_at?: string | null
+          ended_at?: string | null
+          featured_product_ids?: number[] | null
+          id?: string
+          is_live?: boolean | null
+          seller_address: string
+          started_at?: string | null
+          youtube_url: string
+        }
+        Update: {
+          created_at?: string | null
+          ended_at?: string | null
+          featured_product_ids?: number[] | null
+          id?: string
+          is_live?: boolean | null
+          seller_address?: string
+          started_at?: string | null
+          youtube_url?: string
         }
         Relationships: []
       }
@@ -3620,6 +3852,361 @@ export type Database = {
           },
         ]
       }
+      sentinel_api_keys: {
+        Row: {
+          created_at: string | null
+          id: string
+          key_hash: string
+          key_prefix: string
+          last_used_at: string | null
+          name: string
+          wallet_address: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          key_hash: string
+          key_prefix: string
+          last_used_at?: string | null
+          name: string
+          wallet_address: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          key_hash?: string
+          key_prefix?: string
+          last_used_at?: string | null
+          name?: string
+          wallet_address?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sentinel_api_keys_wallet_address_fkey"
+            columns: ["wallet_address"]
+            isOneToOne: false
+            referencedRelation: "sentinel_users"
+            referencedColumns: ["wallet_address"]
+          },
+        ]
+      }
+      sentinel_projects: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          id: string
+          name: string
+          network: string | null
+          updated_at: string | null
+          wallet_address: string
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          name: string
+          network?: string | null
+          updated_at?: string | null
+          wallet_address: string
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          name?: string
+          network?: string | null
+          updated_at?: string | null
+          wallet_address?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sentinel_projects_wallet_address_fkey"
+            columns: ["wallet_address"]
+            isOneToOne: false
+            referencedRelation: "sentinel_users"
+            referencedColumns: ["wallet_address"]
+          },
+        ]
+      }
+      sentinel_prover_runs: {
+        Row: {
+          code: string
+          created_at: string | null
+          duration_ms: number | null
+          error_message: string | null
+          id: string
+          modules: Json | null
+          project_id: string | null
+          results: Json | null
+          status: string
+          wallet_address: string
+        }
+        Insert: {
+          code: string
+          created_at?: string | null
+          duration_ms?: number | null
+          error_message?: string | null
+          id?: string
+          modules?: Json | null
+          project_id?: string | null
+          results?: Json | null
+          status: string
+          wallet_address: string
+        }
+        Update: {
+          code?: string
+          created_at?: string | null
+          duration_ms?: number | null
+          error_message?: string | null
+          id?: string
+          modules?: Json | null
+          project_id?: string | null
+          results?: Json | null
+          status?: string
+          wallet_address?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sentinel_prover_runs_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "sentinel_projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sentinel_prover_runs_wallet_address_fkey"
+            columns: ["wallet_address"]
+            isOneToOne: false
+            referencedRelation: "sentinel_users"
+            referencedColumns: ["wallet_address"]
+          },
+        ]
+      }
+      sentinel_simulations: {
+        Row: {
+          arguments: Json | null
+          created_at: string | null
+          error_message: string | null
+          events: Json | null
+          function_name: string
+          gas_used: number | null
+          id: string
+          module_address: string
+          module_name: string
+          network: string
+          project_id: string | null
+          sender_address: string
+          state_changes: Json | null
+          success: boolean
+          type_arguments: Json | null
+          vm_status: string | null
+          wallet_address: string
+        }
+        Insert: {
+          arguments?: Json | null
+          created_at?: string | null
+          error_message?: string | null
+          events?: Json | null
+          function_name: string
+          gas_used?: number | null
+          id?: string
+          module_address: string
+          module_name: string
+          network: string
+          project_id?: string | null
+          sender_address: string
+          state_changes?: Json | null
+          success: boolean
+          type_arguments?: Json | null
+          vm_status?: string | null
+          wallet_address: string
+        }
+        Update: {
+          arguments?: Json | null
+          created_at?: string | null
+          error_message?: string | null
+          events?: Json | null
+          function_name?: string
+          gas_used?: number | null
+          id?: string
+          module_address?: string
+          module_name?: string
+          network?: string
+          project_id?: string | null
+          sender_address?: string
+          state_changes?: Json | null
+          success?: boolean
+          type_arguments?: Json | null
+          vm_status?: string | null
+          wallet_address?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sentinel_simulations_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "sentinel_projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sentinel_simulations_wallet_address_fkey"
+            columns: ["wallet_address"]
+            isOneToOne: false
+            referencedRelation: "sentinel_users"
+            referencedColumns: ["wallet_address"]
+          },
+        ]
+      }
+      sentinel_team_invites: {
+        Row: {
+          created_at: string | null
+          expires_at: string
+          id: string
+          invite_token: string
+          invited_by: string
+          role: string
+          team_id: string
+          used_at: string | null
+          used_by: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          expires_at: string
+          id?: string
+          invite_token: string
+          invited_by: string
+          role?: string
+          team_id: string
+          used_at?: string | null
+          used_by?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          expires_at?: string
+          id?: string
+          invite_token?: string
+          invited_by?: string
+          role?: string
+          team_id?: string
+          used_at?: string | null
+          used_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sentinel_team_invites_invited_by_fkey"
+            columns: ["invited_by"]
+            isOneToOne: false
+            referencedRelation: "sentinel_users"
+            referencedColumns: ["wallet_address"]
+          },
+          {
+            foreignKeyName: "sentinel_team_invites_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "sentinel_teams"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sentinel_team_invites_used_by_fkey"
+            columns: ["used_by"]
+            isOneToOne: false
+            referencedRelation: "sentinel_users"
+            referencedColumns: ["wallet_address"]
+          },
+        ]
+      }
+      sentinel_team_members: {
+        Row: {
+          id: string
+          joined_at: string | null
+          role: string
+          team_id: string
+          wallet_address: string
+        }
+        Insert: {
+          id?: string
+          joined_at?: string | null
+          role?: string
+          team_id: string
+          wallet_address: string
+        }
+        Update: {
+          id?: string
+          joined_at?: string | null
+          role?: string
+          team_id?: string
+          wallet_address?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sentinel_team_members_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "sentinel_teams"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sentinel_team_members_wallet_address_fkey"
+            columns: ["wallet_address"]
+            isOneToOne: false
+            referencedRelation: "sentinel_users"
+            referencedColumns: ["wallet_address"]
+          },
+        ]
+      }
+      sentinel_teams: {
+        Row: {
+          created_at: string | null
+          id: string
+          name: string
+          owner_wallet: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          name: string
+          owner_wallet: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          name?: string
+          owner_wallet?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sentinel_teams_owner_wallet_fkey"
+            columns: ["owner_wallet"]
+            isOneToOne: false
+            referencedRelation: "sentinel_users"
+            referencedColumns: ["wallet_address"]
+          },
+        ]
+      }
+      sentinel_users: {
+        Row: {
+          created_at: string | null
+          last_login_at: string | null
+          updated_at: string | null
+          wallet_address: string
+        }
+        Insert: {
+          created_at?: string | null
+          last_login_at?: string | null
+          updated_at?: string | null
+          wallet_address: string
+        }
+        Update: {
+          created_at?: string | null
+          last_login_at?: string | null
+          updated_at?: string | null
+          wallet_address?: string
+        }
+        Relationships: []
+      }
       service_key_audit_log: {
         Row: {
           action: string
@@ -3751,6 +4338,42 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      shinroe_users: {
+        Row: {
+          address: string
+          avatar_url: string | null
+          bio: string | null
+          created_at: string
+          display_name: string | null
+          id: string
+          updated_at: string
+          verychat_handle: string | null
+          verychat_id: string | null
+        }
+        Insert: {
+          address: string
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          updated_at?: string
+          verychat_handle?: string | null
+          verychat_id?: string | null
+        }
+        Update: {
+          address?: string
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          updated_at?: string
+          verychat_handle?: string | null
+          verychat_id?: string | null
+        }
+        Relationships: []
       }
       spatial_ref_sys: {
         Row: {

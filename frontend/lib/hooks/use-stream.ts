@@ -1,9 +1,19 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { getStreamById, Stream } from '@/lib/supabase';
 import { getSeller, Seller } from '@/lib/ember/queries';
 import { getProduct, Product } from '@/lib/ember/product-queries';
+
+interface Stream {
+  id: string;
+  seller_address: string;
+  youtube_url: string;
+  featured_product_ids: number[];
+  is_live: boolean;
+  started_at: string | null;
+  ended_at: string | null;
+  created_at: string;
+}
 
 export interface StreamWithDetails {
   id: string;
@@ -39,22 +49,25 @@ export function useStream(streamId: string | null) {
     setError(null);
 
     try {
-      // Fetch stream from Supabase
-      const supabaseStream = await getStreamById(streamId);
+      // Fetch stream from API
+      const res = await fetch(`/api/streams/${streamId}`);
+      const data = await res.json();
 
-      if (!supabaseStream) {
+      if (!data.stream) {
         setStream(null);
         setError('Stream not found');
         setLoading(false);
         return;
       }
 
+      const supabaseStream: Stream = data.stream;
+
       // Fetch seller data from on-chain
       const seller = await getSeller(supabaseStream.seller_address);
 
       // Fetch featured products from on-chain
       const products: Product[] = [];
-      for (const productId of supabaseStream.featured_product_ids) {
+      for (const productId of supabaseStream.featured_product_ids || []) {
         const product = await getProduct(productId);
         if (product) {
           products.push(product);
@@ -67,7 +80,7 @@ export function useStream(streamId: string | null) {
         products,
         status: supabaseStream.is_live ? 'live' : 'ended',
         title: seller?.shopName ? `${seller.shopName}'s Live` : 'Live Stream',
-        viewer_count: 0, // TODO: Could track in Supabase if needed
+        viewer_count: 0,
       };
 
       setStream(enrichedStream);
