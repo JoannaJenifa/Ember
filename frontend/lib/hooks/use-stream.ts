@@ -1,20 +1,26 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import type { ProductWithSeller } from '@/lib/types/product';
-import type { LabangStream, LabangSeller } from '@/lib/types/stream';
+import { getStreamById, Stream } from '@/lib/supabase';
+import { getSeller, Seller } from '@/lib/ember/queries';
+import { getProduct, Product } from '@/lib/ember/product-queries';
 
-export interface StreamWithDetails extends LabangStream {
-  seller?: LabangSeller | null;
-  products?: ProductWithSeller[];
-}
-
-// Check if URL contains products parameter (indicates active stream)
-function getProductsFromUrl(): string[] {
-  if (typeof window === 'undefined') return [];
-  const params = new URLSearchParams(window.location.search);
-  const products = params.get('products');
-  return products ? products.split(',') : [];
+export interface StreamWithDetails {
+  id: string;
+  seller_address: string;
+  youtube_url: string;
+  featured_product_ids: number[];
+  is_live: boolean;
+  started_at: string | null;
+  ended_at: string | null;
+  created_at: string;
+  // Enriched data from on-chain
+  seller?: Seller | null;
+  products?: Product[];
+  // Compatibility fields
+  status: 'live' | 'ended';
+  title: string;
+  viewer_count: number;
 }
 
 export function useStream(streamId: string | null) {
@@ -33,51 +39,40 @@ export function useStream(streamId: string | null) {
     setError(null);
 
     try {
-      // If streamId is a wallet address (0x...), create a live stream view
-      if (streamId.startsWith('0x') && streamId.length === 66) {
-        const productIds = getProductsFromUrl();
-        // Mock stream data for live streams
-        const mockStream: StreamWithDetails = {
-          id: streamId,
-          seller_id: streamId,
-          title: 'Live Stream',
-          title_ko: null,
-          status: 'live',
-          youtube_url: 'https://youtube.com/watch?v=jfKfPfyJRdk',
-          viewer_count: 1,
-          created_at: new Date().toISOString(),
-          started_at: new Date().toISOString(),
-          ended_at: null,
-          seller: {
-            id: streamId,
-            wallet_address: streamId,
-            shop_name: 'Live Seller',
-            shop_name_ko: null,
-            description: '',
-            category: 0,
-            kyc_verified: true,
-            avatar: null,
-            youtube_channel: '',
-          },
-          products: productIds.map((id, idx) => ({
-            id,
-            seller: { id: streamId, wallet: streamId, shopName: 'Live Seller' },
-            title: `Product ${id}`,
-            category: 'electronics',
-            priceVery: '500000000',
-            inventory: '100',
-            metadataURI: '',
-            isActive: true,
-            createdAt: Date.now().toString(),
-            totalSold: '0',
-          })),
-        };
-        setStream(mockStream);
-      } else {
+      // Fetch stream from Supabase
+      const supabaseStream = await getStreamById(streamId);
+
+      if (!supabaseStream) {
         setStream(null);
         setError('Stream not found');
+        setLoading(false);
+        return;
       }
+
+      // Fetch seller data from on-chain
+      const seller = await getSeller(supabaseStream.seller_address);
+
+      // Fetch featured products from on-chain
+      const products: Product[] = [];
+      for (const productId of supabaseStream.featured_product_ids) {
+        const product = await getProduct(productId);
+        if (product) {
+          products.push(product);
+        }
+      }
+
+      const enrichedStream: StreamWithDetails = {
+        ...supabaseStream,
+        seller,
+        products,
+        status: supabaseStream.is_live ? 'live' : 'ended',
+        title: seller?.shopName ? `${seller.shopName}'s Live` : 'Live Stream',
+        viewer_count: 0, // TODO: Could track in Supabase if needed
+      };
+
+      setStream(enrichedStream);
     } catch (err) {
+      console.error('Error loading stream:', err);
       setError(err instanceof Error ? err.message : 'Error loading stream');
     } finally {
       setLoading(false);

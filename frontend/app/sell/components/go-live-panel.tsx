@@ -1,16 +1,22 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Badge } from '@/components/ui/badge';
-import { Video, Copy, ExternalLink, Package, CheckCircle } from 'lucide-react';
+import { Video, Copy, ExternalLink, Package, CheckCircle, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useSellerProducts } from '@/hooks/use-seller';
 import { formatMoveAmount } from '@/lib/aptos';
+import {
+  createStream,
+  endStream,
+  getActiveStream,
+  updateFeaturedProducts,
+  Stream,
+} from '@/lib/supabase';
 
 interface GoLivePanelProps {
   sellerAddress: string;
@@ -20,19 +26,43 @@ export function GoLivePanel({ sellerAddress }: GoLivePanelProps) {
   const { products, loading } = useSellerProducts(sellerAddress);
   const [youtubeUrl, setYoutubeUrl] = useState('https://youtube.com/watch?v=dQw4w9WgXcQ');
   const [selectedProducts, setSelectedProducts] = useState<number[]>([]);
-  const [isLive, setIsLive] = useState(false);
+  const [activeStream, setActiveStream] = useState<Stream | null>(null);
+  const [isStarting, setIsStarting] = useState(false);
+  const [isEnding, setIsEnding] = useState(false);
+  const [isLoadingStream, setIsLoadingStream] = useState(true);
 
   const activeProducts = products.filter((p) => p.isActive && p.inventory > 0);
+  const isLive = activeStream?.is_live ?? false;
 
-  const toggleProduct = (productId: number) => {
-    setSelectedProducts((prev) =>
-      prev.includes(productId)
-        ? prev.filter((id) => id !== productId)
-        : [...prev, productId]
-    );
+  // Load active stream on mount
+  useEffect(() => {
+    async function loadActiveStream() {
+      setIsLoadingStream(true);
+      const stream = await getActiveStream(sellerAddress);
+      if (stream) {
+        setActiveStream(stream);
+        setYoutubeUrl(stream.youtube_url);
+        setSelectedProducts(stream.featured_product_ids);
+      }
+      setIsLoadingStream(false);
+    }
+    loadActiveStream();
+  }, [sellerAddress]);
+
+  const toggleProduct = async (productId: number) => {
+    const newSelected = selectedProducts.includes(productId)
+      ? selectedProducts.filter((id) => id !== productId)
+      : [...selectedProducts, productId];
+
+    setSelectedProducts(newSelected);
+
+    // If live, update featured products in real-time
+    if (activeStream?.is_live) {
+      await updateFeaturedProducts(activeStream.id, newSelected);
+    }
   };
 
-  const handleStartLive = () => {
+  const handleStartLive = async () => {
     if (!youtubeUrl) {
       toast.error('Please enter your YouTube stream URL');
       return;
@@ -41,19 +71,39 @@ export function GoLivePanel({ sellerAddress }: GoLivePanelProps) {
       toast.error('Please select at least one product to feature');
       return;
     }
-    setIsLive(true);
-    toast.success('You are now live!');
+
+    setIsStarting(true);
+    const stream = await createStream(sellerAddress, youtubeUrl, selectedProducts);
+
+    if (stream) {
+      setActiveStream(stream);
+      toast.success('You are now live!', {
+        description: 'Share your stream link with viewers',
+      });
+    } else {
+      toast.error('Failed to start stream');
+    }
+    setIsStarting(false);
   };
 
-  const handleStopLive = () => {
-    setIsLive(false);
-    toast.success('Stream ended');
+  const handleStopLive = async () => {
+    if (!activeStream) return;
+
+    setIsEnding(true);
+    const success = await endStream(activeStream.id);
+
+    if (success) {
+      setActiveStream(null);
+      toast.success('Stream ended');
+    } else {
+      toast.error('Failed to end stream');
+    }
+    setIsEnding(false);
   };
 
   const generateShareableLink = () => {
-    // Generate a link to the live page with selected products
-    const productIds = selectedProducts.join(',');
-    return `${window.location.origin}/live/${sellerAddress}?products=${productIds}`;
+    if (!activeStream) return '';
+    return `${window.location.origin}/live/${activeStream.id}`;
   };
 
   const copyLink = () => {
@@ -61,6 +111,19 @@ export function GoLivePanel({ sellerAddress }: GoLivePanelProps) {
     navigator.clipboard.writeText(link);
     toast.success('Link copied to clipboard!');
   };
+
+  const openStream = () => {
+    const link = generateShareableLink();
+    window.open(link, '_blank');
+  };
+
+  if (isLoadingStream) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <Loader2 className="h-8 w-8 animate-spin text-ember" />
+      </div>
+    );
+  }
 
   return (
     <div className="grid gap-6 md:grid-cols-2">
@@ -97,28 +160,52 @@ export function GoLivePanel({ sellerAddress }: GoLivePanelProps) {
                 <span className="text-red-500 font-medium">LIVE</span>
               </div>
 
-              <div className="p-3 bg-muted rounded-lg">
+              <div className="p-3 bg-muted rounded-lg space-y-2">
                 <Label className="text-xs text-muted-foreground">Share Link</Label>
-                <div className="flex items-center gap-2 mt-1">
+                <div className="flex items-center gap-2">
                   <Input value={generateShareableLink()} readOnly className="text-xs" />
                   <Button variant="outline" size="sm" onClick={copyLink}>
                     <Copy className="h-4 w-4" />
                   </Button>
+                  <Button variant="outline" size="sm" onClick={openStream}>
+                    <ExternalLink className="h-4 w-4" />
+                  </Button>
                 </div>
               </div>
 
-              <Button variant="destructive" className="w-full" onClick={handleStopLive}>
-                End Stream
+              <Button
+                variant="destructive"
+                className="w-full"
+                onClick={handleStopLive}
+                disabled={isEnding}
+              >
+                {isEnding ? (
+                  <>
+                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    Ending...
+                  </>
+                ) : (
+                  'End Stream'
+                )}
               </Button>
             </div>
           ) : (
             <Button
               className="w-full bg-ember hover:bg-ember/90"
               onClick={handleStartLive}
-              disabled={!youtubeUrl || selectedProducts.length === 0}
+              disabled={!youtubeUrl || selectedProducts.length === 0 || isStarting}
             >
-              <Video className="h-4 w-4 mr-2" />
-              Start Live
+              {isStarting ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  Starting...
+                </>
+              ) : (
+                <>
+                  <Video className="h-4 w-4 mr-2" />
+                  Start Live
+                </>
+              )}
             </Button>
           )}
         </div>
@@ -148,15 +235,15 @@ export function GoLivePanel({ sellerAddress }: GoLivePanelProps) {
                       ? 'border-ember bg-ember/10'
                       : 'border-border hover:border-muted-foreground'
                   }`}
-                  onClick={() => !isLive && toggleProduct(product.id)}
+                  onClick={() => toggleProduct(product.id)}
                 >
                   <Checkbox
                     checked={isSelected}
-                    disabled={isLive}
-                    onCheckedChange={() => !isLive && toggleProduct(product.id)}
+                    onCheckedChange={() => toggleProduct(product.id)}
                   />
                   <div className="h-12 w-12 rounded bg-muted flex-shrink-0 overflow-hidden">
                     {product.imageUrl ? (
+                      // eslint-disable-next-line @next/next/no-img-element
                       <img
                         src={product.imageUrl}
                         alt={product.title}

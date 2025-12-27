@@ -1,70 +1,67 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Send, Loader2 } from 'lucide-react'
-import { cn } from '@/lib/utils'
-import { useTranslation } from '@/lib/i18n'
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Send, Loader2 } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { sendChatMessage } from '@/lib/supabase';
 
 interface ChatInputProps {
-  streamId: string
-  userAddress?: string
-  username?: string
-  isConnected?: boolean
-  onSend?: (message: string) => Promise<void>
-  className?: string
+  streamId: string;
+  userAddress?: string;
+  sellerAddress?: string;
+  username?: string;
+  isConnected?: boolean;
+  className?: string;
 }
 
 export function ChatInput({
   streamId,
   userAddress,
+  sellerAddress,
   username,
   isConnected = false,
-  onSend,
   className,
 }: ChatInputProps) {
-  const { t } = useTranslation()
-  const [message, setMessage] = useState('')
-  const [isSending, setIsSending] = useState(false)
+  const [message, setMessage] = useState('');
+  const [isSending, setIsSending] = useState(false);
+
+  // Check if current user is the seller
+  const isSeller = userAddress && sellerAddress
+    ? userAddress.toLowerCase() === sellerAddress.toLowerCase()
+    : false;
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    const trimmedMessage = message.trim()
-    if (!trimmedMessage || !isConnected || isSending) return
+    e.preventDefault();
+    const trimmedMessage = message.trim();
+    if (!trimmedMessage || !isConnected || !userAddress || isSending) return;
 
-    setIsSending(true)
+    setIsSending(true);
     try {
-      if (onSend) {
-        await onSend(trimmedMessage)
-      } else {
-        // Default: POST to API
-        await fetch(`/api/chat/${streamId}`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            message: trimmedMessage,
-            userAddress,
-            username,
-          }),
-        })
-      }
-      setMessage('')
+      await sendChatMessage(
+        streamId,
+        userAddress,
+        username || null,
+        trimmedMessage,
+        isSeller
+      );
+      setMessage('');
     } catch (error) {
-      console.error('Failed to send message:', error)
+      console.error('Failed to send message:', error);
     } finally {
-      setIsSending(false)
+      setIsSending(false);
     }
-  }
+  };
 
   if (!isConnected) {
     return (
       <div className={cn('p-4 bg-muted/50 rounded-lg', className)}>
         <p className="text-sm text-muted-foreground text-center">
-          {t('chat.connectToChat')}
+          Connect wallet to chat
         </p>
       </div>
-    )
+    );
   }
 
   return (
@@ -72,7 +69,7 @@ export function ChatInput({
       <Input
         value={message}
         onChange={(e) => setMessage(e.target.value)}
-        placeholder={t('chat.placeholder')}
+        placeholder={isSeller ? 'Message your viewers...' : 'Type a message...'}
         maxLength={200}
         disabled={isSending}
         className="flex-1"
@@ -90,5 +87,5 @@ export function ChatInput({
         )}
       </Button>
     </form>
-  )
+  );
 }
