@@ -1,0 +1,165 @@
+specVersion: 1.0.0
+indexerHints:
+  prune: auto
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: SellerRegistry
+    network: base-sepolia
+    source:
+      address: "0x2DE5e038fb2fB0d9998dC1C7C9855b9Df156fF93"
+      abi: SellerRegistry
+      startBlock: 35752000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Seller
+      abis:
+        - name: SellerRegistry
+          file: ./abis/SellerRegistry.json
+      eventHandlers:
+        - event: SellerRegistered(indexed uint256,indexed address,string,string)
+          handler: handleSellerRegistered
+        - event: SellerUpdated(indexed uint256,string)
+          handler: handleSellerUpdated
+        - event: SellerDeactivated(indexed uint256)
+          handler: handleSellerDeactivated
+        - event: SellerReactivated(indexed uint256)
+          handler: handleSellerReactivated
+        - event: SellerSaleRecorded(indexed uint256,uint256)
+          handler: handleSellerSaleRecorded
+      file: ./src/mappings/seller-registry.ts
+  - kind: ethereum
+    name: ProductRegistry
+    network: base-sepolia
+    source:
+      address: "0x4aAfCB744e5A9923640838C4788455B2Cc1EbD48"
+      abi: ProductRegistry
+      startBlock: 35764948
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Product
+      abis:
+        - name: ProductRegistry
+          file: ./abis/ProductRegistry.json
+        - name: SellerRegistry
+          file: ./abis/SellerRegistry.json
+      eventHandlers:
+        - event: ProductCreated(indexed uint256,indexed uint256,string,uint256)
+          handler: handleProductCreated
+        - event: ProductUpdated(indexed uint256,string)
+          handler: handleProductUpdated
+        - event: ProductPriceUpdated(indexed uint256,uint256,uint256)
+          handler: handleProductPriceUpdated
+        - event: ProductInventoryUpdated(indexed uint256,uint256)
+          handler: handleProductInventoryUpdated
+        - event: ProductDeactivated(indexed uint256)
+          handler: handleProductDeactivated
+        - event: ProductReactivated(indexed uint256)
+          handler: handleProductReactivated
+        - event: ProductSold(indexed uint256,uint256)
+          handler: handleProductSold
+      file: ./src/mappings/product-registry.ts
+  - kind: ethereum
+    name: OrderEscrow
+    network: base-sepolia
+    source:
+      address: "0x9eE30BdA6D0f19650336697de95eb0B429AF8E23"
+      abi: OrderEscrow
+      startBlock: 35752000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Order
+        - DailyVolume
+      abis:
+        - name: OrderEscrow
+          file: ./abis/OrderEscrow.json
+      eventHandlers:
+        - event: OrderCreated(indexed bytes32,indexed address,indexed address,uint256,uint256)
+          handler: handleOrderCreated
+        - event: OrderConfirmed(indexed bytes32,uint256)
+          handler: handleOrderConfirmed
+        - event: OrderDisputed(indexed bytes32,string)
+          handler: handleOrderDisputed
+        - event: OrderRefunded(indexed bytes32,uint256)
+          handler: handleOrderRefunded
+        - event: OrderAutoReleased(indexed bytes32,uint256)
+          handler: handleOrderAutoReleased
+      file: ./src/mappings/order-escrow.ts
+  - kind: ethereum
+    name: ReviewRegistry
+    network: base-sepolia
+    source:
+      address: "0x4B11861596c60c2E6E5a5223F37FDBd9442c8426"
+      abi: ReviewRegistry
+      startBlock: 35752000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Review
+        - ProductRating
+      abis:
+        - name: ReviewRegistry
+          file: ./abis/ReviewRegistry.json
+      eventHandlers:
+        - event: ReviewSubmitted(indexed uint256,indexed bytes32,indexed uint256,address,uint8)
+          handler: handleReviewSubmitted
+      file: ./src/mappings/review-registry.ts
+  - kind: ethereum
+    name: TipJar
+    network: base-sepolia
+    source:
+      address: "0x59827A61443b35Ca23b1A8FBD7104972A6C7270D"
+      abi: TipJar
+      startBlock: 35752000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Tip
+        - StreamerStats
+        - DailyVolume
+      abis:
+        - name: TipJar
+          file: ./abis/TipJar.json
+      eventHandlers:
+        - event: TipSent(indexed address,indexed address,uint256,string,uint256)
+          handler: handleTipSent
+      file: ./src/mappings/tip-jar.ts
+  - kind: ethereum
+    name: GiftShop
+    network: base-sepolia
+    source:
+      address: "0xBbD9d35F1C6ce58810171Af7b66102873C385702"
+      abi: GiftShop
+      startBlock: 35752000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Gift
+        - GiftSent
+        - StreamerStats
+        - DailyVolume
+      abis:
+        - name: GiftShop
+          file: ./abis/GiftShop.json
+      eventHandlers:
+        - event: GiftCreated(indexed uint256,string,uint256,string)
+          handler: handleGiftCreated
+        - event: GiftSent(indexed address,indexed address,indexed uint256,uint256,uint256)
+          handler: handleGiftSent
+      file: ./src/mappings/gift-shop.ts

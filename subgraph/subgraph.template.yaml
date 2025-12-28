@@ -1,0 +1,103 @@
+specVersion: 1.0.0
+indexerHints:
+  prune: auto
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: OrderEscrow
+    network: {{network}}
+    source:
+      address: "{{orderEscrowAddress}}"
+      abi: OrderEscrow
+      startBlock: {{startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Order
+        - DailyVolume
+      abis:
+        - name: OrderEscrow
+          file: ./abis/OrderEscrow.json
+      eventHandlers:
+        - event: OrderCreated(indexed bytes32,indexed address,indexed address,uint256,uint256)
+          handler: handleOrderCreated
+        - event: OrderConfirmed(indexed bytes32,uint256)
+          handler: handleOrderConfirmed
+        - event: OrderDisputed(indexed bytes32,string)
+          handler: handleOrderDisputed
+        - event: OrderRefunded(indexed bytes32,uint256)
+          handler: handleOrderRefunded
+        - event: OrderAutoReleased(indexed bytes32,uint256)
+          handler: handleOrderAutoReleased
+      file: ./src/mappings/order-escrow.ts
+  - kind: ethereum
+    name: ReviewRegistry
+    network: {{network}}
+    source:
+      address: "{{reviewRegistryAddress}}"
+      abi: ReviewRegistry
+      startBlock: {{startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Review
+        - ProductRating
+      abis:
+        - name: ReviewRegistry
+          file: ./abis/ReviewRegistry.json
+      eventHandlers:
+        - event: ReviewSubmitted(indexed uint256,indexed bytes32,indexed uint256,address,uint8)
+          handler: handleReviewSubmitted
+      file: ./src/mappings/review-registry.ts
+  - kind: ethereum
+    name: TipJar
+    network: {{network}}
+    source:
+      address: "{{tipJarAddress}}"
+      abi: TipJar
+      startBlock: {{startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Tip
+        - StreamerStats
+        - DailyVolume
+      abis:
+        - name: TipJar
+          file: ./abis/TipJar.json
+      eventHandlers:
+        - event: TipSent(indexed address,indexed address,uint256,string,uint256)
+          handler: handleTipSent
+      file: ./src/mappings/tip-jar.ts
+  - kind: ethereum
+    name: GiftShop
+    network: {{network}}
+    source:
+      address: "{{giftShopAddress}}"
+      abi: GiftShop
+      startBlock: {{startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Gift
+        - GiftSent
+        - StreamerStats
+        - DailyVolume
+      abis:
+        - name: GiftShop
+          file: ./abis/GiftShop.json
+      eventHandlers:
+        - event: GiftCreated(indexed uint256,string,uint256,string)
+          handler: handleGiftCreated
+        - event: GiftSent(indexed address,indexed address,indexed uint256,uint256,uint256)
+          handler: handleGiftSent
+      file: ./src/mappings/gift-shop.ts
