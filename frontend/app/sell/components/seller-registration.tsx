@@ -96,7 +96,7 @@ export function SellerRegistration({ walletAddress }: SellerRegistrationProps) {
   const isSubmitDisabled = loading || uploading;
 
   return (
-    <div className="max-w-lg mx-auto">
+    <div className="max-w-xl mx-auto">
       <Card className="p-6 bg-card border-border">
         <div className="text-center mb-6">
           <div className="h-16 w-16 mx-auto mb-4 rounded-full bg-ember/20 flex items-center justify-center">
