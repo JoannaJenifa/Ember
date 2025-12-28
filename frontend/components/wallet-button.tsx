@@ -3,7 +3,7 @@
 import { useState, useMemo } from 'react';
 import { usePrivy, useLogin } from '@privy-io/react-auth';
 import { useCreateWallet } from '@privy-io/react-auth/extended-chains';
-import { useMoveBalance } from '@/hooks/use-move-balance';
+import { useUsdcBalance } from '@/hooks/use-usdc-balance';
 import { usePrivyAvailable } from '@/app/providers';
 import { createMovementWallet } from '@/lib/privy-movement';
 import { Button } from '@/components/ui/button';
@@ -43,7 +43,7 @@ export function WalletButton() {
   const walletAddress = movementWallet?.address ?? null;
   const isConnected = authenticated && !!movementWallet;
 
-  const { balance, isLoading: balanceLoading } = useMoveBalance(walletAddress);
+  const { balance, isLoading: balanceLoading } = useUsdcBalance(walletAddress);
 
   // Generate DiceBear pixel-art avatar URL using address as seed
   const avatarUrl = useMemo(() => {
@@ -163,7 +163,7 @@ export function WalletButton() {
             {balanceLoading ? (
               <Loader2 className="h-3 w-3 animate-spin" />
             ) : (
-              `${balance} MOVE`
+              `$${balance}`
             )}
           </span>
 

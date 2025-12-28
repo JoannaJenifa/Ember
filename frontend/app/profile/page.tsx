@@ -20,7 +20,7 @@ import { toast } from 'sonner';
 import { useWalletContext } from '@/hooks/use-wallet-context';
 import { useBuyerOrders } from '@/hooks/use-orders';
 import { useIsVerifiedSeller } from '@/hooks/use-seller';
-import { formatMoveAmount, getAccountExplorerUrl } from '@/lib/aptos';
+import { formatUsdcAmount, getAccountExplorerUrl } from '@/lib/aptos';
 import { OrderStatus } from '@/lib/ember/order-queries';
 
 export default function ProfilePage() {
@@ -169,7 +169,7 @@ export default function ProfilePage() {
                   <div>
                     <p className="text-xs text-muted-foreground">Total Spent</p>
                     <p className="text-lg font-bold text-foreground">
-                      {formatMoveAmount(orderStats.totalSpent)}
+                      ${formatUsdcAmount(orderStats.totalSpent)}
                     </p>
                   </div>
                 </div>

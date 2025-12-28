@@ -28,7 +28,8 @@ export function FeaturedProducts() {
     fetchProducts();
   }, []);
 
-  const formatPrice = (price: number) => (price / 1e8).toFixed(4);
+  // USDC uses 6 decimals
+  const formatPrice = (price: number) => (price / 1e6).toFixed(2);
 
   const getAvgRating = (product: Product) => {
     return product.ratingCount > 0
@@ -86,7 +87,7 @@ export function FeaturedProducts() {
                 </div>
                 <div className="p-3">
                   <h3 className="font-medium text-foreground line-clamp-2 mb-1">{product.title}</h3>
-                  <p className="text-lg font-bold text-primary">{formatPrice(product.price)} MOVE</p>
+                  <p className="text-lg font-bold text-primary">${formatPrice(product.price)}</p>
                   <div className="flex items-center gap-1 text-sm text-muted-foreground mt-1">
                     <Star className="h-3 w-3 fill-yellow-500 text-yellow-500" />
                     <span>{getAvgRating(product) ?? t('product.new')}</span>

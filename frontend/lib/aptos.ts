@@ -44,6 +44,12 @@ export const formatMoveAmount = (amount: bigint | number, decimals = 8): string 
   return (value / Math.pow(10, decimals)).toFixed(4);
 };
 
+// USDC uses 6 decimals
+export const formatUsdcAmount = (amount: bigint | number): string => {
+  const value = typeof amount === 'bigint' ? Number(amount) : amount;
+  return (value / Math.pow(10, 6)).toFixed(2);
+};
+
 export const toHex = (buffer: Uint8Array): string => {
   return Array.from(buffer)
     .map((b) => b.toString(16).padStart(2, '0'))

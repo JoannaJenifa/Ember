@@ -5,7 +5,7 @@ import { DollarSign, TrendingUp, Gift, Heart, Loader2 } from 'lucide-react';
 import { useSeller } from '@/hooks/use-seller';
 import { useStreamerTips } from '@/hooks/use-tips';
 import { useStreamerGifts } from '@/hooks/use-gifts';
-import { formatMoveAmount } from '@/lib/aptos';
+import { formatUsdcAmount } from '@/lib/aptos';
 
 interface EarningsDashboardProps {
   sellerAddress: string;
@@ -50,7 +50,7 @@ export function EarningsDashboard({ sellerAddress }: EarningsDashboardProps) {
             <div>
               <p className="text-xs text-muted-foreground">Total Earnings</p>
               <p className="text-lg font-bold text-foreground">
-                {formatMoveAmount(totalEarnings)} MOVE
+                ${formatUsdcAmount(totalEarnings)}
               </p>
             </div>
           </div>
@@ -64,7 +64,7 @@ export function EarningsDashboard({ sellerAddress }: EarningsDashboardProps) {
             <div>
               <p className="text-xs text-muted-foreground">Sales Revenue</p>
               <p className="text-lg font-bold text-foreground">
-                {formatMoveAmount(seller?.totalSales || 0)} MOVE
+                ${formatUsdcAmount(seller?.totalSales || 0)}
               </p>
             </div>
           </div>
@@ -78,7 +78,7 @@ export function EarningsDashboard({ sellerAddress }: EarningsDashboardProps) {
             <div>
               <p className="text-xs text-muted-foreground">Tips Received</p>
               <p className="text-lg font-bold text-foreground">
-                {formatMoveAmount(tipsTotal)} MOVE
+                ${formatUsdcAmount(tipsTotal)}
               </p>
             </div>
           </div>
@@ -92,7 +92,7 @@ export function EarningsDashboard({ sellerAddress }: EarningsDashboardProps) {
             <div>
               <p className="text-xs text-muted-foreground">Gifts Received</p>
               <p className="text-lg font-bold text-foreground">
-                {formatMoveAmount(giftsTotal)} MOVE
+                ${formatUsdcAmount(giftsTotal)}
               </p>
             </div>
           </div>
@@ -116,7 +116,7 @@ export function EarningsDashboard({ sellerAddress }: EarningsDashboardProps) {
                     <p className="text-xs text-muted-foreground">{formatTime(tip.timestamp)}</p>
                   </div>
                   <span className="text-ember font-semibold">
-                    +{formatMoveAmount(tip.amount)} MOVE
+                    +${formatUsdcAmount(tip.amount)}
                   </span>
                 </div>
               ))}
@@ -141,7 +141,7 @@ export function EarningsDashboard({ sellerAddress }: EarningsDashboardProps) {
                     </p>
                   </div>
                   <span className="text-purple-500 font-semibold">
-                    +{formatMoveAmount(gift.totalValue)} MOVE
+                    +${formatUsdcAmount(gift.totalValue)}
                   </span>
                 </div>
               ))}

@@ -18,8 +18,9 @@ export function ProductCard({ product }: ProductCardProps) {
     ? (product.ratingSum / product.ratingCount).toFixed(1)
     : null;
 
+  // USDC uses 6 decimals
   const formatPrice = (price: number) => {
-    return (price / 1e8).toFixed(4);
+    return (price / 1e6).toFixed(2);
   };
 
   return (
@@ -54,7 +55,7 @@ export function ProductCard({ product }: ProductCardProps) {
             {product.title}
           </h3>
           <p className="text-lg font-bold text-ember">
-            {formatPrice(product.price)} MOVE
+            ${formatPrice(product.price)}
           </p>
           <div className="flex items-center gap-1 text-sm text-muted-foreground mt-1">
             <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />

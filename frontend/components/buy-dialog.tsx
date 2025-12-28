@@ -13,7 +13,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Minus, Plus, Loader2, ShoppingBag, MapPin, CreditCard } from 'lucide-react';
 import { toast } from 'sonner';
-import { formatMoveAmount } from '@/lib/aptos';
+import { formatUsdcAmount } from '@/lib/aptos';
 import { Product } from '@/lib/ember/product-queries';
 import { createOrder } from '@/lib/ember/order-transactions';
 import { useWalletContext } from '@/hooks/use-wallet-context';
@@ -178,7 +178,7 @@ export function BuyDialog({ product, open, onOpenChange, onSuccess }: BuyDialogP
             <div className="flex-1 min-w-0">
               <p className="font-medium line-clamp-2">{product.title}</p>
               <p className="text-ember font-bold">
-                {formatMoveAmount(product.price)} MOVE
+                ${formatUsdcAmount(product.price)}
               </p>
             </div>
           </div>
@@ -297,7 +297,7 @@ export function BuyDialog({ product, open, onOpenChange, onSuccess }: BuyDialogP
                 <span className="font-medium">Total</span>
               </div>
               <span className="text-xl font-bold text-ember">
-                {formatMoveAmount(totalPrice)} MOVE
+                ${formatUsdcAmount(totalPrice)}
               </span>
             </div>
 

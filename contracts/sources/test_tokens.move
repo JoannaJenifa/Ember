@@ -106,6 +106,23 @@ module ember::test_tokens {
         mint_internal(registry.tusdc, user_addr, amount);
     }
 
+    // ============ Transfer Functions ============
+
+    /// Transfer tUSDC using the stored TransferRef (for escrow operations)
+    public fun transfer_tusdc(
+        registry_addr: address,
+        from: address,
+        to: address,
+        amount: u64
+    ) acquires TokenRegistry, TokenRefs {
+        let registry = borrow_global<TokenRegistry>(registry_addr);
+        let refs = borrow_global<TokenRefs>(registry.tusdc);
+        let metadata = object::address_to_object<Metadata>(registry.tusdc);
+        let from_store = primary_fungible_store::primary_store(from, metadata);
+        let fa = fungible_asset::withdraw_with_ref(&refs.transfer_ref, from_store, amount);
+        primary_fungible_store::deposit(to, fa);
+    }
+
     // ============ View Functions ============
 
     #[view]

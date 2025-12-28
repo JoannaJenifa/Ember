@@ -1,4 +1,4 @@
-/// Order escrow module for Ember commerce platform
+/// Order escrow module for Ember commerce platform (uses tUSDC)
 module ember::order_escrow {
     use std::string::String;
     use std::signer;
@@ -6,12 +6,11 @@ module ember::order_escrow {
     use aptos_std::smart_table::{Self, SmartTable};
     use aptos_framework::timestamp;
     use aptos_framework::event;
-    use aptos_framework::coin::{Self, Coin};
-    use aptos_framework::aptos_coin::AptosCoin;
     use ember::types::{Self, OrderStatus};
     use ember::errors;
     use ember::product_registry;
     use ember::seller_registry;
+    use ember::test_tokens;
 
     const BASIS_POINTS: u64 = 10000;
     const DEFAULT_PLATFORM_FEE: u64 = 300; // 3%
@@ -26,7 +25,7 @@ module ember::order_escrow {
         orders: SmartTable<u64, Order>,
         buyer_orders: SmartTable<address, vector<u64>>,
         seller_orders: SmartTable<address, vector<u64>>,
-        escrow_balance: Coin<AptosCoin>,
+        escrow_balance: u64,
         order_count: u64, auto_release_days: u64, platform_fee_bps: u64, fee_recipient: address,
     }
 
@@ -46,7 +45,7 @@ module ember::order_escrow {
         assert!(!exists<OrderEscrow>(admin_addr), errors::already_initialized());
         move_to(admin, OrderEscrow {
             orders: smart_table::new(), buyer_orders: smart_table::new(),
-            seller_orders: smart_table::new(), escrow_balance: coin::zero<AptosCoin>(),
+            seller_orders: smart_table::new(), escrow_balance: 0,
             order_count: 0, auto_release_days, platform_fee_bps: DEFAULT_PLATFORM_FEE, fee_recipient,
         });
     }
@@ -62,8 +61,10 @@ module ember::order_escrow {
         let platform_fee = (total_price * escrow.platform_fee_bps) / BASIS_POINTS;
         let seller_amount = total_price - platform_fee;
 
-        let payment = coin::withdraw<AptosCoin>(buyer, total_price);
-        coin::merge(&mut escrow.escrow_balance, payment);
+        // Transfer tUSDC from buyer to escrow (@ember holds the funds)
+        test_tokens::transfer_tusdc(@ember, buyer_addr, @ember, total_price);
+        escrow.escrow_balance = escrow.escrow_balance + total_price;
+
         product_registry::record_sale(product_id, quantity);
 
         let order_id = escrow.order_count + 1;
@@ -100,9 +101,14 @@ module ember::order_escrow {
         assert!(order.status == types::order_status_shipped(), errors::invalid_order_status());
         order.status = types::order_status_delivered();
         order.delivered_at = timestamp::now_seconds();
-        let (seller_amount, platform_fee, seller, fee_recipient) = (order.seller_amount, order.platform_fee, order.seller, escrow.fee_recipient);
-        coin::deposit(seller, coin::extract(&mut escrow.escrow_balance, seller_amount));
-        coin::deposit(fee_recipient, coin::extract(&mut escrow.escrow_balance, platform_fee));
+        let (seller_amount, platform_fee, seller, fee_recipient) =
+            (order.seller_amount, order.platform_fee, order.seller, escrow.fee_recipient);
+
+        // Transfer tUSDC from escrow to seller and fee recipient
+        test_tokens::transfer_tusdc(@ember, @ember, seller, seller_amount);
+        test_tokens::transfer_tusdc(@ember, @ember, fee_recipient, platform_fee);
+        escrow.escrow_balance = escrow.escrow_balance - order.total_price;
+
         seller_registry::record_sale(seller, seller_amount);
         event::emit(OrderDelivered { order_id, seller_amount, platform_fee });
     }
@@ -127,7 +133,11 @@ module ember::order_escrow {
         assert!(order.status == types::order_status_paid(), errors::invalid_order_status());
         order.status = types::order_status_cancelled();
         let refund_amount = order.total_price;
-        coin::deposit(buyer_addr, coin::extract(&mut escrow.escrow_balance, refund_amount));
+
+        // Refund tUSDC to buyer
+        test_tokens::transfer_tusdc(@ember, @ember, buyer_addr, refund_amount);
+        escrow.escrow_balance = escrow.escrow_balance - refund_amount;
+
         event::emit(OrderCancelled { order_id, refund_amount });
     }
 

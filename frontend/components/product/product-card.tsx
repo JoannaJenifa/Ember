@@ -82,8 +82,7 @@ export function ProductCard({ product, onBuy, showSeller = true, className }: Pr
 
         {/* Price */}
         <div className="flex items-baseline gap-1">
-          <span className="text-lg font-bold text-ember">{formatPrice(product.priceVery)}</span>
-          <span className="text-sm text-muted-foreground">MOVE</span>
+          <span className="text-lg font-bold text-ember">${formatPrice(product.priceVery)}</span>
         </div>
 
         {/* Seller */}

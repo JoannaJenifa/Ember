@@ -9,7 +9,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Video, Copy, ExternalLink, Package, CheckCircle, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useSellerProducts } from '@/hooks/use-seller';
-import { formatMoveAmount } from '@/lib/aptos';
+import { formatUsdcAmount } from '@/lib/aptos';
 
 interface Stream {
   id: string;
@@ -291,7 +291,7 @@ export function GoLivePanel({ sellerAddress }: GoLivePanelProps) {
                       {product.title}
                     </p>
                     <p className="text-xs text-muted-foreground">
-                      {formatMoveAmount(product.price)} MOVE · Stock: {product.inventory}
+                      ${formatUsdcAmount(product.price)} · Stock: {product.inventory}
                     </p>
                   </div>
                   {isSelected && <CheckCircle className="h-5 w-5 text-ember flex-shrink-0" />}

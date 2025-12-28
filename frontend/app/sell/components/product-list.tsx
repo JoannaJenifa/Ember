@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
 import { Plus, Package, Edit, Grid, List, Loader2 } from 'lucide-react';
 import { useSellerProducts } from '@/hooks/use-seller';
-import { formatMoveAmount } from '@/lib/aptos';
+import { formatUsdcAmount } from '@/lib/aptos';
 import { ProductForm } from './product-form';
 
 interface ProductListProps {
@@ -108,7 +108,7 @@ export function ProductList({ sellerAddress }: ProductListProps) {
                 </h3>
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-ember font-semibold text-sm">
-                    {formatMoveAmount(product.price)} MOVE
+                    ${formatUsdcAmount(product.price)}
                   </span>
                   <span className="text-xs text-muted-foreground">
                     Stock: {product.inventory}
@@ -148,7 +148,7 @@ export function ProductList({ sellerAddress }: ProductListProps) {
                 <div className="flex-1 min-w-0">
                   <h3 className="font-medium text-foreground truncate">{product.title}</h3>
                   <p className="text-sm text-muted-foreground">
-                    {formatMoveAmount(product.price)} MOVE · Stock: {product.inventory}
+                    ${formatUsdcAmount(product.price)} · Stock: {product.inventory}
                   </p>
                 </div>
                 <Badge variant={product.isActive ? 'default' : 'secondary'}>

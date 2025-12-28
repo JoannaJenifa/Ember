@@ -1,4 +1,4 @@
-/// TipJar module for streamer tips on Ember
+/// TipJar module for streamer tips on Ember (uses tUSDC)
 module ember::tip_jar {
     use std::string::String;
     use std::signer;
@@ -6,9 +6,8 @@ module ember::tip_jar {
     use aptos_std::smart_table::{Self, SmartTable};
     use aptos_framework::timestamp;
     use aptos_framework::event;
-    use aptos_framework::coin;
-    use aptos_framework::aptos_coin::AptosCoin;
     use ember::errors;
+    use ember::test_tokens;
 
     // === Constants ===
 
@@ -63,7 +62,7 @@ module ember::tip_jar {
         });
     }
 
-    /// Send a tip to a streamer
+    /// Send a tip to a streamer (using tUSDC)
     public entry fun send_tip(
         sender: &signer,
         streamer: address,
@@ -79,13 +78,9 @@ module ember::tip_jar {
         let fee = (amount * jar.platform_fee_bps) / BASIS_POINTS;
         let streamer_amount = amount - fee;
 
-        // Transfer MOVE from sender
-        let payment = coin::withdraw<AptosCoin>(sender, amount);
-        let fee_payment = coin::extract(&mut payment, fee);
-
-        // Send to streamer and fee recipient
-        coin::deposit(streamer, payment);
-        coin::deposit(jar.fee_recipient, fee_payment);
+        // Transfer tUSDC from sender to streamer and fee recipient
+        test_tokens::transfer_tusdc(@ember, sender_addr, streamer, streamer_amount);
+        test_tokens::transfer_tusdc(@ember, sender_addr, jar.fee_recipient, fee);
 
         // Create tip record
         let tip_id = jar.tip_count + 1;

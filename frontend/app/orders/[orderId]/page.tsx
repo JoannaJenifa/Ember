@@ -19,7 +19,7 @@ import Link from 'next/link';
 import { useOrder } from '@/hooks/use-orders';
 import { useProduct } from '@/hooks/use-products';
 import { useWalletContext } from '@/hooks/use-wallet-context';
-import { formatMoveAmount, getAccountExplorerUrl } from '@/lib/aptos';
+import { formatUsdcAmount, getAccountExplorerUrl } from '@/lib/aptos';
 import { OrderStatus } from '@/lib/ember/order-queries';
 import { DeliveryConfirmation } from '../components/delivery-confirmation';
 import { DisputeForm } from '../components/dispute-form';
@@ -129,7 +129,7 @@ export default function OrderDetailPage({ params }: OrderDetailPageProps) {
                 </h3>
                 <p className="text-sm text-muted-foreground">Quantity: {order.quantity}</p>
                 <p className="text-ember font-bold mt-1">
-                  {formatMoveAmount(order.totalPrice)} MOVE
+                  ${formatUsdcAmount(order.totalPrice)}
                 </p>
               </div>
             </div>
@@ -152,11 +152,11 @@ export default function OrderDetailPage({ params }: OrderDetailPageProps) {
               </div>
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Platform Fee</span>
-                <span className="text-foreground">{formatMoveAmount(order.platformFee)} MOVE</span>
+                <span className="text-foreground">${formatUsdcAmount(order.platformFee)}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Seller Amount</span>
-                <span className="text-foreground">{formatMoveAmount(order.sellerAmount)} MOVE</span>
+                <span className="text-foreground">${formatUsdcAmount(order.sellerAmount)}</span>
               </div>
               {order.shippingInfo && (
                 <div className="flex justify-between">

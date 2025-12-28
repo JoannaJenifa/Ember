@@ -1,4 +1,4 @@
-/// GiftShop module for virtual gifts on Ember
+/// GiftShop module for virtual gifts on Ember (uses tUSDC)
 module ember::gift_shop {
     use std::string::String;
     use std::signer;
@@ -6,10 +6,9 @@ module ember::gift_shop {
     use aptos_std::smart_table::{Self, SmartTable};
     use aptos_framework::timestamp;
     use aptos_framework::event;
-    use aptos_framework::coin;
-    use aptos_framework::aptos_coin::AptosCoin;
     use ember::types::{GiftType, gift_from_u8, gift_value};
     use ember::errors;
+    use ember::test_tokens;
 
     // === Constants ===
 
@@ -53,18 +52,18 @@ module ember::gift_shop {
 
     // === Entry Functions ===
 
-    /// Initialize the gift shop with default prices (admin only)
+    /// Initialize the gift shop with default prices in tUSDC (6 decimals)
     public entry fun initialize(admin: &signer, fee_recipient: address) {
         let admin_addr = signer::address_of(admin);
         assert!(!exists<GiftShop>(admin_addr), errors::already_initialized());
 
         let gift_prices = smart_table::new<u8, u64>();
-        // Set default prices: Heart=1, Star=5, Fire=10, Diamond=50, Crown=100 MOVE
-        smart_table::add(&mut gift_prices, 0, 100_000_000);      // Heart: 1 MOVE
-        smart_table::add(&mut gift_prices, 1, 500_000_000);      // Star: 5 MOVE
-        smart_table::add(&mut gift_prices, 2, 1_000_000_000);    // Fire: 10 MOVE
-        smart_table::add(&mut gift_prices, 3, 5_000_000_000);    // Diamond: 50 MOVE
-        smart_table::add(&mut gift_prices, 4, 10_000_000_000);   // Crown: 100 MOVE
+        // Prices in tUSDC (6 decimals): Heart=$1, Star=$5, Fire=$10, Diamond=$50, Crown=$100
+        smart_table::add(&mut gift_prices, 0, 1_000_000);      // Heart: 1 USDC
+        smart_table::add(&mut gift_prices, 1, 5_000_000);      // Star: 5 USDC
+        smart_table::add(&mut gift_prices, 2, 10_000_000);     // Fire: 10 USDC
+        smart_table::add(&mut gift_prices, 3, 50_000_000);     // Diamond: 50 USDC
+        smart_table::add(&mut gift_prices, 4, 100_000_000);    // Crown: 100 USDC
 
         move_to(admin, GiftShop {
             gifts: smart_table::new(),
@@ -90,7 +89,7 @@ module ember::gift_shop {
         };
     }
 
-    /// Send a gift to a streamer
+    /// Send a gift to a streamer (using tUSDC)
     public entry fun send_gift(
         sender: &signer,
         streamer: address,
@@ -114,13 +113,9 @@ module ember::gift_shop {
         let fee = (total_value * shop.platform_fee_bps) / BASIS_POINTS;
         let streamer_amount = total_value - fee;
 
-        // Transfer MOVE from sender
-        let payment = coin::withdraw<AptosCoin>(sender, total_value);
-        let fee_payment = coin::extract(&mut payment, fee);
-
-        // Send to streamer and fee recipient
-        coin::deposit(streamer, payment);
-        coin::deposit(shop.fee_recipient, fee_payment);
+        // Transfer tUSDC from sender to streamer and fee recipient
+        test_tokens::transfer_tusdc(@ember, sender_addr, streamer, streamer_amount);
+        test_tokens::transfer_tusdc(@ember, sender_addr, shop.fee_recipient, fee);
 
         // Create gift record
         let gift_id = shop.gift_count + 1;

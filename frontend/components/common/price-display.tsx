@@ -4,18 +4,21 @@ import { cn } from '@/lib/utils'
 
 interface PriceDisplayProps {
   amount: number
-  currency?: 'KRW' | 'MOVE'
+  currency?: 'KRW' | 'USDC'
   size?: 'sm' | 'md' | 'lg'
   className?: string
 }
 
 export function PriceDisplay({
   amount,
-  currency = 'KRW',
+  currency = 'USDC',
   size = 'md',
   className,
 }: PriceDisplayProps) {
-  const formattedAmount = amount.toLocaleString()
+  // Format amount based on currency
+  const formattedAmount = currency === 'USDC'
+    ? amount.toFixed(2)
+    : amount.toLocaleString()
 
   const sizeClasses = {
     sm: 'text-sm',
@@ -23,12 +26,11 @@ export function PriceDisplay({
     lg: 'text-xl',
   }
 
-  const prefix = currency === 'KRW' ? '₩' : ''
-  const suffix = currency === 'MOVE' ? ' MOVE' : ''
+  const prefix = currency === 'USDC' ? '$' : '₩'
 
   return (
     <span className={cn('font-semibold text-ember', sizeClasses[size], className)}>
-      {prefix}{formattedAmount}{suffix}
+      {prefix}{formattedAmount}
     </span>
   )
 }

@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { Order, OrderStatus } from '@/lib/ember/order-queries';
-import { formatMoveAmount } from '@/lib/aptos';
+import { formatUsdcAmount } from '@/lib/aptos';
 
 const STATUS_CONFIG = {
   [OrderStatus.Paid]: { label: 'Paid', icon: Clock, color: 'bg-yellow-500 text-yellow-50' },
@@ -79,7 +79,7 @@ export function BuyerOrderCard({ order, onConfirmDelivery, onDispute }: BuyerOrd
                   {config.label}
                 </Badge>
                 <span className="text-ember font-bold">
-                  {formatMoveAmount(order.totalPrice)} MOVE
+                  ${formatUsdcAmount(order.totalPrice)}
                 </span>
               </div>
             </div>

@@ -104,7 +104,7 @@ export function SellerProfileHeader({ seller, onProfileUpdate }: SellerProfileHe
               <div className="flex items-center gap-2">
                 <Package className="h-4 w-4 text-ember" />
                 <span className="font-medium">
-                  {(seller.totalSales / 1e8).toFixed(2)} MOVE
+                  ${(seller.totalSales / 1e6).toFixed(2)}
                 </span>
                 <span className="text-muted-foreground">total sales</span>
               </div>
