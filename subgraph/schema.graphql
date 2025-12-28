@@ -1,0 +1,129 @@
+# Sellers - from SellerRegistry contract
+type Seller @entity(immutable: false) {
+  id: ID! # sellerId
+  wallet: Bytes!
+  shopName: String!
+  category: String!
+  metadataURI: String!
+  isActive: Boolean!
+  createdAt: BigInt!
+  totalSales: BigInt!
+  totalOrders: BigInt!
+  products: [Product!]! @derivedFrom(field: "seller")
+  txHash: Bytes!
+  blockNumber: BigInt!
+}
+
+# Products - from ProductRegistry contract
+type Product @entity(immutable: false) {
+  id: ID! # productId
+  seller: Seller!
+  title: String!
+  category: String!
+  priceVery: BigInt!
+  inventory: BigInt!
+  metadataURI: String!
+  isActive: Boolean!
+  createdAt: BigInt!
+  totalSold: BigInt!
+  txHash: Bytes!
+  blockNumber: BigInt!
+}
+
+# Orders - from OrderEscrow contract
+type Order @entity(immutable: false) {
+  id: ID! # orderId (bytes32)
+  buyer: Bytes!
+  seller: Bytes!
+  productId: BigInt!
+  amount: BigInt!
+  status: OrderStatus!
+  createdAt: BigInt!
+  confirmedAt: BigInt
+  releasedAmount: BigInt
+  txHash: Bytes!
+  blockNumber: BigInt!
+}
+
+enum OrderStatus {
+  ACTIVE
+  CONFIRMED
+  DISPUTED
+  REFUNDED
+  AUTO_RELEASED
+}
+
+# Reviews - from ReviewRegistry contract
+type Review @entity(immutable: true) {
+  id: ID! # reviewId
+  order: Order!
+  productId: BigInt!
+  buyer: Bytes!
+  rating: Int!
+  contentHash: Bytes!
+  createdAt: BigInt!
+  txHash: Bytes!
+  blockNumber: BigInt!
+}
+
+type ProductRating @entity(immutable: false) {
+  id: ID! # productId as string
+  totalRating: BigInt!
+  reviewCount: BigInt!
+  averageRating: BigDecimal!
+}
+
+# Tips - from TipJar contract
+type Tip @entity(immutable: true) {
+  id: ID! # tx hash + log index
+  from: Bytes!
+  streamer: Bytes!
+  amount: BigInt!
+  message: String
+  createdAt: BigInt!
+  txHash: Bytes!
+  blockNumber: BigInt!
+}
+
+# Gifts - from GiftShop contract
+type Gift @entity(immutable: false) {
+  id: ID! # giftId
+  name: String!
+  price: BigInt!
+  animationURI: String!
+  active: Boolean!
+  createdAt: BigInt!
+  txHash: Bytes!
+}
+
+type GiftSent @entity(immutable: true) {
+  id: ID! # tx hash + log index
+  from: Bytes!
+  streamer: Bytes!
+  gift: Gift!
+  quantity: BigInt!
+  totalValue: BigInt!
+  createdAt: BigInt!
+  txHash: Bytes!
+  blockNumber: BigInt!
+}
+
+# Aggregations
+type StreamerStats @entity(immutable: false) {
+  id: ID! # streamer address
+  totalTips: BigInt!
+  totalGifts: BigInt!
+  tipCount: BigInt!
+  giftCount: BigInt!
+}
+
+type DailyVolume @entity(immutable: false) {
+  id: ID! # date string YYYY-MM-DD
+  date: BigInt! # timestamp of day start
+  orderVolume: BigInt!
+  tipVolume: BigInt!
+  giftVolume: BigInt!
+  orderCount: BigInt!
+  tipCount: BigInt!
+  giftCount: BigInt!
+}
