@@ -98,7 +98,7 @@ export default function SellersPage() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {filteredSellers.map((seller) => (
-              <Link key={seller.addr} href={`/sellers/${seller.addr}`}>
+              <Link key={seller.addr} href={`/seller/${seller.addr}`}>
                 <Card className="bg-card border-border p-4 hover:border-ember/50 transition-colors cursor-pointer h-full">
                   <div className="flex items-start gap-4">
                     {seller.profileImage ? (
