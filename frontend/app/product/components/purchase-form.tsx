@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useWallet } from '@aptos-labs/wallet-adapter-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -12,6 +12,7 @@ import { useTranslation } from '@/lib/i18n';
 import { Product } from '@/lib/ember/product-queries';
 import { createOrder } from '@/lib/ember/order-transactions';
 import { toast } from 'sonner';
+import { getDemoShipping } from '@/lib/demo/templates';
 
 interface PurchaseFormProps {
   product: Product;
@@ -21,7 +22,12 @@ export function PurchaseForm({ product }: PurchaseFormProps) {
   const { t } = useTranslation();
   const { account, signAndSubmitTransaction, connected } = useWallet();
   const [quantity, setQuantity] = useState(1);
-  const [shippingInfo, setShippingInfo] = useState('John Doe\n123 Demo Street, Apt 4B\nSan Francisco, CA 94102\nUSA\nPhone: +1 555-123-4567');
+
+  // Random demo data for variation during demos
+  const demoShipping = useMemo(() => getDemoShipping(), []);
+  const defaultShipping = `${demoShipping.name}\n${demoShipping.address}\nPhone: ${demoShipping.phone}${demoShipping.memo ? `\nNote: ${demoShipping.memo}` : ''}`;
+
+  const [shippingInfo, setShippingInfo] = useState(defaultShipping);
   const [loading, setLoading] = useState(false);
   const [showForm, setShowForm] = useState(false);
 

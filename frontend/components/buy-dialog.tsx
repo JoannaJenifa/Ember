@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -18,6 +18,7 @@ import { Product } from '@/lib/ember/product-queries';
 import { createOrder } from '@/lib/ember/order-transactions';
 import { useWalletContext } from '@/hooks/use-wallet-context';
 import { useUsdcBalance } from '@/hooks/use-usdc-balance';
+import { getDemoShipping } from '@/lib/demo/templates';
 
 interface BuyDialogProps {
   product: Product | null;
@@ -38,13 +39,18 @@ interface ShippingInfo {
 export function BuyDialog({ product, open, onOpenChange, onSuccess }: BuyDialogProps) {
   const [quantity, setQuantity] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
+
+  // Random demo data for variation during demos
+  const demoShipping = useMemo(() => getDemoShipping(), []);
+  const addressParts = demoShipping.address.split('\n');
+
   const [shipping, setShipping] = useState<ShippingInfo>({
-    fullName: 'Alex Kim',
-    phone: '+82 10 1234 5678',
-    address: '123 Gangnam-daero, Gangnam-gu',
-    city: 'Seoul',
-    postalCode: '06001',
-    notes: 'Leave with security desk',
+    fullName: demoShipping.name,
+    phone: demoShipping.phone,
+    address: addressParts[0] || '',
+    city: addressParts[1]?.split(',')[0]?.trim() || 'San Francisco',
+    postalCode: addressParts[1]?.match(/\d{5}/)?.[0] || '94102',
+    notes: demoShipping.memo,
   });
 
   const {

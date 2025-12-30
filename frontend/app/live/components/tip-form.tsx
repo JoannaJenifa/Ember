@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -13,6 +13,7 @@ import { useWalletContext } from '@/hooks/use-wallet-context';
 import { usePrivy } from '@privy-io/react-auth';
 import { usePrivyAvailable } from '@/app/providers';
 import type { TransactionContext } from '@/lib/ember/transactions';
+import { getDemoTip } from '@/lib/demo/templates';
 
 const PRESET_AMOUNTS = [1, 5, 10, 25, 50, 100];
 
@@ -23,8 +24,11 @@ interface TipFormProps {
 }
 
 export function TipForm({ streamerAddress, onSuccess, className }: TipFormProps) {
-  const [amount, setAmount] = useState<string>('0.1');
-  const [message, setMessage] = useState('Love your skincare tutorials! Your tips always work wonders!');
+  // Random demo data for variation during demos
+  const demoTip = useMemo(() => getDemoTip(), []);
+
+  const [amount, setAmount] = useState<string>(demoTip.amount);
+  const [message, setMessage] = useState(demoTip.message);
   const [isLoading, setIsLoading] = useState(false);
 
   const { walletAddress, isConnected, isPrivy, publicKeyHex, signAndSubmitTransaction } = useWalletContext();

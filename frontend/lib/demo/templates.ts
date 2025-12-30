@@ -187,6 +187,17 @@ export const giftTemplates = [
 ];
 
 // ============================================
+// DISPUTE TEMPLATES
+// ============================================
+export const disputeTemplates = [
+  { reason: 'not_received', description: 'Package shows as delivered but I never received it. I checked with neighbors and building management but no one has seen it.' },
+  { reason: 'wrong_item', description: 'I ordered the rose serum but received the lavender version instead. The packaging and product are completely different from what I ordered.' },
+  { reason: 'damaged', description: 'The product arrived with the bottle cracked and most of the serum leaked out. The packaging was not adequately protected.' },
+  { reason: 'not_as_described', description: 'The serum consistency is much thinner than shown in the demo. The scent is also different from what was described in the stream.' },
+  { reason: 'quality', description: 'The product quality seems lower than expected. The texture feels different from what was demonstrated and doesn\'t absorb well.' },
+];
+
+// ============================================
 // HELPER FUNCTIONS
 // ============================================
 
@@ -220,4 +231,8 @@ export function getDemoBridge() {
 
 export function getDemoGift() {
   return getRandomTemplate(giftTemplates);
+}
+
+export function getDemoDispute() {
+  return getRandomTemplate(disputeTemplates);
 }

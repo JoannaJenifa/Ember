@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -19,6 +19,7 @@ import { useWalletContext } from '@/hooks/use-wallet-context';
 import { registerSeller } from '@/lib/ember/seller-transactions';
 import { getExplorerUrl } from '@/lib/aptos';
 import { SingleImageUpload } from '@/components/ui/single-image-upload';
+import { getDemoSeller } from '@/lib/demo/templates';
 
 const CATEGORIES = [
   { value: 0, label: 'Fashion & Apparel' },
@@ -38,13 +39,18 @@ export function SellerRegistration({ walletAddress }: SellerRegistrationProps) {
   const { isPrivy, publicKeyHex, signRawHash, signAndSubmitTransaction } = useWalletContext();
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
+
+  // Random demo data for variation during demos
+  const demoData = useMemo(() => getDemoSeller(), []);
+  const categoryMap: Record<string, string> = { fashion: '0', beauty: '1', food: '2', electronics: '3', home: '4', other: '6' };
+
   const [formData, setFormData] = useState({
-    shopName: 'Glow Beauty Studio',
-    description: 'Your destination for premium Korean skincare and makeup. Cruelty-free, dermatologist-tested products for radiant skin.',
+    shopName: demoData.shopName,
+    description: demoData.description,
     profileImage: '',
     coverImage: '',
-    category: '1',
-    youtubeChannel: 'https://youtube.com/@glowbeautystudio',
+    category: categoryMap[demoData.category] || '1',
+    youtubeChannel: `https://youtube.com/@${demoData.shopName.toLowerCase().replace(/\s+/g, '')}`,
   });
 
   const handleSubmit = async (e: React.FormEvent) => {

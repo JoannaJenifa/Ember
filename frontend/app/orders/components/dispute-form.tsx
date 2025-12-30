@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -23,6 +23,7 @@ import { AlertTriangle, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useWalletContext } from '@/hooks/use-wallet-context';
 import { disputeOrder } from '@/lib/ember/order-transactions';
+import { getDemoDispute } from '@/lib/demo/templates';
 
 const DISPUTE_REASONS = [
   { value: 'not_received', label: 'Item not received' },
@@ -42,8 +43,12 @@ interface DisputeFormProps {
 export function DisputeForm({ orderId, onClose, onSuccess }: DisputeFormProps) {
   const { walletAddress, isPrivy, publicKeyHex, signAndSubmitTransaction } = useWalletContext();
   const [loading, setLoading] = useState(false);
-  const [reason, setReason] = useState('not_as_described');
-  const [description, setDescription] = useState('The serum I received has a different consistency than shown in the demo. It seems thinner and the scent is different from what was described.');
+
+  // Random demo data for variation during demos
+  const demoDispute = useMemo(() => getDemoDispute(), []);
+
+  const [reason, setReason] = useState(demoDispute.reason);
+  const [description, setDescription] = useState(demoDispute.description);
 
   const handleSubmit = async () => {
     if (!walletAddress) return;

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -19,6 +19,7 @@ import { useWalletContext } from '@/hooks/use-wallet-context';
 import { useProduct } from '@/hooks/use-products';
 import { createProduct, updateProduct, updateInventory } from '@/lib/ember/product-transactions';
 import { SingleImageUpload } from '@/components/ui/single-image-upload';
+import { getDemoProduct } from '@/lib/demo/templates';
 
 const CATEGORIES = [
   { value: 0, label: 'Fashion & Apparel' },
@@ -42,13 +43,18 @@ export function ProductForm({ sellerAddress, productId, onCancel, onSuccess }: P
   const { product, loading: loadingProduct } = useProduct(productId);
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
+
+  // Random demo data for variation during demos
+  const demoData = useMemo(() => getDemoProduct(), []);
+  const categoryMap: Record<string, string> = { fashion: '0', beauty: '1', food: '2', electronics: '3', home: '4', other: '6' };
+
   const [formData, setFormData] = useState({
-    title: 'Hydrating Rose Serum',
-    description: 'Luxurious hydrating serum with Bulgarian rose extract and hyaluronic acid. Deeply nourishes skin for a dewy, glass-skin glow. Suitable for all skin types.',
+    title: demoData.title,
+    description: demoData.description,
     imageUrl: '',
-    price: '0.5',
-    inventory: '100',
-    category: '1',
+    price: demoData.priceVery,
+    inventory: demoData.inventory,
+    category: categoryMap[demoData.category] || '1',
   });
 
   const isEditing = productId !== null;

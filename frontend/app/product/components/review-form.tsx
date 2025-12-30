@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useWallet } from '@aptos-labs/wallet-adapter-react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -13,6 +13,7 @@ import { submitReview } from '@/lib/ember/review-transactions';
 import { getBuyerOrdersFull, Order, OrderStatus } from '@/lib/ember/order-queries';
 import { hasReviewedOrder } from '@/lib/ember/review-queries';
 import { toast } from 'sonner';
+import { getDemoReview } from '@/lib/demo/templates';
 
 interface ReviewFormProps {
   productId: number;
@@ -23,9 +24,13 @@ interface ReviewFormProps {
 export function ReviewForm({ productId, sellerAddress, onSuccess }: ReviewFormProps) {
   const { t } = useTranslation();
   const { account, signAndSubmitTransaction, connected } = useWallet();
-  const [rating, setRating] = useState(5);
+
+  // Random demo data for variation during demos
+  const demoReview = useMemo(() => getDemoReview(), []);
+
+  const [rating, setRating] = useState(demoReview.rating);
   const [hoverRating, setHoverRating] = useState(0);
-  const [content, setContent] = useState('My skin has never looked better! The serum absorbs quickly and leaves my face so hydrated and glowy. Will definitely repurchase!');
+  const [content, setContent] = useState(demoReview.content);
   const [loading, setLoading] = useState(false);
   const [eligibleOrderId, setEligibleOrderId] = useState<number | null>(null);
 
