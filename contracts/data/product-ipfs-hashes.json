@@ -1,0 +1,132 @@
+[
+  {
+    "file": "beauty-1-glow-serum.json",
+    "title": "Glow Serum Set",
+    "category": "beauty",
+    "sellerId": 1,
+    "priceVery": 45,
+    "inventory": 100,
+    "ipfsHash": "bafkreiar63zeujpxripyoh5beb4ok4jbomh3i4kzy2jhzanbe3tbzaceju",
+    "metadataURI": "ipfs://bafkreiar63zeujpxripyoh5beb4ok4jbomh3i4kzy2jhzanbe3tbzaceju"
+  },
+  {
+    "file": "beauty-2-sheet-mask.json",
+    "title": "K-Beauty Sheet Mask Pack",
+    "category": "beauty",
+    "sellerId": 1,
+    "priceVery": 25,
+    "inventory": 200,
+    "ipfsHash": "bafkreifsgyumtxriemslmteyn7w72le7alpo7ihjoq5n3qtysraijd7254",
+    "metadataURI": "ipfs://bafkreifsgyumtxriemslmteyn7w72le7alpo7ihjoq5n3qtysraijd7254"
+  },
+  {
+    "file": "beauty-3-cushion-foundation.json",
+    "title": "Cushion Foundation SPF50",
+    "category": "beauty",
+    "sellerId": 1,
+    "priceVery": 38,
+    "inventory": 75,
+    "ipfsHash": "bafkreiaxwhimkchgbucqapz3php2ckatuvpsc6tyd6v7vdf5zrwzmcbyea",
+    "metadataURI": "ipfs://bafkreiaxwhimkchgbucqapz3php2ckatuvpsc6tyd6v7vdf5zrwzmcbyea"
+  },
+  {
+    "file": "fashion-1-blazer.json",
+    "title": "Oversized Blazer",
+    "category": "fashion",
+    "sellerId": 2,
+    "priceVery": 89,
+    "inventory": 50,
+    "ipfsHash": "bafkreigmmnr4vljrpujmhe5ennkvgkt5sjd4u4fmvkwztzwapf3sd2furi",
+    "metadataURI": "ipfs://bafkreigmmnr4vljrpujmhe5ennkvgkt5sjd4u4fmvkwztzwapf3sd2furi"
+  },
+  {
+    "file": "fashion-2-pants.json",
+    "title": "Wide Leg Pants",
+    "category": "fashion",
+    "sellerId": 2,
+    "priceVery": 55,
+    "inventory": 80,
+    "ipfsHash": "bafkreie4e7u3w3lh44r6dj7uqwtjj4eevpdvshrkftkl53jiam2e7m37wu",
+    "metadataURI": "ipfs://bafkreie4e7u3w3lh44r6dj7uqwtjj4eevpdvshrkftkl53jiam2e7m37wu"
+  },
+  {
+    "file": "fashion-3-bucket-hat.json",
+    "title": "Bucket Hat",
+    "category": "fashion",
+    "sellerId": 2,
+    "priceVery": 28,
+    "inventory": 150,
+    "ipfsHash": "bafkreiboihzsonxv2qhhtalx3za5dgosfntwxvk7eprbzw5ahap7vz35ku",
+    "metadataURI": "ipfs://bafkreiboihzsonxv2qhhtalx3za5dgosfntwxvk7eprbzw5ahap7vz35ku"
+  },
+  {
+    "file": "food-1-kimchi.json",
+    "title": "Premium Kimchi Set",
+    "category": "food",
+    "sellerId": 3,
+    "priceVery": 35,
+    "inventory": 60,
+    "ipfsHash": "bafkreih6ou6viiakhecf2yizbp5sf7d4bmycz6hymzgp66tbig225mmr34",
+    "metadataURI": "ipfs://bafkreih6ou6viiakhecf2yizbp5sf7d4bmycz6hymzgp66tbig225mmr34"
+  },
+  {
+    "file": "food-2-snack-box.json",
+    "title": "Korean Snack Box",
+    "category": "food",
+    "sellerId": 3,
+    "priceVery": 42,
+    "inventory": 40,
+    "ipfsHash": "bafkreidswcxyxd4uejworjx3555vninhxfegdgxoccmwruonohfefmz4me",
+    "metadataURI": "ipfs://bafkreidswcxyxd4uejworjx3555vninhxfegdgxoccmwruonohfefmz4me"
+  },
+  {
+    "file": "electronics-1-earbuds.json",
+    "title": "Wireless Earbuds Pro",
+    "category": "electronics",
+    "sellerId": 4,
+    "priceVery": 129,
+    "inventory": 35,
+    "ipfsHash": "bafkreif5nqsux2fm4jmlcwzpxqvltvwbf4gxoa6ckhdnfw46wnenltzklq",
+    "metadataURI": "ipfs://bafkreif5nqsux2fm4jmlcwzpxqvltvwbf4gxoa6ckhdnfw46wnenltzklq"
+  },
+  {
+    "file": "electronics-2-watch-band.json",
+    "title": "Smart Watch Band",
+    "category": "electronics",
+    "sellerId": 4,
+    "priceVery": 45,
+    "inventory": 120,
+    "ipfsHash": "bafkreiel7se777w4wqvyh5jmig46lgtoonn4yebzx2mknsc2hpfqw3aihq",
+    "metadataURI": "ipfs://bafkreiel7se777w4wqvyh5jmig46lgtoonn4yebzx2mknsc2hpfqw3aihq"
+  },
+  {
+    "file": "electronics-3-charger.json",
+    "title": "Portable Charger 20000mAh",
+    "category": "electronics",
+    "sellerId": 4,
+    "priceVery": 59,
+    "inventory": 90,
+    "ipfsHash": "bafkreicxmo3tagn65diy4zaqzmxigeihv6vzivwalp66lzp4zso75fj6ke",
+    "metadataURI": "ipfs://bafkreicxmo3tagn65diy4zaqzmxigeihv6vzivwalp66lzp4zso75fj6ke"
+  },
+  {
+    "file": "home-1-tea-set.json",
+    "title": "Ceramic Tea Set",
+    "category": "home",
+    "sellerId": 5,
+    "priceVery": 78,
+    "inventory": 25,
+    "ipfsHash": "bafkreibl2lzjlyvfgde3bwcze3dxinst2bkas5mtf7zlygpqdmrronptaa",
+    "metadataURI": "ipfs://bafkreibl2lzjlyvfgde3bwcze3dxinst2bkas5mtf7zlygpqdmrronptaa"
+  },
+  {
+    "file": "home-2-hanji-lamp.json",
+    "title": "Hanji Lamp",
+    "category": "home",
+    "sellerId": 5,
+    "priceVery": 65,
+    "inventory": 30,
+    "ipfsHash": "bafkreieo5n5mppvrir6l3mnlbljwk4r6oldf64jjd3iawl6ekbdmrmurpm",
+    "metadataURI": "ipfs://bafkreieo5n5mppvrir6l3mnlbljwk4r6oldf64jjd3iawl6ekbdmrmurpm"
+  }
+]
