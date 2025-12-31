@@ -1570,6 +1570,60 @@ export type Database = {
           },
         ]
       }
+      ember_order_details: {
+        Row: {
+          buyer_address: string
+          created_at: string | null
+          id: string
+          product_id: number
+          quantity: number
+          seller_address: string
+          shipping_address: string
+          shipping_city: string
+          shipping_name: string
+          shipping_notes: string | null
+          shipping_phone: string
+          shipping_postal_code: string | null
+          total_price: number
+          tx_hash: string
+          updated_at: string | null
+        }
+        Insert: {
+          buyer_address: string
+          created_at?: string | null
+          id?: string
+          product_id: number
+          quantity?: number
+          seller_address: string
+          shipping_address: string
+          shipping_city: string
+          shipping_name: string
+          shipping_notes?: string | null
+          shipping_phone: string
+          shipping_postal_code?: string | null
+          total_price: number
+          tx_hash: string
+          updated_at?: string | null
+        }
+        Update: {
+          buyer_address?: string
+          created_at?: string | null
+          id?: string
+          product_id?: number
+          quantity?: number
+          seller_address?: string
+          shipping_address?: string
+          shipping_city?: string
+          shipping_name?: string
+          shipping_notes?: string | null
+          shipping_phone?: string
+          shipping_postal_code?: string | null
+          total_price?: number
+          tx_hash?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       ember_streams: {
         Row: {
           created_at: string | null
@@ -6611,6 +6665,57 @@ export type Database = {
             referencedColumns: ["hedera_account_id"]
           },
         ]
+      }
+      velox_maker_transactions: {
+        Row: {
+          created_at: string | null
+          id: number
+          intent_id: string
+          maker_tx_hash: string
+          user_address: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: number
+          intent_id: string
+          maker_tx_hash: string
+          user_address: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: number
+          intent_id?: string
+          maker_tx_hash?: string
+          user_address?: string
+        }
+        Relationships: []
+      }
+      velox_taker_transactions: {
+        Row: {
+          created_at: string | null
+          fill_amount: string | null
+          id: number
+          intent_id: string
+          solver_address: string
+          taker_tx_hash: string
+        }
+        Insert: {
+          created_at?: string | null
+          fill_amount?: string | null
+          id?: number
+          intent_id: string
+          solver_address: string
+          taker_tx_hash: string
+        }
+        Update: {
+          created_at?: string | null
+          fill_amount?: string | null
+          id?: number
+          intent_id?: string
+          solver_address?: string
+          taker_tx_hash?: string
+        }
+        Relationships: []
       }
       wallets: {
         Row: {

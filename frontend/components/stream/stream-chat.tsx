@@ -68,9 +68,9 @@ export function StreamChat({ streamId, className }: StreamChatProps) {
   // Polling for new messages
   useEffect(() => {
     const interval = setInterval(() => {
-      if (lastMessageIdRef.current) {
-        fetchMessages(lastMessageIdRef.current);
-      }
+      // If we have messages, fetch only new ones since last message
+      // If no messages yet, do a full fetch to check for new messages
+      fetchMessages(lastMessageIdRef.current || undefined);
     }, POLL_INTERVAL);
 
     return () => clearInterval(interval);

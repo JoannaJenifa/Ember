@@ -1,6 +1,6 @@
 'use client';
 
-import { use, useState, useCallback } from 'react';
+import { use, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -13,17 +13,19 @@ import {
   ShoppingBag,
   MessageCircle,
   Package,
-  Loader2,
+  Gift,
+  DollarSign,
 } from 'lucide-react';
 import Link from 'next/link';
-import { toast } from 'sonner';
 import { VideoPlayer } from '@/components/stream/video-player';
 import { LiveBadge } from '@/components/stream/live-badge';
 import { StreamChat } from '@/components/stream/stream-chat';
 import { ChatInput } from '@/components/stream/chat-input';
+import { BuyDialog } from '@/components/buy-dialog';
+import { TipForm } from '@/app/live/components/tip-form';
+import { GiftSelector } from '@/app/live/components/gift-selector';
 import { useStream } from '@/lib/hooks/use-stream';
 import { useWalletContext } from '@/hooks/use-wallet-context';
-import { createOrder } from '@/lib/ember/order-transactions';
 import { formatMoveAmount } from '@/lib/aptos';
 import { Product } from '@/lib/ember/product-queries';
 
@@ -34,65 +36,14 @@ interface StreamPageProps {
 export default function StreamPage({ params }: StreamPageProps) {
   const { streamId } = use(params);
   const { stream, loading, error } = useStream(streamId);
-  const {
-    walletAddress: address,
-    isConnected,
-    isPrivy,
-    signRawHash,
-    publicKeyHex,
-    signAndSubmitTransaction,
-  } = useWalletContext();
-  const [orderLoading, setOrderLoading] = useState<number | null>(null);
+  const { walletAddress: address, isConnected } = useWalletContext();
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [buyDialogOpen, setBuyDialogOpen] = useState(false);
 
-  const handleBuy = useCallback(
-    async (product: Product) => {
-      if (!address) {
-        toast.error('Please connect your wallet');
-        return;
-      }
-
-      setOrderLoading(product.id);
-      const loadingToast = toast.loading('Processing order...');
-
-      try {
-        const shippingJson = JSON.stringify({
-          name: 'Demo User',
-          phone: '+1234567890',
-          address: '123 Demo Street, Demo City',
-          memo: 'Live stream purchase',
-        });
-
-        const txHash = await createOrder(address, product.id, 1, shippingJson, {
-          isPrivy,
-          signRawHash: signRawHash || undefined,
-          publicKeyHex: publicKeyHex || undefined,
-          signAndSubmitTransaction: signAndSubmitTransaction || undefined,
-        });
-
-        toast.dismiss(loadingToast);
-        toast.success('Order placed!', {
-          description: `Transaction: ${txHash.slice(0, 10)}...`,
-          action: {
-            label: 'View TX',
-            onClick: () =>
-              window.open(
-                `https://explorer.movementnetwork.xyz/txn/${txHash}?network=testnet`,
-                '_blank'
-              ),
-          },
-        });
-      } catch (err) {
-        console.error('Order creation failed:', err);
-        toast.dismiss(loadingToast);
-        toast.error('Failed to place order', {
-          description: err instanceof Error ? err.message : 'Unknown error',
-        });
-      } finally {
-        setOrderLoading(null);
-      }
-    },
-    [address, isPrivy, signRawHash, publicKeyHex, signAndSubmitTransaction]
-  );
+  const handleBuyClick = (product: Product) => {
+    setSelectedProduct(product);
+    setBuyDialogOpen(true);
+  };
 
   if (loading) {
     return <StreamPageSkeleton />;
@@ -204,18 +155,21 @@ export default function StreamPage({ params }: StreamPageProps) {
                   <p className="text-sm">No products featured</p>
                 </div>
               ) : (
-                <div className="space-y-3 max-h-[400px] overflow-y-auto">
+                <div className="space-y-3 max-h-[300px] overflow-y-auto">
                   {products.map((product) => (
                     <ProductItem
                       key={product.id}
                       product={product}
-                      onBuy={() => handleBuy(product)}
-                      loading={orderLoading === product.id}
+                      onBuy={() => handleBuyClick(product)}
                     />
                   ))}
                 </div>
               )}
             </Card>
+
+            {/* Tip & Gift */}
+            <TipForm streamerAddress={sellerAddress} />
+            <GiftSelector streamerAddress={sellerAddress} />
 
             {/* Seller Card */}
             {stream.seller && (
@@ -269,14 +223,18 @@ export default function StreamPage({ params }: StreamPageProps) {
 
           {/* Tabs */}
           <Tabs defaultValue="products" className="mt-4">
-            <TabsList className="w-full">
-              <TabsTrigger value="products" className="flex-1">
-                <ShoppingBag className="h-4 w-4 mr-2" />
-                Products
+            <TabsList className="w-full grid grid-cols-4">
+              <TabsTrigger value="products">
+                <ShoppingBag className="h-4 w-4" />
               </TabsTrigger>
-              <TabsTrigger value="chat" className="flex-1">
-                <MessageCircle className="h-4 w-4 mr-2" />
-                Chat
+              <TabsTrigger value="chat">
+                <MessageCircle className="h-4 w-4" />
+              </TabsTrigger>
+              <TabsTrigger value="tip">
+                <DollarSign className="h-4 w-4" />
+              </TabsTrigger>
+              <TabsTrigger value="gift">
+                <Gift className="h-4 w-4" />
               </TabsTrigger>
             </TabsList>
             <TabsContent value="products" className="mt-4">
@@ -285,8 +243,7 @@ export default function StreamPage({ params }: StreamPageProps) {
                   <ProductItem
                     key={product.id}
                     product={product}
-                    onBuy={() => handleBuy(product)}
-                    loading={orderLoading === product.id}
+                    onBuy={() => handleBuyClick(product)}
                   />
                 ))}
               </div>
@@ -301,9 +258,22 @@ export default function StreamPage({ params }: StreamPageProps) {
                 className="flex-1"
               />
             </TabsContent>
+            <TabsContent value="tip" className="mt-4">
+              <TipForm streamerAddress={sellerAddress} />
+            </TabsContent>
+            <TabsContent value="gift" className="mt-4">
+              <GiftSelector streamerAddress={sellerAddress} />
+            </TabsContent>
           </Tabs>
         </div>
       </div>
+
+      {/* Buy Dialog */}
+      <BuyDialog
+        product={selectedProduct}
+        open={buyDialogOpen}
+        onOpenChange={setBuyDialogOpen}
+      />
     </main>
   );
 }
@@ -311,11 +281,9 @@ export default function StreamPage({ params }: StreamPageProps) {
 function ProductItem({
   product,
   onBuy,
-  loading,
 }: {
   product: Product;
   onBuy: () => void;
-  loading: boolean;
 }) {
   return (
     <div className="flex items-center gap-3 p-2 rounded-lg hover:bg-accent transition-colors">
@@ -344,9 +312,9 @@ function ProductItem({
         variant="outline"
         className="shrink-0"
         onClick={onBuy}
-        disabled={product.inventory === 0 || loading}
+        disabled={product.inventory === 0}
       >
-        {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Buy'}
+        Buy
       </Button>
     </div>
   );
