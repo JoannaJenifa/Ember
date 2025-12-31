@@ -18,7 +18,7 @@ interface GoLivePanelProps {
 
 export function GoLivePanel({ sellerAddress }: GoLivePanelProps) {
   const { products, loading } = useSellerProducts(sellerAddress);
-  const [youtubeUrl, setYoutubeUrl] = useState('');
+  const [youtubeUrl, setYoutubeUrl] = useState('https://youtube.com/watch?v=dQw4w9WgXcQ');
   const [selectedProducts, setSelectedProducts] = useState<number[]>([]);
   const [isLive, setIsLive] = useState(false);
 

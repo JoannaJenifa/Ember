@@ -39,12 +39,12 @@ export function SellerRegistration({ walletAddress }: SellerRegistrationProps) {
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [formData, setFormData] = useState({
-    shopName: '',
-    description: '',
+    shopName: 'Ember Demo Store',
+    description: 'Premium quality products for live commerce enthusiasts. Fast shipping and great customer service!',
     profileImage: '',
     coverImage: '',
-    category: '',
-    youtubeChannel: '',
+    category: '3',
+    youtubeChannel: 'https://youtube.com/@emberdemo',
   });
 
   const handleSubmit = async (e: React.FormEvent) => {

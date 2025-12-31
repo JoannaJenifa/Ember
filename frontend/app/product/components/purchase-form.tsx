@@ -21,7 +21,7 @@ export function PurchaseForm({ product }: PurchaseFormProps) {
   const { t } = useTranslation();
   const { account, signAndSubmitTransaction, connected } = useWallet();
   const [quantity, setQuantity] = useState(1);
-  const [shippingInfo, setShippingInfo] = useState('');
+  const [shippingInfo, setShippingInfo] = useState('John Doe\n123 Demo Street, Apt 4B\nSan Francisco, CA 94102\nUSA\nPhone: +1 555-123-4567');
   const [loading, setLoading] = useState(false);
   const [showForm, setShowForm] = useState(false);
 

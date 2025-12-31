@@ -43,12 +43,12 @@ export function ProductForm({ sellerAddress, productId, onCancel, onSuccess }: P
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [formData, setFormData] = useState({
-    title: '',
-    description: '',
+    title: 'Wireless Gaming Headset Pro',
+    description: 'Premium wireless headset with active noise cancellation, 40-hour battery life, and crystal-clear audio for gaming and music.',
     imageUrl: '',
-    price: '',
-    inventory: '',
-    category: '',
+    price: '2.5',
+    inventory: '50',
+    category: '3',
   });
 
   const isEditing = productId !== null;
