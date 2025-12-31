@@ -1,0 +1,609 @@
+{
+  "provider": "thegraph",
+  "subgraph": {
+    "name": "OrderEscrow",
+    "slug": "orderescrow",
+    "version": "1.0.0",
+    "endpoint": "",
+    "network": "amoy"
+  },
+  "schema": {
+    "entities": [
+      {
+        "name": "Order",
+        "pluralName": "orders",
+        "fields": [
+          {
+            "name": "id",
+            "type": "ID",
+            "baseType": "ID",
+            "isRequired": true,
+            "isArray": false,
+            "isRelation": false
+          },
+          {
+            "name": "buyer",
+            "type": "Bytes",
+            "baseType": "Bytes",
+            "isRequired": true,
+            "isArray": false,
+            "isRelation": false
+          },
+          {
+            "name": "seller",
+            "type": "Bytes",
+            "baseType": "Bytes",
+            "isRequired": true,
+            "isArray": false,
+            "isRelation": false
+          },
+          {
+            "name": "productId",
+            "type": "BigInt",
+            "baseType": "BigInt",
+            "isRequired": true,
+            "isArray": false,
+            "isRelation": false
+          },
+          {
+            "name": "amount",
+            "type": "BigInt",
+            "baseType": "BigInt",
+            "isRequired": true,
+            "isArray": false,
+            "isRelation": false
+          },
+          {
+            "name": "status",
+            "type": "OrderStatus",
+            "baseType": "OrderStatus",
+            "isRequired": true,
+            "isArray": false,
+            "isRelation": false
+          },
+          {
+            "name": "createdAt",
+            "type": "BigInt",
+            "baseType": "BigInt",
+            "isRequired": true,
+            "isArray": false,
+            "isRelation": false
+          },
+          {
+            "name": "confirmedAt",
+            "type": "BigInt",
+            "baseType": "BigInt",
+            "isRequired": false,
+            "isArray": false,
+            "isRelation": false
+          },
+          {
+            "name": "releasedAmount",
+            "type": "BigInt",
+            "baseType": "BigInt",
+            "isRequired": false,
+            "isArray": false,
+            "isRelation": false
+          },
+          {
+            "name": "txHash",
+            "type": "Bytes",
+            "baseType": "Bytes",
+            "isRequired": true,
+            "isArray": false,
+            "isRelation": false
+          },
+          {
+            "name": "blockNumber",
+            "type": "BigInt",
+            "baseType": "BigInt",
+            "isRequired": true,
+            "isArray": false,
+            "isRelation": false
+          }
+        ],
+        "isTimeseries": false,
+        "isImmutable": false,
+        "directives": [
+          "@entity"
+        ]
+      },
+      {
+        "name": "Review",
+        "pluralName": "reviews",
+        "fields": [
+          {
+            "name": "id",
+            "type": "ID",
+            "baseType": "ID",
+            "isRequired": true,
+            "isArray": false,
+            "isRelation": false
+          },
+          {
+            "name": "order",
+            "type": "Order",
+            "baseType": "Order",
+            "isRequired": true,
+            "isArray": false,
+            "isRelation": false
+          },
+          {
+            "name": "productId",
+            "type": "BigInt",
+            "baseType": "BigInt",
+            "isRequired": true,
+            "isArray": false,
+            "isRelation": false
+          },
+          {
+            "name": "buyer",
+            "type": "Bytes",
+            "baseType": "Bytes",
+            "isRequired": true,
+            "isArray": false,
+            "isRelation": false
+          },
+          {
+            "name": "rating",
+            "type": "Int",
+            "baseType": "Int",
+            "isRequired": true,
+            "isArray": false,
+            "isRelation": false
+          },
+          {
+            "name": "contentHash",
+            "type": "Bytes",
+            "baseType": "Bytes",
+            "isRequired": true,
+            "isArray": false,
+            "isRelation": false
+          },
+          {
+            "name": "createdAt",
+            "type": "BigInt",
+            "baseType": "BigInt",
+            "isRequired": true,
+            "isArray": false,
+            "isRelation": false
+          },
+          {
+            "name": "txHash",
+            "type": "Bytes",
+            "baseType": "Bytes",
+            "isRequired": true,
+            "isArray": false,
+            "isRelation": false
+          },
+          {
+            "name": "blockNumber",
+            "type": "BigInt",
+            "baseType": "BigInt",
+            "isRequired": true,
+            "isArray": false,
+            "isRelation": false
+          }
+        ],
+        "isTimeseries": false,
+        "isImmutable": true,
+        "directives": [
+          "@entity(immutable: true)"
+        ]
+      },
+      {
+        "name": "ProductRating",
+        "pluralName": "productRatings",
+        "fields": [
+          {
+            "name": "id",
+            "type": "ID",
+            "baseType": "ID",
+            "isRequired": true,
+            "isArray": false,
+            "isRelation": false
+          },
+          {
+            "name": "totalRating",
+            "type": "BigInt",
+            "baseType": "BigInt",
+            "isRequired": true,
+            "isArray": false,
+            "isRelation": false
+          },
+          {
+            "name": "reviewCount",
+            "type": "BigInt",
+            "baseType": "BigInt",
+            "isRequired": true,
+            "isArray": false,
+            "isRelation": false
+          },
+          {
+            "name": "averageRating",
+            "type": "BigDecimal",
+            "baseType": "BigDecimal",
+            "isRequired": true,
+            "isArray": false,
+            "isRelation": false
+          }
+        ],
+        "isTimeseries": false,
+        "isImmutable": false,
+        "directives": [
+          "@entity"
+        ]
+      },
+      {
+        "name": "Tip",
+        "pluralName": "tips",
+        "fields": [
+          {
+            "name": "id",
+            "type": "ID",
+            "baseType": "ID",
+            "isRequired": true,
+            "isArray": false,
+            "isRelation": false
+          },
+          {
+            "name": "from",
+            "type": "Bytes",
+            "baseType": "Bytes",
+            "isRequired": true,
+            "isArray": false,
+            "isRelation": false
+          },
+          {
+            "name": "streamer",
+            "type": "Bytes",
+            "baseType": "Bytes",
+            "isRequired": true,
+            "isArray": false,
+            "isRelation": false
+          },
+          {
+            "name": "amount",
+            "type": "BigInt",
+            "baseType": "BigInt",
+            "isRequired": true,
+            "isArray": false,
+            "isRelation": false
+          },
+          {
+            "name": "message",
+            "type": "String",
+            "baseType": "String",
+            "isRequired": false,
+            "isArray": false,
+            "isRelation": false
+          },
+          {
+            "name": "createdAt",
+            "type": "BigInt",
+            "baseType": "BigInt",
+            "isRequired": true,
+            "isArray": false,
+            "isRelation": false
+          },
+          {
+            "name": "txHash",
+            "type": "Bytes",
+            "baseType": "Bytes",
+            "isRequired": true,
+            "isArray": false,
+            "isRelation": false
+          },
+          {
+            "name": "blockNumber",
+            "type": "BigInt",
+            "baseType": "BigInt",
+            "isRequired": true,
+            "isArray": false,
+            "isRelation": false
+          }
+        ],
+        "isTimeseries": false,
+        "isImmutable": true,
+        "directives": [
+          "@entity(immutable: true)"
+        ]
+      },
+      {
+        "name": "Gift",
+        "pluralName": "gifts",
+        "fields": [
+          {
+            "name": "id",
+            "type": "ID",
+            "baseType": "ID",
+            "isRequired": true,
+            "isArray": false,
+            "isRelation": false
+          },
+          {
+            "name": "name",
+            "type": "String",
+            "baseType": "String",
+            "isRequired": true,
+            "isArray": false,
+            "isRelation": false
+          },
+          {
+            "name": "price",
+            "type": "BigInt",
+            "baseType": "BigInt",
+            "isRequired": true,
+            "isArray": false,
+            "isRelation": false
+          },
+          {
+            "name": "animationURI",
+            "type": "String",
+            "baseType": "String",
+            "isRequired": true,
+            "isArray": false,
+            "isRelation": false
+          },
+          {
+            "name": "active",
+            "type": "Boolean",
+            "baseType": "Boolean",
+            "isRequired": true,
+            "isArray": false,
+            "isRelation": false
+          },
+          {
+            "name": "createdAt",
+            "type": "BigInt",
+            "baseType": "BigInt",
+            "isRequired": true,
+            "isArray": false,
+            "isRelation": false
+          },
+          {
+            "name": "txHash",
+            "type": "Bytes",
+            "baseType": "Bytes",
+            "isRequired": true,
+            "isArray": false,
+            "isRelation": false
+          }
+        ],
+        "isTimeseries": false,
+        "isImmutable": false,
+        "directives": [
+          "@entity"
+        ]
+      },
+      {
+        "name": "GiftSent",
+        "pluralName": "giftSents",
+        "fields": [
+          {
+            "name": "id",
+            "type": "ID",
+            "baseType": "ID",
+            "isRequired": true,
+            "isArray": false,
+            "isRelation": false
+          },
+          {
+            "name": "from",
+            "type": "Bytes",
+            "baseType": "Bytes",
+            "isRequired": true,
+            "isArray": false,
+            "isRelation": false
+          },
+          {
+            "name": "streamer",
+            "type": "Bytes",
+            "baseType": "Bytes",
+            "isRequired": true,
+            "isArray": false,
+            "isRelation": false
+          },
+          {
+            "name": "gift",
+            "type": "Gift",
+            "baseType": "Gift",
+            "isRequired": true,
+            "isArray": false,
+            "isRelation": false
+          },
+          {
+            "name": "quantity",
+            "type": "BigInt",
+            "baseType": "BigInt",
+            "isRequired": true,
+            "isArray": false,
+            "isRelation": false
+          },
+          {
+            "name": "totalValue",
+            "type": "BigInt",
+            "baseType": "BigInt",
+            "isRequired": true,
+            "isArray": false,
+            "isRelation": false
+          },
+          {
+            "name": "createdAt",
+            "type": "BigInt",
+            "baseType": "BigInt",
+            "isRequired": true,
+            "isArray": false,
+            "isRelation": false
+          },
+          {
+            "name": "txHash",
+            "type": "Bytes",
+            "baseType": "Bytes",
+            "isRequired": true,
+            "isArray": false,
+            "isRelation": false
+          },
+          {
+            "name": "blockNumber",
+            "type": "BigInt",
+            "baseType": "BigInt",
+            "isRequired": true,
+            "isArray": false,
+            "isRelation": false
+          }
+        ],
+        "isTimeseries": false,
+        "isImmutable": true,
+        "directives": [
+          "@entity(immutable: true)"
+        ]
+      },
+      {
+        "name": "StreamerStats",
+        "pluralName": "streamerStats",
+        "fields": [
+          {
+            "name": "id",
+            "type": "ID",
+            "baseType": "ID",
+            "isRequired": true,
+            "isArray": false,
+            "isRelation": false
+          },
+          {
+            "name": "totalTips",
+            "type": "BigInt",
+            "baseType": "BigInt",
+            "isRequired": true,
+            "isArray": false,
+            "isRelation": false
+          },
+          {
+            "name": "totalGifts",
+            "type": "BigInt",
+            "baseType": "BigInt",
+            "isRequired": true,
+            "isArray": false,
+            "isRelation": false
+          },
+          {
+            "name": "tipCount",
+            "type": "BigInt",
+            "baseType": "BigInt",
+            "isRequired": true,
+            "isArray": false,
+            "isRelation": false
+          },
+          {
+            "name": "giftCount",
+            "type": "BigInt",
+            "baseType": "BigInt",
+            "isRequired": true,
+            "isArray": false,
+            "isRelation": false
+          }
+        ],
+        "isTimeseries": false,
+        "isImmutable": false,
+        "directives": [
+          "@entity"
+        ]
+      },
+      {
+        "name": "DailyVolume",
+        "pluralName": "dailyVolumes",
+        "fields": [
+          {
+            "name": "id",
+            "type": "ID",
+            "baseType": "ID",
+            "isRequired": true,
+            "isArray": false,
+            "isRelation": false
+          },
+          {
+            "name": "date",
+            "type": "BigInt",
+            "baseType": "BigInt",
+            "isRequired": true,
+            "isArray": false,
+            "isRelation": false
+          },
+          {
+            "name": "orderVolume",
+            "type": "BigInt",
+            "baseType": "BigInt",
+            "isRequired": true,
+            "isArray": false,
+            "isRelation": false
+          },
+          {
+            "name": "tipVolume",
+            "type": "BigInt",
+            "baseType": "BigInt",
+            "isRequired": true,
+            "isArray": false,
+            "isRelation": false
+          },
+          {
+            "name": "giftVolume",
+            "type": "BigInt",
+            "baseType": "BigInt",
+            "isRequired": true,
+            "isArray": false,
+            "isRelation": false
+          },
+          {
+            "name": "orderCount",
+            "type": "BigInt",
+            "baseType": "BigInt",
+            "isRequired": true,
+            "isArray": false,
+            "isRelation": false
+          },
+          {
+            "name": "tipCount",
+            "type": "BigInt",
+            "baseType": "BigInt",
+            "isRequired": true,
+            "isArray": false,
+            "isRelation": false
+          },
+          {
+            "name": "giftCount",
+            "type": "BigInt",
+            "baseType": "BigInt",
+            "isRequired": true,
+            "isArray": false,
+            "isRelation": false
+          }
+        ],
+        "isTimeseries": false,
+        "isImmutable": false,
+        "directives": [
+          "@entity"
+        ]
+      }
+    ],
+    "queries": {
+      "getOrders": "query GetOrders($first: Int = 10, $skip: Int = 0) {\n  orders(first: $first, skip: $skip, orderDirection: desc) {\n    id\n    buyer\n    seller\n    productId\n    amount\n    createdAt\n    confirmedAt\n    releasedAmount\n    txHash\n    blockNumber\n  }\n}",
+      "getOrder": "query GetOrder($id: ID!) {\n  order(id: $id) {\n    id\n    buyer\n    seller\n    productId\n    amount\n    createdAt\n    confirmedAt\n    releasedAmount\n    txHash\n    blockNumber\n  }\n}",
+      "getReviews": "query GetReviews($first: Int = 10, $skip: Int = 0) {\n  reviews(first: $first, skip: $skip, orderDirection: desc) {\n    id\n    productId\n    buyer\n    rating\n    contentHash\n    createdAt\n    txHash\n    blockNumber\n  }\n}",
+      "getReview": "query GetReview($id: ID!) {\n  review(id: $id) {\n    id\n    productId\n    buyer\n    rating\n    contentHash\n    createdAt\n    txHash\n    blockNumber\n  }\n}",
+      "getProductRatings": "query GetProductRatings($first: Int = 10, $skip: Int = 0) {\n  productRatings(first: $first, skip: $skip, orderDirection: desc) {\n    id\n    totalRating\n    reviewCount\n    averageRating\n  }\n}",
+      "getProductRating": "query GetProductRating($id: ID!) {\n  productrating(id: $id) {\n    id\n    totalRating\n    reviewCount\n    averageRating\n  }\n}",
+      "getTips": "query GetTips($first: Int = 10, $skip: Int = 0) {\n  tips(first: $first, skip: $skip, orderDirection: desc) {\n    id\n    from\n    streamer\n    amount\n    message\n    createdAt\n    txHash\n    blockNumber\n  }\n}",
+      "getTip": "query GetTip($id: ID!) {\n  tip(id: $id) {\n    id\n    from\n    streamer\n    amount\n    message\n    createdAt\n    txHash\n    blockNumber\n  }\n}",
+      "getGifts": "query GetGifts($first: Int = 10, $skip: Int = 0) {\n  gifts(first: $first, skip: $skip, orderDirection: desc) {\n    id\n    name\n    price\n    animationURI\n    active\n    createdAt\n    txHash\n  }\n}",
+      "getGift": "query GetGift($id: ID!) {\n  gift(id: $id) {\n    id\n    name\n    price\n    animationURI\n    active\n    createdAt\n    txHash\n  }\n}",
+      "getGiftSents": "query GetGiftSents($first: Int = 10, $skip: Int = 0) {\n  giftSents(first: $first, skip: $skip, orderDirection: desc) {\n    id\n    from\n    streamer\n    quantity\n    totalValue\n    createdAt\n    txHash\n    blockNumber\n  }\n}",
+      "getGiftSent": "query GetGiftSent($id: ID!) {\n  giftsent(id: $id) {\n    id\n    from\n    streamer\n    quantity\n    totalValue\n    createdAt\n    txHash\n    blockNumber\n  }\n}",
+      "getStreamerStatss": "query GetStreamerStatss($first: Int = 10, $skip: Int = 0) {\n  streamerStats(first: $first, skip: $skip, orderDirection: desc) {\n    id\n    totalTips\n    totalGifts\n    tipCount\n    giftCount\n  }\n}",
+      "getStreamerStats": "query GetStreamerStats($id: ID!) {\n  streamerstats(id: $id) {\n    id\n    totalTips\n    totalGifts\n    tipCount\n    giftCount\n  }\n}",
+      "getDailyVolumes": "query GetDailyVolumes($first: Int = 10, $skip: Int = 0) {\n  dailyVolumes(first: $first, skip: $skip, orderDirection: desc) {\n    id\n    date\n    orderVolume\n    tipVolume\n    giftVolume\n    orderCount\n    tipCount\n    giftCount\n  }\n}",
+      "getDailyVolume": "query GetDailyVolume($id: ID!) {\n  dailyvolume(id: $id) {\n    id\n    date\n    orderVolume\n    tipVolume\n    giftVolume\n    orderCount\n    tipCount\n    giftCount\n  }\n}"
+    }
+  },
+  "generatedAt": "2025-12-30T09:57:16.683Z"
+}

@@ -1,0 +1,54 @@
+{
+  "amoy": {
+    "SellerRegistry": {
+      "address": "0xDCE0738284b2dD48883dDd46f4939b171f06db2d",
+      "startBlock": 20800000
+    },
+    "ProductRegistry": {
+      "address": "0xE63F8524f76EF3cF3b2835C80A706f29d9F23975",
+      "startBlock": 20800000
+    },
+    "OrderEscrow": {
+      "address": "0xc91cf854ba36eEBcF72459573d8532Ecfe373652",
+      "startBlock": 20800000
+    },
+    "ReviewRegistry": {
+      "address": "0xD3252A58aBAB0cD5E52e9980715798c243F9aC3e",
+      "startBlock": 20800000
+    },
+    "TipJar": {
+      "address": "0x217f6f6A1D3BFC1950177704B453a37Dd3ae17a8",
+      "startBlock": 20800000
+    },
+    "GiftShop": {
+      "address": "0x2848F11Bd418E747b523a3d83579Ef191dEEA644",
+      "startBlock": 20800000
+    }
+  },
+  "verychain": {
+    "SellerRegistry": {
+      "address": "0x0000000000000000000000000000000000000001",
+      "startBlock": 1
+    },
+    "ProductRegistry": {
+      "address": "0x0000000000000000000000000000000000000002",
+      "startBlock": 1
+    },
+    "OrderEscrow": {
+      "address": "0x0000000000000000000000000000000000000003",
+      "startBlock": 1
+    },
+    "ReviewRegistry": {
+      "address": "0x0000000000000000000000000000000000000004",
+      "startBlock": 1
+    },
+    "TipJar": {
+      "address": "0x0000000000000000000000000000000000000005",
+      "startBlock": 1
+    },
+    "GiftShop": {
+      "address": "0x0000000000000000000000000000000000000006",
+      "startBlock": 1
+    }
+  }
+}
