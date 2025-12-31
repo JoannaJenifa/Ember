@@ -10,8 +10,6 @@ import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import { sendTip } from '@/lib/ember/tip-transactions';
 import { useWalletContext } from '@/hooks/use-wallet-context';
-import { usePrivy } from '@privy-io/react-auth';
-import { usePrivyAvailable } from '@/app/providers';
 import type { TransactionContext } from '@/lib/ember/transactions';
 import { getDemoTip } from '@/lib/demo/templates';
 
@@ -19,11 +17,12 @@ const PRESET_AMOUNTS = [1, 5, 10, 25, 50, 100];
 
 interface TipFormProps {
   streamerAddress: string;
+  streamId?: string;
   onSuccess?: (txHash: string, amount: number, message: string) => void;
   className?: string;
 }
 
-export function TipForm({ streamerAddress, onSuccess, className }: TipFormProps) {
+export function TipForm({ streamerAddress, streamId, onSuccess, className }: TipFormProps) {
   // Random demo data for variation during demos
   const demoTip = useMemo(() => getDemoTip(), []);
 
@@ -31,9 +30,7 @@ export function TipForm({ streamerAddress, onSuccess, className }: TipFormProps)
   const [message, setMessage] = useState(demoTip.message);
   const [isLoading, setIsLoading] = useState(false);
 
-  const { walletAddress, isConnected, isPrivy, publicKeyHex, signAndSubmitTransaction } = useWalletContext();
-  const isPrivyAvailable = usePrivyAvailable();
-  const privyHook = isPrivyAvailable ? usePrivy() : null;
+  const { walletAddress, isConnected, isPrivy, publicKeyHex, signRawHash, signAndSubmitTransaction } = useWalletContext();
 
   const handlePresetClick = (preset: number) => {
     setAmount(preset.toString());
@@ -57,9 +54,9 @@ export function TipForm({ streamerAddress, onSuccess, className }: TipFormProps)
 
       const context: TransactionContext = {
         isPrivy,
-        signRawHash: isPrivy && privyHook ? privyHook.signMessage : undefined,
-        publicKeyHex: isPrivy ? publicKeyHex : undefined,
-        signAndSubmitTransaction: !isPrivy ? signAndSubmitTransaction ?? undefined : undefined,
+        publicKeyHex,
+        signRawHash: signRawHash || undefined,
+        signAndSubmitTransaction: signAndSubmitTransaction || undefined,
       };
 
       const txHash = await sendTip(
@@ -78,6 +75,21 @@ export function TipForm({ streamerAddress, onSuccess, className }: TipFormProps)
           onClick: () => window.open(`https://explorer.movementnetwork.xyz/txn/${txHash}`, '_blank'),
         },
       });
+
+      // Send chat message if streamId is provided
+      if (streamId) {
+        const chatMessage = message ? `tipped $${amountNum}: "${message}"` : `tipped $${amountNum}`;
+        fetch(`/api/streams/${streamId}/chat`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            sender_address: walletAddress,
+            message: chatMessage,
+            message_type: 'tip',
+            metadata: { amount: amountNum, txHash },
+          }),
+        }).catch(console.error);
+      }
 
       onSuccess?.(txHash, amountNum, message);
       setAmount('');

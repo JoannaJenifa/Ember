@@ -9,25 +9,22 @@ import { toast } from 'sonner';
 import { sendGift, GiftType } from '@/lib/ember/gift-transactions';
 import { useGiftPrices, GIFT_NAMES, GIFT_EMOJIS } from '@/hooks/use-gifts';
 import { useWalletContext } from '@/hooks/use-wallet-context';
-import { usePrivy } from '@privy-io/react-auth';
-import { usePrivyAvailable } from '@/app/providers';
 import type { TransactionContext } from '@/lib/ember/transactions';
 
 interface GiftSelectorProps {
   streamerAddress: string;
+  streamId?: string;
   onSuccess?: (txHash: string, giftType: number, quantity: number) => void;
   className?: string;
 }
 
-export function GiftSelector({ streamerAddress, onSuccess, className }: GiftSelectorProps) {
+export function GiftSelector({ streamerAddress, streamId, onSuccess, className }: GiftSelectorProps) {
   const [selectedGift, setSelectedGift] = useState<number | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
 
   const { prices, loading: pricesLoading } = useGiftPrices();
-  const { walletAddress, isConnected, isPrivy, publicKeyHex, signAndSubmitTransaction } = useWalletContext();
-  const isPrivyAvailable = usePrivyAvailable();
-  const privyHook = isPrivyAvailable ? usePrivy() : null;
+  const { walletAddress, isConnected, isPrivy, publicKeyHex, signRawHash, signAndSubmitTransaction } = useWalletContext();
 
   const formatPrice = (price: number) => (price / 1e6).toFixed(0);
 
@@ -43,9 +40,9 @@ export function GiftSelector({ streamerAddress, onSuccess, className }: GiftSele
     try {
       const context: TransactionContext = {
         isPrivy,
-        signRawHash: isPrivy && privyHook ? privyHook.signMessage : undefined,
-        publicKeyHex: isPrivy ? publicKeyHex : undefined,
-        signAndSubmitTransaction: !isPrivy ? signAndSubmitTransaction ?? undefined : undefined,
+        publicKeyHex,
+        signRawHash: signRawHash || undefined,
+        signAndSubmitTransaction: signAndSubmitTransaction || undefined,
       };
 
       const txHash = await sendGift(
@@ -65,6 +62,23 @@ export function GiftSelector({ streamerAddress, onSuccess, className }: GiftSele
           onClick: () => window.open(`https://explorer.movementnetwork.xyz/txn/${txHash}`, '_blank'),
         },
       });
+
+      // Send chat message if streamId is provided
+      if (streamId) {
+        const giftName = GIFT_NAMES[selectedGift];
+        const giftEmoji = GIFT_EMOJIS[selectedGift];
+        const chatMessage = `sent ${quantity}x ${giftEmoji} ${giftName}`;
+        fetch(`/api/streams/${streamId}/chat`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            sender_address: walletAddress,
+            message: chatMessage,
+            message_type: 'gift',
+            metadata: { giftType: selectedGift, giftName, quantity, txHash },
+          }),
+        }).catch(console.error);
+      }
 
       onSuccess?.(txHash, selectedGift, quantity);
       setSelectedGift(null);

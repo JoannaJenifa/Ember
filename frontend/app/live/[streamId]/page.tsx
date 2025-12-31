@@ -168,8 +168,8 @@ export default function StreamPage({ params }: StreamPageProps) {
             </Card>
 
             {/* Tip & Gift */}
-            <TipForm streamerAddress={sellerAddress} />
-            <GiftSelector streamerAddress={sellerAddress} />
+            <TipForm streamerAddress={sellerAddress} streamId={streamId} />
+            <GiftSelector streamerAddress={sellerAddress} streamId={streamId} />
 
             {/* Seller Card */}
             {stream.seller && (
@@ -259,10 +259,10 @@ export default function StreamPage({ params }: StreamPageProps) {
               />
             </TabsContent>
             <TabsContent value="tip" className="mt-4">
-              <TipForm streamerAddress={sellerAddress} />
+              <TipForm streamerAddress={sellerAddress} streamId={streamId} />
             </TabsContent>
             <TabsContent value="gift" className="mt-4">
-              <GiftSelector streamerAddress={sellerAddress} />
+              <GiftSelector streamerAddress={sellerAddress} streamId={streamId} />
             </TabsContent>
           </Tabs>
         </div>
@@ -273,6 +273,7 @@ export default function StreamPage({ params }: StreamPageProps) {
         product={selectedProduct}
         open={buyDialogOpen}
         onOpenChange={setBuyDialogOpen}
+        streamId={streamId}
       />
     </main>
   );

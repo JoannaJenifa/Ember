@@ -24,6 +24,7 @@ interface BuyDialogProps {
   product: Product | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  streamId?: string;
   onSuccess?: (txHash: string) => void;
 }
 
@@ -36,7 +37,7 @@ interface ShippingInfo {
   notes: string;
 }
 
-export function BuyDialog({ product, open, onOpenChange, onSuccess }: BuyDialogProps) {
+export function BuyDialog({ product, open, onOpenChange, streamId, onSuccess }: BuyDialogProps) {
   const [quantity, setQuantity] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -131,6 +132,22 @@ export function BuyDialog({ product, open, onOpenChange, onSuccess }: BuyDialogP
             ),
         },
       });
+
+      // Send chat message if streamId is provided
+      if (streamId) {
+        const priceFormatted = formatUsdcAmount(totalPrice);
+        const chatMessage = `purchased ${quantity}x ${product.title} for $${priceFormatted}`;
+        fetch(`/api/streams/${streamId}/chat`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            sender_address: walletAddress,
+            message: chatMessage,
+            message_type: 'purchase',
+            metadata: { productId: product.id, productTitle: product.title, quantity, totalPrice, txHash },
+          }),
+        }).catch(console.error);
+      }
 
       onSuccess?.(txHash);
       onOpenChange(false);

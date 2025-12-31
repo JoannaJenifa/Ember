@@ -56,7 +56,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     const { streamId } = await params;
     const supabase = getSupabase();
     const body = await request.json();
-    const { sender_address, sender_name, message, is_seller } = body;
+    const { sender_address, sender_name, message, is_seller, message_type, metadata } = body;
 
     if (!sender_address || !message) {
       return NextResponse.json(
@@ -73,6 +73,8 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
         sender_name: sender_name || null,
         message,
         is_seller: is_seller || false,
+        message_type: message_type || 'message',
+        metadata: metadata || null,
       })
       .select()
       .single();

@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, useCallback, memo } from 'react';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { MessageCircle, Crown } from 'lucide-react';
+import { MessageCircle, Crown, DollarSign, Gift, ShoppingBag } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
@@ -13,6 +13,8 @@ interface ChatMessage {
   sender_name: string | null;
   message: string;
   is_seller: boolean;
+  message_type?: 'message' | 'tip' | 'gift' | 'purchase';
+  metadata?: Record<string, unknown>;
   created_at: string;
 }
 
@@ -118,6 +120,25 @@ const ChatMessageItem = memo(function ChatMessageItem({
   message: ChatMessage;
 }) {
   const displayName = message.sender_name || maskAddress(message.sender_address);
+  const isTransaction = message.message_type && message.message_type !== 'message';
+
+  // Transaction message styling
+  if (isTransaction) {
+    const Icon = message.message_type === 'tip' ? DollarSign
+      : message.message_type === 'gift' ? Gift
+      : ShoppingBag;
+    const colorClass = message.message_type === 'tip' ? 'text-green-500 bg-green-500/10 border-green-500/30'
+      : message.message_type === 'gift' ? 'text-purple-500 bg-purple-500/10 border-purple-500/30'
+      : 'text-ember bg-ember/10 border-ember/30';
+
+    return (
+      <div className={cn('flex items-center gap-2 text-sm p-2 rounded-lg border', colorClass)}>
+        <Icon className="h-4 w-4 shrink-0" />
+        <span className="font-medium">{displayName}</span>
+        <span className="opacity-90">{message.message}</span>
+      </div>
+    );
+  }
 
   return (
     <div className="flex gap-2 text-sm">
