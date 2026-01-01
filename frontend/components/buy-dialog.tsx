@@ -61,7 +61,7 @@ export function BuyDialog({ product, open, onOpenChange, onSuccess }: BuyDialogP
 
   const maxQuantity = Math.min(product.inventory, 10);
   const totalPrice = product.price * quantity;
-  const hasInsufficientBalance = rawBalance !== null && rawBalance < totalPrice;
+  const hasInsufficientBalance = rawBalance !== null && Number(rawBalance) < totalPrice;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -328,7 +328,7 @@ export function BuyDialog({ product, open, onOpenChange, onSuccess }: BuyDialogP
                   <div className="space-y-1">
                     <p className="text-sm font-medium text-destructive">Insufficient Balance</p>
                     <p className="text-xs text-muted-foreground">
-                      Need ${formatUsdcAmount(totalPrice - (rawBalance || 0))} more
+                      Need ${formatUsdcAmount(totalPrice - Number(rawBalance || 0))} more
                     </p>
                     <div className="flex items-center gap-1.5 text-xs text-primary mt-1">
                       <Wallet className="h-3.5 w-3.5" />
