@@ -23,7 +23,7 @@ interface TipFormProps {
 }
 
 export function TipForm({ streamerAddress, onSuccess, className }: TipFormProps) {
-  const [amount, setAmount] = useState<string>('5');
+  const [amount, setAmount] = useState<string>('0.1');
   const [message, setMessage] = useState('Great stream! Keep up the awesome content!');
   const [isLoading, setIsLoading] = useState(false);
 
