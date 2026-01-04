@@ -130,8 +130,8 @@ export function ProductForm({ sellerAddress, productId, onCancel, onSuccess }: P
   }
 
   return (
-    <div className="flex justify-center">
-      <Card className="p-6 bg-card border-border w-full max-w-lg">
+    <Card className="p-6 bg-card border-border">
+      <div className="max-w-lg mx-auto">
         <h2 className="text-xl font-bold text-foreground text-center mb-6">
           {isEditing ? 'Edit Product' : 'Add New Product'}
         </h2>
@@ -235,7 +235,7 @@ export function ProductForm({ sellerAddress, productId, onCancel, onSuccess }: P
           </Button>
         </div>
         </form>
-      </Card>
-    </div>
+      </div>
+    </Card>
   );
 }
