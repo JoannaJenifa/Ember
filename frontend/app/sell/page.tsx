@@ -5,8 +5,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card } from '@/components/ui/card';
 import { Loader2, Package, ShoppingCart, Video, DollarSign } from 'lucide-react';
 import { useWalletContext } from '@/hooks/use-wallet-context';
-import { useIsVerifiedSeller } from '@/hooks/use-seller';
+import { useSeller, useIsVerifiedSeller } from '@/hooks/use-seller';
 import { SellerRegistration } from './components/seller-registration';
+import { SellerProfileHeader } from './components/seller-profile-header';
 import { ProductList } from './components/product-list';
 import { OrderManagement } from './components/order-management';
 import { GoLivePanel } from './components/go-live-panel';
@@ -15,6 +16,7 @@ import { EarningsDashboard } from './components/earnings-dashboard';
 export default function SellPage() {
   const { walletAddress, isConnected, login } = useWalletContext();
   const { isVerified, isRegistered, loading } = useIsVerifiedSeller(walletAddress);
+  const { seller, refetch: refetchSeller } = useSeller(walletAddress);
   const [activeTab, setActiveTab] = useState('products');
 
   if (!isConnected) {
@@ -60,33 +62,15 @@ export default function SellPage() {
     );
   }
 
-  if (!isVerified) {
-    return (
-      <main className="min-h-screen bg-background">
-        <div className="container mx-auto px-4 py-16">
-          <Card className="max-w-md mx-auto p-8 text-center bg-card border-border">
-            <div className="h-16 w-16 mx-auto mb-4 rounded-full bg-yellow-500/20 flex items-center justify-center">
-              <Loader2 className="h-8 w-8 text-yellow-500" />
-            </div>
-            <h1 className="text-2xl font-bold text-foreground mb-2">
-              Pending Verification
-            </h1>
-            <p className="text-muted-foreground">
-              Your seller account is pending verification. This usually takes 1-2 business days.
-            </p>
-          </Card>
-        </div>
-      </main>
-    );
-  }
-
   return (
     <main className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">
-        <div className="mb-8">
-          <h1 className="text-2xl font-bold text-foreground mb-1">Seller Dashboard</h1>
-          <p className="text-muted-foreground">Manage your products, orders, and earnings</p>
-        </div>
+        {seller && (
+          <SellerProfileHeader
+            seller={seller}
+            onProfileUpdate={refetchSeller}
+          />
+        )}
 
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="grid w-full grid-cols-4 mb-8">
