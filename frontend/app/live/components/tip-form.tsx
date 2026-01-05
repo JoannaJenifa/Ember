@@ -12,6 +12,7 @@ import { sendTip } from '@/lib/ember/tip-transactions';
 import { useWalletContext } from '@/hooks/use-wallet-context';
 import type { TransactionContext } from '@/lib/ember/transactions';
 import { getDemoTip } from '@/lib/demo/templates';
+import { TransactionConfirmDialog, TransactionDetails } from '@/components/ui/transaction-confirm-dialog';
 
 const PRESET_AMOUNTS = [1, 5, 10, 25, 50, 100];
 
@@ -23,12 +24,12 @@ interface TipFormProps {
 }
 
 export function TipForm({ streamerAddress, streamId, onSuccess, className }: TipFormProps) {
-  // Random demo data for variation during demos
   const demoTip = useMemo(() => getDemoTip(), []);
 
   const [amount, setAmount] = useState<string>(demoTip.amount);
   const [message, setMessage] = useState(demoTip.message);
   const [isLoading, setIsLoading] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   const { walletAddress, isConnected, isPrivy, publicKeyHex, signRawHash, signAndSubmitTransaction } = useWalletContext();
 
@@ -36,7 +37,7 @@ export function TipForm({ streamerAddress, streamId, onSuccess, className }: Tip
     setAmount(preset.toString());
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!walletAddress || !amount) return;
 
@@ -46,8 +47,14 @@ export function TipForm({ streamerAddress, streamId, onSuccess, className }: Tip
       return;
     }
 
+    setShowConfirm(true);
+  };
+
+  const handleConfirm = async () => {
+    if (!walletAddress || !amount) return;
+
+    const amountNum = parseFloat(amount);
     setIsLoading(true);
-    const loadingToast = toast.loading('Sending tip...');
 
     try {
       const amountInOctas = Math.floor(amountNum * 1e8);
@@ -67,7 +74,7 @@ export function TipForm({ streamerAddress, streamId, onSuccess, className }: Tip
         context
       );
 
-      toast.dismiss(loadingToast);
+      setShowConfirm(false);
       toast.success('Tip sent!', {
         description: `$${amountNum} sent successfully`,
         action: {
@@ -76,7 +83,6 @@ export function TipForm({ streamerAddress, streamId, onSuccess, className }: Tip
         },
       });
 
-      // Send chat message if streamId is provided
       if (streamId) {
         const chatMessage = message ? `tipped $${amountNum}: "${message}"` : `tipped $${amountNum}`;
         fetch(`/api/streams/${streamId}/chat`, {
@@ -95,7 +101,6 @@ export function TipForm({ streamerAddress, streamId, onSuccess, className }: Tip
       setAmount('');
       setMessage('');
     } catch (error) {
-      toast.dismiss(loadingToast);
       toast.error('Failed to send tip', {
         description: error instanceof Error ? error.message : 'Unknown error',
       });
@@ -103,6 +108,19 @@ export function TipForm({ streamerAddress, streamId, onSuccess, className }: Tip
       setIsLoading(false);
     }
   };
+
+  const formatAddress = (addr: string) => `${addr.slice(0, 6)}...${addr.slice(-4)}`;
+
+  const transactionDetails: TransactionDetails | null = amount ? {
+    title: 'Confirm Tip',
+    description: 'Review your tip details before sending',
+    icon: <DollarSign className="h-5 w-5 text-ember" />,
+    items: [
+      { label: 'Recipient', value: formatAddress(streamerAddress) },
+      { label: 'Amount', value: `$${parseFloat(amount).toFixed(2)} USDC`, highlight: true },
+      ...(message ? [{ label: 'Message', value: message.length > 30 ? message.slice(0, 30) + '...' : message }] : []),
+    ],
+  } : null;
 
   if (!isConnected) {
     return (
@@ -116,58 +134,66 @@ export function TipForm({ streamerAddress, streamId, onSuccess, className }: Tip
   }
 
   return (
-    <Card className={cn('p-4', className)}>
-      <div className="flex items-center gap-2 mb-4">
-        <DollarSign className="h-5 w-5 text-ember" />
-        <h3 className="font-semibold">Send Tip</h3>
-      </div>
-
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <div className="flex flex-wrap gap-2 mb-2">
-            {PRESET_AMOUNTS.map((preset) => (
-              <Button
-                key={preset}
-                type="button"
-                variant={amount === preset.toString() ? 'default' : 'outline'}
-                size="sm"
-                onClick={() => handlePresetClick(preset)}
-              >
-                ${preset}
-              </Button>
-            ))}
-          </div>
-          <Input
-            type="number"
-            placeholder="Custom amount"
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
-            min="0.01"
-            step="0.01"
-          />
+    <>
+      <Card className={cn('p-4', className)}>
+        <div className="flex items-center gap-2 mb-4">
+          <DollarSign className="h-5 w-5 text-ember" />
+          <h3 className="font-semibold">Send Tip</h3>
         </div>
 
-        <Textarea
-          placeholder="Add a message (optional)"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          maxLength={200}
-          rows={2}
-        />
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <div className="flex flex-wrap gap-2 mb-2">
+              {PRESET_AMOUNTS.map((preset) => (
+                <Button
+                  key={preset}
+                  type="button"
+                  variant={amount === preset.toString() ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => handlePresetClick(preset)}
+                >
+                  ${preset}
+                </Button>
+              ))}
+            </div>
+            <Input
+              type="number"
+              placeholder="Custom amount"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+              min="0.01"
+              step="0.01"
+            />
+          </div>
 
-        <Button
-          type="submit"
-          className="w-full"
-          disabled={!amount || isLoading}
-        >
-          {isLoading ? (
-            <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-          ) : (
+          <Textarea
+            placeholder="Add a message (optional)"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            maxLength={200}
+            rows={2}
+          />
+
+          <Button
+            type="submit"
+            className="w-full bg-ember hover:bg-ember/90"
+            disabled={!amount || isLoading}
+          >
             <Send className="h-4 w-4 mr-2" />
-          )}
-          Send {amount ? `$${amount}` : 'Tip'}
-        </Button>
-      </form>
-    </Card>
+            Send {amount ? `$${amount}` : 'Tip'}
+          </Button>
+        </form>
+      </Card>
+
+      <TransactionConfirmDialog
+        open={showConfirm}
+        onOpenChange={setShowConfirm}
+        details={transactionDetails}
+        onConfirm={handleConfirm}
+        onCancel={() => setShowConfirm(false)}
+        isLoading={isLoading}
+        confirmText="Send Tip"
+      />
+    </>
   );
 }

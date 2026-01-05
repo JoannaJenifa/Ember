@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Minus, Plus, Loader2, ShoppingBag, MapPin, CreditCard, AlertCircle, Wallet } from 'lucide-react';
+import { Minus, Plus, Loader2, ShoppingBag, MapPin, CreditCard, AlertCircle, Wallet, Fuel, Sparkles } from 'lucide-react';
 import { toast } from 'sonner';
 import { formatUsdcAmount } from '@/lib/aptos';
 import { Product } from '@/lib/ember/product-queries';
@@ -19,6 +19,7 @@ import { createOrder } from '@/lib/ember/order-transactions';
 import { useWalletContext } from '@/hooks/use-wallet-context';
 import { useUsdcBalance } from '@/hooks/use-usdc-balance';
 import { getDemoShipping } from '@/lib/demo/templates';
+import { GasSponsorshipSection } from '@/components/ui/transaction-confirm-dialog';
 
 interface BuyDialogProps {
   product: Product | null;
@@ -360,6 +361,9 @@ export function BuyDialog({ product, open, onOpenChange, streamId, onSuccess }: 
                   </div>
                 </div>
               )}
+
+              {/* Gas Sponsorship Notice */}
+              <GasSponsorshipSection />
 
               {/* Submit Button */}
               <Button type="submit" className="w-full" disabled={isLoading || hasInsufficientBalance}>
