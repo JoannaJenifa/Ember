@@ -122,17 +122,14 @@ const ChatMessageItem = memo(function ChatMessageItem({
   const displayName = message.sender_name || maskAddress(message.sender_address);
   const isTransaction = message.message_type && message.message_type !== 'message';
 
-  // Transaction message styling
+  // Transaction message styling - all use ember/orange theme
   if (isTransaction) {
     const Icon = message.message_type === 'tip' ? DollarSign
       : message.message_type === 'gift' ? Gift
       : ShoppingBag;
-    const colorClass = message.message_type === 'tip' ? 'text-green-500 bg-green-500/10 border-green-500/30'
-      : message.message_type === 'gift' ? 'text-purple-500 bg-purple-500/10 border-purple-500/30'
-      : 'text-ember bg-ember/10 border-ember/30';
 
     return (
-      <div className={cn('flex items-center gap-2 text-sm p-2 rounded-lg border', colorClass)}>
+      <div className="flex items-center gap-2 text-sm p-2 rounded-lg border text-ember bg-ember/10 border-ember/30">
         <Icon className="h-4 w-4 shrink-0" />
         <span className="font-medium">{displayName}</span>
         <span className="opacity-90">{message.message}</span>
