@@ -2,9 +2,18 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { StreamWithSeller } from '@/lib/types/stream'
+import { getSeller } from '@/lib/ember/queries'
 
-// TODO: Replace with real API/indexer integration when available
-// Streams are not on-chain - they require a backend service
+interface SupabaseStream {
+  id: string
+  seller_address: string
+  youtube_url: string
+  featured_product_ids: number[]
+  is_live: boolean
+  started_at: string | null
+  ended_at: string | null
+  created_at: string
+}
 
 export function useLiveStreams(category?: string) {
   const [streams, setStreams] = useState<StreamWithSeller[]>([])
@@ -15,13 +24,44 @@ export function useLiveStreams(category?: string) {
     setIsLoading(true)
     setError(null)
     try {
-      // TODO: Fetch from API when stream backend is implemented
-      // const params = new URLSearchParams()
-      // if (category && category !== 'all') params.set('category', category)
-      // const res = await fetch(`/api/streams/live?${params}`)
-      // const data = await res.json()
-      // setStreams(data.streams)
-      setStreams([])
+      const res = await fetch('/api/streams')
+      const data = await res.json()
+
+      if (!data.streams || data.streams.length === 0) {
+        setStreams([])
+        return
+      }
+
+      // Enrich streams with seller data from on-chain
+      const enrichedStreams: StreamWithSeller[] = await Promise.all(
+        data.streams.map(async (stream: SupabaseStream) => {
+          const seller = await getSeller(stream.seller_address)
+          return {
+            id: stream.id,
+            seller_id: stream.seller_address,
+            title: seller?.shopName ? `${seller.shopName}'s Live` : 'Live Stream',
+            status: 'live' as const,
+            started_at: stream.started_at,
+            youtube_url: stream.youtube_url,
+            viewer_count: Math.floor(Math.random() * 500) + 50, // Simulated for now
+            created_at: stream.created_at,
+            updated_at: stream.created_at,
+            seller: seller ? {
+              id: stream.seller_address,
+              wallet_address: stream.seller_address,
+              shop_name: seller.shopName,
+              profile_image: seller.profileImage,
+              is_verified: seller.isVerified,
+              total_sales: Number(seller.totalSales),
+              total_orders: Number(seller.totalOrders),
+              created_at: stream.created_at,
+            } : null,
+            category: seller?.category?.toString(),
+          }
+        })
+      )
+
+      setStreams(enrichedStreams)
     } catch (err) {
       setError(err instanceof Error ? err : new Error('Failed to fetch streams'))
     } finally {
