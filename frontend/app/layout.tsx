@@ -1,30 +1,27 @@
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
-import { ThemeProvider } from 'next-themes'
-import './globals.css'
-import { Toaster } from '@/components/ui/sonner'
-import { Navbar } from '@/components/layout/navbar'
-import { Web3Provider } from '@/providers/web3-provider'
-import { ConfigurationProvider } from '@/components/config/configuration-provider'
-import { TranslationProvider } from '@/lib/i18n'
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+import { ThemeProvider } from 'next-themes';
+import './globals.css';
+import { Providers } from './providers';
+import { Navbar } from '@/components/navbar';
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: process.env.NEXT_PUBLIC_APP_NAME || 'Web3 App',
-  description: process.env.NEXT_PUBLIC_APP_DESCRIPTION || 'A comprehensive Web3 application powered by Reown AppKit',
+  title: 'Ember - Live Commerce on Movement',
+  description: 'Live commerce platform with instant crypto payments on Movement blockchain',
   icons: {
-    icon: '/labang.png',
+    icon: '/favicon.ico',
   },
-}
+};
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
-    <html lang="ko" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
         <ThemeProvider
           attribute="class"
@@ -32,17 +29,12 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <TranslationProvider>
-            <ConfigurationProvider>
-              <Web3Provider>
-                <Navbar />
-                {children}
-                <Toaster />
-              </Web3Provider>
-            </ConfigurationProvider>
-          </TranslationProvider>
+          <Providers>
+            <Navbar />
+            {children}
+          </Providers>
         </ThemeProvider>
       </body>
     </html>
-  )
+  );
 }

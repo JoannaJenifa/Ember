@@ -1,16 +1,16 @@
-# Labang (라방) — Product Requirements Document
+# Ember — Product Requirements Document
 
-## Live Commerce with Crypto Payments
+## Live Commerce with Crypto Payments on Movement
 
 ---
 
 ## 1. Executive Summary
 
-**Product Name:** Labang (라방)
-**Tagline:** "라이브로 쇼핑, 크립토로 결제" (Shop Live, Pay Crypto)
-**Category:** E-commerce / Live Streaming
+**Product Name:** Ember
+**Tagline:** "Ignite Your Shopping Experience"
+**Category:** E-commerce / Live Streaming / Web3
 
-Labang is a live commerce platform where streamers sell products in real-time and viewers purchase with VERY tokens. KYC-verified reviews ensure authentic feedback, and instant crypto payments remove traditional payment friction.
+Ember is a live commerce platform built on Movement blockchain where streamers sell products in real-time and viewers purchase with crypto. On-chain verified reviews ensure authentic feedback, and instant crypto payments remove traditional payment friction.
 
 ---
 
@@ -30,22 +30,15 @@ Live commerce is exploding, but trust issues persist.
 | **Chargebacks** | Fraudulent buyers reverse payments |
 | **No Viewer Rewards** | Watching brings no value |
 
-### Market Context
-
-- Korean live commerce market: ₩10T+ (2024)
-- Naver Shopping Live, Kakao Shopping dominate
-- 60% of Korean shoppers have used live commerce
-- Crypto payments emerging globally
-
 ---
 
 ## 3. Solution Overview
 
-Labang creates a crypto-native live shopping experience where:
+Ember creates a crypto-native live shopping experience where:
 
 1. **Real-Time Shopping** — Buy during live streams with one tap
-2. **Instant Settlement** — Sellers receive VERY immediately
-3. **Verified Reviews** — Only KYC users who purchased can review
+2. **Instant Settlement** — Sellers receive payment immediately
+3. **Verified Reviews** — Only purchasers can review (on-chain verified)
 4. **Watch-to-Earn** — Viewers earn for engagement
 5. **Low Fees** — 3% vs. 20%+ on traditional platforms
 
@@ -83,28 +76,27 @@ Labang creates a crypto-native live shopping experience where:
 ### Flow 1: Seller Onboarding
 
 ```
-1. Seller opens Labang
-2. Logs in with VeryChat
+1. Seller opens Ember
+2. Connects Movement wallet
 3. Completes seller profile:
    - Shop name
    - Category
    - About
-4. KYC verified (via VeryChat)
-5. Connects Wepin wallet
-6. Uploads products:
+4. Identity verification
+5. Uploads products:
    - Photos
    - Description
-   - Price (in VERY)
+   - Price (in MOVE)
    - Inventory
-7. Seller approved (basic review)
-8. Can now start streaming
+6. Seller approved
+7. Can now start streaming
 ```
 
 ### Flow 2: Starting a Live Stream
 
 ```
 1. Seller opens dashboard
-2. Clicks "라이브 시작" (Start Live)
+2. Clicks "Go Live"
 3. Configures stream:
    - Title
    - Products to feature
@@ -121,10 +113,10 @@ Labang creates a crypto-native live shopping experience where:
 1. Viewer watching live stream
 2. Streamer showcases product
 3. Product card appears on screen
-4. Viewer taps "구매하기" (Buy)
+4. Viewer taps "Buy Now"
 5. Quantity selection
-6. Wepin wallet confirms
-7. Payment instant (VERY)
+6. Wallet confirms transaction
+7. Payment instant (MOVE)
 8. Seller notified in real-time
 9. Viewer sees order confirmation
 10. Continues watching
@@ -135,7 +127,7 @@ Labang creates a crypto-native live shopping experience where:
 ```
 During stream, viewers can:
 1. Send comments (real-time)
-2. Send gifts (VERY tips)
+2. Send gifts (crypto tips)
 3. React (emojis, effects)
 4. Ask questions
 5. Request product demos
@@ -156,11 +148,11 @@ Creates engagement
    - Star rating (1-5)
    - Photo/video (optional)
    - Written review
-4. Review posted with:
+4. Review posted on-chain with:
    - "Verified Purchase" badge
-   - KYC-verified user badge
+   - Verified buyer badge
 5. Review visible on product page
-6. Reviewer earns VERY reward
+6. Reviewer earns MOVE reward
 ```
 
 ---
@@ -174,17 +166,17 @@ Creates engagement
 | **Live Streaming** | RTMP-based broadcasting | P0 |
 | **Product Overlay** | Display products during stream | P0 |
 | **One-Tap Purchase** | Buy without leaving stream | P0 |
-| **Instant Payment** | VERY to seller wallet | P0 |
+| **Instant Payment** | MOVE to seller wallet | P0 |
 | **Chat** | Real-time viewer comments | P0 |
 | **Product Catalog** | Seller uploads inventory | P0 |
 | **Order Management** | Track orders, shipping | P0 |
-| **Verified Reviews** | Purchase-gated reviews | P0 |
+| **Verified Reviews** | Purchase-gated reviews (on-chain) | P0 |
 
 ### Viewer Engagement
 
 | Feature | Description | Priority |
 |---------|-------------|----------|
-| **Gifts/Tips** | Send VERY to streamer | P1 |
+| **Gifts/Tips** | Send crypto to streamer | P1 |
 | **Reactions** | Emoji reactions | P1 |
 | **Polls** | Interactive voting | P1 |
 | **Watch-to-Earn** | Earn for viewing | P1 |
@@ -206,8 +198,8 @@ Creates engagement
 
 | Feature | Description | Priority |
 |---------|-------------|----------|
-| **KYC Seller Badge** | Verified seller identity | P0 |
-| **Verified Purchase Reviews** | Only buyers can review | P0 |
+| **Verified Seller Badge** | Verified seller identity | P0 |
+| **Verified Purchase Reviews** | Only buyers can review (on-chain) | P0 |
 | **Seller Ratings** | Aggregate score | P0 |
 | **Dispute Resolution** | Buyer/seller conflicts | P1 |
 | **Return Policy Display** | Clear refund terms | P1 |
@@ -229,79 +221,65 @@ Creates engagement
                               │
                               ▼
 ┌─────────────────────────────────────────────────────────────┐
-│                      Backend Services                       │
-│  - Stream Management                                        │
-│  - Order Processing                                         │
-│  - Chat/Notifications                                       │
-│  - Analytics                                                │
+│                    Movement Blockchain                      │
+│  - All state stored on-chain                                │
+│  - No database dependency                                   │
+│  - Fully decentralized                                      │
 └─────────────────────────────────────────────────────────────┘
                               │
             ┌─────────────────┼─────────────────┐
             ▼                 ▼                 ▼
 ┌───────────────────┐ ┌───────────────────┐ ┌───────────────┐
-│   Streaming       │ │   VeryChat Auth   │ │   VeryChain   │
-│   Infrastructure  │ │   - Login         │ │   - Payments  │
-│   - RTMP server   │ │   - KYC           │ │   - Escrow    │
-│   - CDN           │ │   - Profile       │ │   - Reviews   │
+│   Streaming       │ │   Movement        │ │   Indexer     │
+│   Infrastructure  │ │   Wallet          │ │   (Query)     │
+│   - RTMP server   │ │   - Auth          │ │   - Events    │
+│   - CDN           │ │   - Signing       │ │   - History   │
 └───────────────────┴─┴───────────────────┴─┴───────────────┘
 ```
 
-### Smart Contracts
+### Move Modules
 
-| Contract | Purpose |
-|----------|---------|
-| **OrderEscrow** | Hold payment until delivery confirmed |
-| **ReviewRegistry** | Verified reviews on-chain |
-| **TipJar** | Manage streamer tips |
-| **GiftShop** | Virtual gift purchases |
+| Module | Purpose |
+|--------|---------|
+| **order_escrow** | Hold payment until delivery confirmed |
+| **review_registry** | Verified reviews on-chain |
+| **product_registry** | Product catalog management |
+| **seller_registry** | Seller profiles and verification |
+| **tip_jar** | Manage streamer tips |
+| **gift_shop** | Virtual gift purchases |
 
-### Data Model
+### Data Model (On-Chain)
 
 **Product:**
-- productId
-- sellerId
+- product_id
+- seller_address
 - title
 - description
 - images[]
-- price (VERY)
+- price (MOVE)
 - inventory
 - category
-- reviews[]
 - rating
-
-**Stream:**
-- streamId
-- sellerId
-- title
-- status (scheduled/live/ended)
-- startedAt
-- endedAt
-- viewers (current/peak)
-- featuredProducts[]
-- recording URL
 
 **Order:**
-- orderId
-- buyerId
-- sellerId
-- productId
+- order_id
+- buyer_address
+- seller_address
+- product_id
 - quantity
-- totalPrice
+- total_price
 - status (paid/shipped/delivered/disputed)
-- txHash
-- createdAt
-- shippingInfo
+- created_at
 
 **Review:**
-- reviewId
-- orderId
-- productId
-- buyerId
+- review_id
+- order_id
+- product_id
+- buyer_address
 - rating
 - content
-- photos[]
-- verified (purchase + KYC)
-- createdAt
+- verified (purchase proof on-chain)
+- created_at
 
 ---
 
@@ -314,14 +292,14 @@ Buyer clicks "Buy"
           │
           ▼
     ┌───────────┐
-    │  Wepin    │
+    │  Movement │
     │  Wallet   │
     └─────┬─────┘
-          │ VERY
+          │ MOVE
           ▼
     ┌───────────┐
-    │  Escrow   │ (holds funds)
-    │  Contract │
+    │  Escrow   │ (holds funds on-chain)
+    │  Module   │
     └─────┬─────┘
           │
           ▼
@@ -332,7 +310,7 @@ Buyer clicks "Buy"
               │
               ▼
     ┌───────────────────┐
-    │ Escrow releases   │──► Seller receives VERY
+    │ Escrow releases   │──► Seller receives MOVE
     │ to seller         │
     └───────────────────┘
 ```
@@ -341,32 +319,32 @@ Buyer clicks "Buy"
 
 | Fee | Amount | Recipient |
 |-----|--------|-----------|
-| Platform fee | 3% | Labang treasury |
-| Gas | ~0.01 VERY | Network |
+| Platform fee | 3% | Ember treasury |
+| Gas | Minimal | Network |
 | Payment processing | 0% | (No card fees) |
 
 ---
 
 ## 9. Watch-to-Earn Mechanics
 
-### Earning VERY
+### Earning MOVE
 
 | Action | Reward |
 |--------|--------|
-| Watch 5 min | 1 VERY |
-| Watch 30 min | 5 VERY |
-| Comment (quality) | 0.5 VERY |
-| First purchase | 10 VERY bonus |
-| Leave verified review | 5 VERY |
+| Watch 5 min | Small reward |
+| Watch 30 min | Larger reward |
+| Comment (quality) | Bonus |
+| First purchase | Welcome bonus |
+| Leave verified review | Review reward |
 
 ### Anti-Farming
 
 | Measure | Implementation |
 |---------|----------------|
 | Attention verification | Random captcha popups |
-| Unique viewer tracking | KYC prevents multi-accounts |
+| Unique viewer tracking | Wallet-based identity |
 | Quality comments | AI filters spam |
-| Daily caps | Max 50 VERY/day from viewing |
+| Daily caps | Max earnings/day from viewing |
 
 ---
 
@@ -379,7 +357,7 @@ Buyer clicks "Buy"
 | Active sellers | 200+ |
 | Live streams | 1,000+ |
 | Orders completed | 5,000+ |
-| GMV | 1M+ VERY |
+| GMV | Significant MOVE volume |
 | Verified reviews | 2,000+ |
 
 ### Secondary KPIs
@@ -393,40 +371,11 @@ Buyer clicks "Buy"
 
 ---
 
-## 11. Korean Market Positioning
-
-### Messaging
-
-**Primary:** "라이브 쇼핑, 수수료 3%"  
-(Live shopping, 3% fee)
-
-**Secondary:** "가짜 리뷰 없는 진짜 쇼핑"  
-(Real shopping without fake reviews)
-
-### Cultural Alignment
-
-| Korean Trend | Labang Feature |
-|--------------|---------------------|
-| 라이브 커머스 boom | Native live shopping |
-| 리뷰 중시 | Verified-only reviews |
-| 인플루언서 경제 | Streamer monetization |
-| 빠른 결제 | Instant crypto payment |
-
-### Product Categories (Korea Focus)
-
-1. **Fashion** — 의류, 악세서리
-2. **Beauty** — 화장품, 스킨케어
-3. **Food** — 간식, 건강식품
-4. **Home** — 생활용품
-5. **Tech** — 가젯, 액세서리
-
----
-
-## 12. Risks & Mitigations
+## 11. Risks & Mitigations
 
 | Risk | Likelihood | Impact | Mitigation |
 |------|------------|--------|------------|
-| Seller fraud | Medium | High | KYC, escrow, ratings |
+| Seller fraud | Medium | High | Verification, escrow, ratings |
 | Low viewer count | High | Medium | Viewer rewards, discovery |
 | Streaming quality | Medium | Medium | Tech support, guidelines |
 | Crypto barrier | High | Medium | Simple UX, education |
@@ -434,7 +383,7 @@ Buyer clicks "Buy"
 
 ---
 
-## 13. Demo Script (For Hackathon)
+## 12. Demo Script
 
 ### Scene 1: The Problem (20 sec)
 - "Traditional live commerce: 20% fees"
@@ -448,15 +397,15 @@ Buyer clicks "Buy"
 
 ### Scene 3: One-Tap Purchase (40 sec)
 - Viewer taps product
-- Wepin confirms
+- Wallet confirms
 - Payment instant
 - Seller sees order
 
 ### Scene 4: Verified Review (30 sec)
 - Product delivered
 - Buyer reviews
-- "Verified Purchase" badge
-- "KYC Verified" badge
+- "Verified Purchase" badge on-chain
+- Transparent and trustworthy
 
 ### Scene 5: Earnings (20 sec)
 - Show viewer rewards
@@ -464,30 +413,14 @@ Buyer clicks "Buy"
 - "Everyone wins"
 
 ### Closing (10 sec)
-- "라이브로 쇼핑, 크립토로 결제. Labang"
+- "Ignite Your Shopping. Ember"
 
 ---
 
-## 14. Timeline Estimate
-
-| Phase | Duration | Deliverables |
-|-------|----------|--------------|
-| Design | 3 days | UI/UX, stream experience |
-| Streaming Infra | 4 days | RTMP, player, CDN |
-| Backend | 4 days | Orders, products, chat |
-| Smart Contracts | 2 days | Escrow, reviews |
-| Frontend | 5 days | All screens, overlays |
-| Integration | 2 days | VeryChat, Wepin |
-| Testing | 2 days | Stream testing, payments |
-| Demo Prep | 1 day | Recording |
-| **Total** | **~3.5 weeks** | |
-
----
-
-## 15. Open Questions
+## 13. Open Questions
 
 1. Streaming infrastructure: Build or use service (Mux, Agora)?
 2. Escrow period: How long before auto-release?
 3. Minimum seller requirements (inventory, verification)?
-4. Should viewers see VERY prices or fiat equivalents?
+4. Movement wallet integration options?
 5. Return/refund policy: Who decides disputes?

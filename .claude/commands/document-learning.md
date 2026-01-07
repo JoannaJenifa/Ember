@@ -1,3 +1,7 @@
+---
+description: Document a debugging issue as a learning for future reference
+---
+
 # Document Learning
 
 Analyze this conversation and document the issue we just debugged.
@@ -18,12 +22,11 @@ Analyze this conversation and document the issue we just debugged.
    If NO to any → Tell user "This doesn't meet the documentation bar" and explain why.
 
 3. **Determine category:**
-   - `ui/` → Frontend, React, Next.js, styling, i18n
-   - `contracts/` → Solidity, Foundry, deployment
-   - `subgraph/` → TheGraph, GraphQL, indexing
-   - `verychain/` → WEPIN, VeryChat, VeryChain-specific
+   - `ui/` → Frontend, React, Next.js, styling
+   - `move/` → Move language, Aptos SDK, contract deployment
+   - `movement/` → Movement network, wallet integration
 
-4. **Read existing issues** in that category's README.md
+4. **Read existing issues** in `docs/issues/{category}/README.md`
 
 5. **Create the new issue** following this format:
    ```markdown
@@ -50,7 +53,7 @@ Analyze this conversation and document the issue we just debugged.
    **Tags:** `tag1`, `tag2`
    ```
 
-6. **Add to the README.md** in the correct folder
+6. **Add to the README.md** in the correct folder (`docs/issues/{category}/`)
 
 7. **Update the Quick Reference table** at the top
 

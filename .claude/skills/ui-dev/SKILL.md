@@ -1,215 +1,175 @@
 ---
 name: ui-dev
-description: Build UI components with dark theme, shadcn/ui, animations, and responsive design (project)
+description: Build UI components with dark theme, shadcn/ui, animations, and responsive design for Ember live commerce dashboard
 ---
 
-# UI Development Skill
+# UI Development Skill - ACTIVE
 
-## CRITICAL: Design System (CHECK FIRST)
-
-**BEFORE writing ANY UI code, reference the Very Design System in `design-system.md`.**
-
-Use the color tokens and patterns defined there. Never hardcode colors.
+**USE THIS SKILL FOR ALL FRONTEND/UI WORK.**
 
 ---
 
-## CRITICAL: File Size Limits
+## BEFORE WRITING ANY CODE - DO THIS FIRST
 
-**HARD LIMIT: 300 lines per file maximum. NO EXCEPTIONS.**
-
-Before writing any component:
-1. If file would exceed 300 lines → decompose FIRST
-2. If component has 3+ useState → extract to hook
-3. If component has tabs/sections → split into separate files
-
-See **code-structure** skill for detailed decomposition patterns.
-
-## BEFORE WRITING ANY CODE
-
-**MANDATORY: Check shadcn/ui via Context7 before building any UI component.**
-
-```
-1. ALWAYS check if shadcn/ui has the component first:
-   mcp__context7__resolve-library-id({ libraryName: "shadcn-ui" })
-
-   mcp__context7__get-library-docs({
-     context7CompatibleLibraryID: "/shadcn-ui/ui",
-     topic: "button",  // or dialog, card, input, select, etc.
-     mode: "code"
-   })
-
-2. If shadcn has it: use their component, don't build custom
-3. If shadcn doesn't have it: build custom following their patterns
-4. For Tailwind utilities:
-   mcp__context7__get-library-docs({
-     context7CompatibleLibraryID: "/tailwindlabs/tailwindcss",
-     topic: "flexbox",
-     mode: "code"
-   })
-
-5. NEVER guess component APIs or Tailwind classes - verify with Context7
-```
-
-**Component Lookup Workflow:**
-- Button? Check shadcn: `topic: "button"`
-- Modal? Check shadcn: `topic: "dialog"`
-- Form inputs? Check shadcn: `topic: "input"`, `topic: "select"`, `topic: "checkbox"`
-- Data display? Check shadcn: `topic: "table"`, `topic: "card"`
-- Feedback? Check shadcn: `topic: "toast"`, `topic: "alert"`
+1. **Check `docs/issues/ui/README.md`** for known pitfalls
+2. **Check shadcn/ui via Context7:** Use `/shadcn-ui/ui` library ID to fetch component docs
+3. **Verify file size limits:** max 300 lines (page.tsx 150, *-tab.tsx 250, use-*.ts 200, types.ts 100)
 
 ---
 
-## When to Use This Skill
+## FILE SIZE ENFORCEMENT
 
-Load this skill when:
-- Creating new React components
-- Styling existing components
-- Adding animations or transitions
-- Building responsive layouts
-- Working with shadcn/ui components
+Before writing ANY component, estimate line count:
 
-## Core Rules
+- **< 150 lines** → Write as single file
+- **150-300 lines** → Consider splitting
+- **> 300 lines** → MUST decompose FIRST
 
-1. **shadcn/ui First** - Always check if a component exists before building custom
-2. **Dark Theme Only** - Use CSS variables, never hardcode colors
-3. **Mobile First** - Start with mobile layout, add breakpoints up
-4. **Semantic HTML** - Use correct elements (button, nav, main, etc.)
-5. **Accessible** - Include aria labels, keyboard navigation, focus states
-
-## Decision Tree
+### Decomposition Pattern
 
 ```
-Need a new component?
-├─ Is it a form element? → Check shadcn/ui first
-├─ Is it a layout? → Use CSS Grid/Flexbox with responsive breakpoints
-├─ Is it interactive? → Add hover states + transitions
-└─ Is it loading data? → Add skeleton + loading state
-
-Need to style something?
-├─ Color → Use theme variables (--primary, --muted, etc.)
-├─ Spacing → Use Tailwind scale (p-4, gap-6, etc.)
-├─ Animation → Use predefined keyframes or transition-all
-└─ Responsive → Mobile-first: base → md: → lg:
+feature/
+├── page.tsx          # Orchestration only (< 150)
+├── components/
+│   ├── main-tab.tsx  # Tab components (< 250 each)
+│   ├── other-tab.tsx
+│   └── shared/       # Reusable pieces
+│       ├── form.tsx
+│       └── display.tsx
+├── hooks/
+│   └── use-feature.ts # Business logic (< 200)
+└── types.ts          # Types only (< 100)
 ```
 
-## Common Tasks
+---
 
-### Adding a New Component
+## MANDATORY PATTERNS
 
-1. Look up shadcn/ui components via Context7 first
-2. If shadcn has it: `cd frontend && npx shadcn@latest add <name>`
-3. If custom: create file at `components/<category>/<name>.tsx`
-4. Use theme variables for colors (never hardcode)
-5. Add responsive breakpoints (mobile-first)
-6. Include loading and error states
-
-### Adding a Form
-
-1. Look up shadcn/ui form components via Context7
-2. Install needed components: `npx shadcn@latest add input label select`
-3. Use `<Label>` with `htmlFor` matching input `id`
-4. Add error state styling with `border-destructive`
-5. Handle loading state on submit button
-
-### Adding Animation
-
-1. Check existing keyframes in `tailwind.config.ts`
-2. If exists: use `animate-{name}` class
-3. If new: add keyframe to tailwind.config.ts first
-4. For hover effects: use `transition-all duration-300`
-
-## File Naming
-
-| Type | Pattern | Example |
-|------|---------|---------|
-| Components | kebab-case.tsx | `user-profile.tsx` |
-| Hooks | use-kebab-case.ts | `use-modal.ts` |
-| Utils | kebab-case.ts | `format-date.ts` |
-
-## Anti-Patterns (NEVER DO)
+### Theme Colors (NEVER hardcode)
 
 ```tsx
-// NEVER hardcode colors
+// WRONG - hardcoded colors
 <div className="bg-gray-900 text-white">
 
-// Use theme variables
+// CORRECT - theme variables
 <div className="bg-background text-foreground">
+```
 
-// NEVER use inline styles for theming
-<div style={{ backgroundColor: '#1a1a1a' }}>
+| Variable | Usage |
+|----------|-------|
+| `bg-background` | Page background |
+| `text-foreground` | Primary text |
+| `bg-card` | Card backgrounds |
+| `bg-primary` | Primary actions |
+| `text-muted-foreground` | Secondary text |
+| `bg-destructive` | Error states |
 
-// Use Tailwind classes
-<div className="bg-card">
+### Loading States (NEVER skip)
 
-// NEVER skip loading states
+```tsx
+// WRONG - no loading state
 {data && <Component data={data} />}
 
-// Handle all states
-{loading ? <Skeleton /> : error ? <Error /> : <Component data={data} />}
-
-// NEVER forget mobile
-<div className="flex gap-8">  // Too much gap on mobile
-
-// Responsive spacing
-<div className="flex gap-4 md:gap-8">
+// CORRECT - all states handled
+{isLoading ? (
+  <Skeleton className="h-40 w-full" />
+) : error ? (
+  <div className="text-destructive">{error.message}</div>
+) : (
+  <Component data={data} />
+)}
 ```
 
-## Installing shadcn Components
+### Responsive Design (mobile-first)
+
+```tsx
+// WRONG - desktop only
+<div className="flex gap-8">
+
+// CORRECT - responsive
+<div className="flex flex-col gap-4 md:flex-row md:gap-8">
+```
+
+---
+
+## EMBER-SPECIFIC COMPONENTS
+
+### Product Card
+```tsx
+<Card className="overflow-hidden">
+  <div className="relative aspect-square">
+    <Image src={product.image} alt={product.title} fill />
+    {product.isLive && (
+      <Badge className="absolute top-2 left-2 bg-red-500">LIVE</Badge>
+    )}
+  </div>
+  <CardContent className="p-4">
+    <h3 className="font-semibold truncate">{product.title}</h3>
+    <p className="text-primary font-bold">{product.price} MOVE</p>
+  </CardContent>
+</Card>
+```
+
+### Live Stream Overlay
+```tsx
+<div className="absolute bottom-4 right-4 space-y-2">
+  {featuredProducts.map(product => (
+    <Button
+      key={product.id}
+      className="bg-primary/90 backdrop-blur"
+      onClick={() => handlePurchase(product)}
+    >
+      Buy {product.title} - {product.price} MOVE
+    </Button>
+  ))}
+</div>
+```
+
+### Verified Badge
+```tsx
+<Badge variant="outline" className="gap-1">
+  <CheckCircle className="h-3 w-3 text-green-500" />
+  Verified Purchase
+</Badge>
+```
+
+---
+
+## INSTALLING COMPONENTS
+
+When you need a shadcn component:
 
 ```bash
-cd frontend && npx shadcn@latest add button card dialog input select tabs toast
+cd frontend && npx shadcn@latest add [component]
 ```
 
-Common components: `button`, `card`, `dialog`, `dropdown-menu`, `input`, `label`, `select`, `skeleton`, `table`, `tabs`, `toast`, `tooltip`
+Common components for Ember:
+```bash
+npx shadcn@latest add button card dialog input select tabs toast progress skeleton badge avatar
+```
 
-## Theme System
+---
 
-All colors use HSL CSS variables defined in `frontend/app/globals.css`:
-
-| Variable | Usage | Example Class |
-|----------|-------|---------------|
-| `--background` | Page background | `bg-background` |
-| `--foreground` | Primary text | `text-foreground` |
-| `--card` | Card backgrounds | `bg-card` |
-| `--primary` | Primary actions | `bg-primary text-primary-foreground` |
-| `--secondary` | Secondary elements | `bg-secondary` |
-| `--muted` | Muted text/backgrounds | `text-muted-foreground bg-muted` |
-| `--accent` | Hover states | `hover:bg-accent` |
-| `--destructive` | Error/danger | `bg-destructive text-destructive-foreground` |
-| `--border` | Borders | `border-border` |
-
-## Animation System
-
-Predefined keyframes in `tailwind.config.ts`:
-
-| Animation | Class | Use Case |
-|-----------|-------|----------|
-| Fade In | `animate-fade-in` | Modal overlays, toasts |
-| Slide Up | `animate-slide-in-bottom` | Drawers, sheets |
-| Scale In | `animate-scale-in` | Modals, popovers |
-| Bounce In | `animate-bounce-in` | Success states |
-| Shimmer | `animate-shimmer` | Loading skeletons |
-| Float | `animate-float` | Decorative elements |
-| Spin | `animate-spin` | Loading spinners |
-
-## Responsive Breakpoints
-
-| Breakpoint | Min Width | Usage |
-|------------|-----------|-------|
-| (default) | 0px | Mobile phones |
-| `sm:` | 640px | Large phones |
-| `md:` | 768px | Tablets |
-| `lg:` | 1024px | Laptops |
-| `xl:` | 1280px | Desktops |
-| `2xl:` | 1536px | Large screens |
-
-## Quick Reference
+## QUICK REFERENCE
 
 | Task | Solution |
 |------|----------|
-| Add component | `cd frontend && npx shadcn@latest add <name>` |
-| Custom color | Add to globals.css + tailwind.config.ts |
-| Icon | `import { IconName } from 'lucide-react'` |
-| Icon sizes | `h-4 w-4` (sm), `h-5 w-5` (md), `h-6 w-6` (lg) |
-| Hover effect | `transition-all duration-300 hover:...` |
-| Focus ring | `focus:ring-2 focus:ring-primary focus:ring-offset-2` |
+| Form input | `shadcn Input` component |
+| Dropdown | `shadcn Select` component |
+| Modal | `shadcn Dialog` component |
+| Video player | HTML5 video or video.js |
+| Icons | `lucide-react` |
+| Hover effect | `transition-all duration-200 hover:bg-muted` |
+| Focus ring | `focus:ring-2 focus:ring-primary` |
+
+---
+
+## CHECKLIST BEFORE SUBMITTING
+
+- [ ] File under 300 lines
+- [ ] No hardcoded colors (use theme variables)
+- [ ] Loading state handled
+- [ ] Error state handled
+- [ ] Mobile responsive
+- [ ] Accessibility (aria labels, keyboard nav)
+- [ ] Follows existing patterns in codebase

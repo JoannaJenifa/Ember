@@ -1,107 +1,177 @@
 ---
 name: strategy
-description: Generate numbered prompts (1.md, 2.md) for VeryChain x VeryChat with WEPIN auth. NO CODE - only prompts.
+description: Multi-session prompt planning for complex features. Creates executable prompt files for step-by-step implementation. (project)
 ---
 
 # Strategy Skill
 
+## Purpose
+
+Break complex goals into executable prompts that can be run across multiple sessions.
+
+## When to Use
+
+- Features requiring multiple components
+- Integration work spanning frontend + contracts
+- Refactoring that touches many files
+- Any task that can't be completed in one session
+
+## Prompt File Format
+
+Each prompt in `prompts/` must follow this structure:
+
+```markdown
+# Prompt N: [Title]
+
+**Priority**: [HIGHEST/High/Medium/Low]
+**Skill**: [ui-dev/move-dev/code-structure/none]
+
+---
+
+## Objective
+
+[Clear, single objective]
+
+---
+
+## Current State
+
+[What exists now, file paths]
+
+---
+
+## Requirements
+
+### 1. [Requirement]
+[Specific details]
+
+### 2. [Requirement]
+[Specific details]
+
+---
+
+## Files to Create/Modify
+
+- `path/file.ts` - CREATE - [purpose]
+- `path/other.ts` - MODIFY - [what changes]
+
+---
+
+## Verification
+
+```bash
+[Commands to verify success]
+```
+
+---
+
+## Success Criteria
+
+- [ ] [Testable criterion]
+- [ ] [Testable criterion]
+
+---
+
+## Dependencies
+
+- **Requires**: [None or Prompt N]
+- **Blocks**: [None or Prompt N]
+```
+
+## Dependency Rules
+
+- No circular dependencies
+- Each prompt should be independently runnable (after deps complete)
+- Verification must be possible without other prompts
+
+## Example: Ember Feature
+
+Goal: "Add product review system"
+
+### Prompt 1: Review Move Module
+```markdown
+# Prompt 1: Review Registry Move Module
+
+**Priority**: HIGHEST
+**Skill**: move-dev
+
+## Objective
+Create the review_registry Move module for storing verified reviews.
+
+## Requirements
+1. Review struct with rating, content, verified flag
+2. Submit review function (requires order completion)
+3. Get reviews by product function
+4. Events for new reviews
+
+## Files to Create
+- `contracts/sources/review_registry.move` - CREATE
+
+## Verification
+```bash
+cd contracts && aptos move test --filter test_review
+```
+
+## Dependencies
+- **Requires**: None
+- **Blocks**: Prompt 2, Prompt 3
+```
+
+### Prompt 2: Review Frontend
+```markdown
+# Prompt 2: Review UI Components
+
+**Priority**: High
+**Skill**: ui-dev
+
+## Objective
+Create review display and submission components.
+
+## Requirements
+1. ReviewCard component
+2. ReviewForm component
+3. useReviews hook
+
+## Files to Create
+- `frontend/app/products/components/review-card.tsx`
+- `frontend/app/products/components/review-form.tsx`
+- `frontend/app/products/hooks/use-reviews.ts`
+
+## Verification
+```bash
+cd frontend && npm run build
+```
+
+## Dependencies
+- **Requires**: Prompt 1
+- **Blocks**: None
+```
+
+## Progress Tracking
+
+Update `prompts/README.md` after each prompt:
+
+```markdown
+# Ember Implementation Progress
+
+## Status
+
+| Prompt | Title | Status | Blocked By |
+|--------|-------|--------|------------|
+| 1 | Review Move Module | ✅ Complete | - |
+| 2 | Review UI Components | 🔄 In Progress | - |
+| 3 | Integration | ⏳ Pending | Prompt 2 |
+
+## Execution Order
+
+1. Prompt 1 (no deps)
+2. Prompt 2 (after 1)
+3. Prompt 3 (after 2)
+```
+
 ## Rules
 
-1. **NO CODE** - only generate prompt files
-2. **Simple names** - `1.md`, `2.md`, `3.md`
-3. **VeryChain Focus** - WEPIN auth + VeryChat API + TheGraph self-hosted
-
-## Workflow
-
-```
-User: /strategy wepin {goal}
-
-Claude:
-  1. Analyze the goal for VeryChain/VeryChat/WEPIN integration
-  2. CHECK RELEVANT ISSUES FIRST (see below)
-  3. mkdir -p .claude/prompts
-  4. Write .claude/prompts/1.md, 2.md, etc. (include issue references)
-  5. Output summary
-```
-
-## Check Issues Before Generating Prompts
-
-**MANDATORY:** Before generating prompts, check if the task involves known pitfalls:
-
-| Task involves... | Read first |
-|------------------|------------|
-| i18n / multilingual / Korean | `docs/issues/ui/README.md` → UI-004 |
-| VeryChat transactions/dialogs | `docs/issues/verychain/README.md` → VERY-002 |
-| Subgraph queries | `docs/issues/subgraph/README.md` |
-| Contract deployment | `docs/issues/contracts/README.md` |
-
-**In each generated prompt, add a "Known Pitfalls" section if relevant:**
-
-```markdown
-## Known Pitfalls
-- See `docs/issues/ui/README.md` → UI-004 for i18n pitfalls
-```
-
-## Prompt Format
-
-```markdown
-# Title
-
-## Required Skills
-- skill-name
-
-## Known Pitfalls
-- See `docs/issues/[category]/README.md` → [ID] (if relevant)
-
-## Context
-- VeryChain mainnet specifics
-- WEPIN auth requirements
-- VeryChat API endpoints
-
-## Steps
-1. Step one
-2. Step two
-
-## Files
-- path/to/file.ts
-
-## Checklist
-- [ ] Read relevant issues first
-- [ ] Done
-```
-
-## Summary
-
-```
-Prompts: .claude/prompts/
-
-| # | Title | Parallel? |
-|---|-------|-----------|
-| 1 | Setup WEPIN Auth | First |
-| 2 | VeryChat API Integration | After 1 |
-| 3 | Local Graph Node Setup | Parallel with 2 |
-| 4 | Contract Deployment | After 3 |
-| 5 | Subgraph Development | After 4 |
-| 6 | Frontend Integration | After 5 |
-
-Run: /run-prompt wepin 1
-```
-
-## VeryChain Stack
-
-```
-Auth Layer:       WEPIN (only auth supporting VeryChain mainnet)
-Messaging:        VeryChat API
-Indexing:         TheGraph (self-hosted graph-node)
-Contracts:        Foundry (EVM compatible)
-Frontend:         Next.js + shadcn/ui
-```
-
-## Integration Phases
-
-1. **Auth Setup** - WEPIN wallet connection for VeryChain
-2. **VeryChat Integration** - Chat API endpoints and messaging
-3. **Graph Node** - Self-hosted indexer for VeryChain
-4. **Contract Deploy** - Sample contract on VeryChain mainnet
-5. **Subgraph** - Index contract events on local graph-node
-6. **Frontend** - Query subgraph from the app
+- **NO CODE in strategy mode** - Only prompt files
+- **Be specific** - Exact file paths, function names
+- **Include verification** - Must be testable
+- **Single responsibility** - One clear objective per prompt

@@ -1,186 +1,129 @@
 ---
-description: Deploy contracts and sync to frontend (no subgraphs)
+description: Deploy Move contracts to Movement Network
+argument: <network: testnet or mainnet>
 ---
 
-# Contract Deployment & Frontend Sync
+# Deploy Move Contracts
 
-Deploy contracts to network, verify them, and update frontend with new addresses and ABIs.
+Deploy Ember Move modules to Movement Network.
 
-**SINGLE SOURCE OF TRUTH:** `contracts/deployment.config.json`
 **NO GARBAGE FILES:** Do not create markdown, temp, or documentation files.
 
 ## Prerequisites
 
-- Load `contracts-dev` skill
-- Read `contracts/deployment.config.json` for network config
-- Ensure `contracts/.env` has `PRIVATE_KEY` and RPC URLs
-
-### Context7 Lookups (if unsure about syntax)
-
-Before executing, look up current syntax if needed:
-- Foundry commands: `mcp__context7__get-library-docs({ context7CompatibleLibraryID: "/foundry-rs/foundry", topic: "forge script broadcast" })`
-- Verification: `mcp__context7__get-library-docs({ context7CompatibleLibraryID: "/foundry-rs/foundry", topic: "forge verify-contract" })`
+- Load `move-dev` skill
+- Aptos CLI installed
+- Movement profile configured
+- Funded wallet for gas
 
 ## Steps
 
-### 1. Build & Test
+### 1. Run Tests First
 
 ```bash
 cd contracts
-source .env
-forge build
-forge test -vv
+aptos move test
 ```
 
 **STOP if tests fail.** Fix issues before deploying.
 
-### 2. Deploy
+### 2. Initialize Profile (First Time Only)
 
 ```bash
-forge script script/Deploy.s.sol:DeployScript \
-  --rpc-url "$SEPOLIA_RPC_URL" \
-  --broadcast -vvv
+# For testnet
+aptos init --profile movement-testnet \
+  --network custom \
+  --rest-url https://aptos.testnet.porto.movementlabs.xyz/v1
+
+# For mainnet
+aptos init --profile movement-mainnet \
+  --network custom \
+  --rest-url https://mainnet.movementnetwork.xyz/v1
 ```
 
-### 3. Get Deployed Addresses
+### 3. Fund the Account (Testnet)
 
-Read from: `contracts/broadcast/Deploy.s.sol/11155111/run-latest.json`
-
-Extract:
-- Contract names
-- Deployed addresses
-- Transaction hashes
-
-### 4. Verify Each Contract
-
-**Get the list:** Read `contracts/broadcast/Deploy.s.sol/{chainId}/run-latest.json` -> `transactions` array where `transactionType` is `CREATE`.
-
-**For EACH contract in the list:**
-
-1. Extract `contractAddress` and `contractName` from the transaction
-2. Run verification:
-   ```bash
-   forge verify-contract {contractAddress} src/{ContractName}.sol:{ContractName} \
-     --chain-id {chainId} \
-     --verifier blockscout \
-     --verifier-url "https://eth-sepolia.blockscout.com/api/" \
-     --watch
-   ```
-3. Check result:
-   - If "Already verified" -> continue (this is OK)
-   - If "Contract verified" -> continue (success)
-   - If other error -> STOP and report the error
-4. Update `contracts/deployment.config.json`: set `deployments.{network}.{ContractName}.verified = true`
-
-**After all contracts:**
-- Verify `deployment.config.json` has `verified: true` for ALL contracts in the deployment
-
-**DO NOT pass `--constructor-args`** - Blockscout auto-detects them.
-
-### 5. Update Frontend Token Configs
-
-Update with new addresses:
-- `frontend/constants/tokens/11155111/erc20.json`
-- `frontend/constants/tokens/11155111/erc721.json`
-
-### 6. Copy ABIs to Frontend
-
-**For EACH contract deployed:**
-
-1. Find the ABI file: `contracts/out/{ContractName}.sol/{ContractName}.json`
-2. Create target directory if needed: `frontend/constants/contracts/{chainId}/abis/`
-3. Copy the ABI:
-   ```bash
-   cp contracts/out/{ContractName}.sol/{ContractName}.json \
-      frontend/constants/contracts/{chainId}/abis/
-   ```
-4. Verify the file was copied successfully
-
-**After all ABIs copied:**
-- Run `ls frontend/constants/contracts/{chainId}/abis/` to confirm all ABIs present
-
-### 7. Update deployment.config.json (REQUIRED)
-
-Update the `deployments` section in `contracts/deployment.config.json`:
-```json
-{
-  "deployments": {
-    "sepolia": {
-      "ContractName": {
-        "address": "0x...",
-        "deploymentTx": "0x...",
-        "blockNumber": 123456,
-        "verified": true
-      }
-    }
-  }
-}
+```bash
+# Get testnet tokens from faucet
+# Visit: https://faucet.movementnetwork.xyz
 ```
 
-This is the ONLY place deployment info should be stored.
+### 4. Compile Contracts
+
+```bash
+cd contracts
+aptos move compile
+```
+
+### 5. Publish to Network
+
+```bash
+# Testnet
+aptos move publish --profile movement-testnet
+
+# Mainnet (requires --max-gas for safety)
+aptos move publish --profile movement-mainnet --max-gas 100000
+```
+
+### 6. Initialize Modules (If Required)
+
+```bash
+# Initialize product registry
+aptos move run \
+  --function-id 'YOUR_ADDR::product_registry::initialize' \
+  --profile movement-testnet
+
+# Initialize order escrow
+aptos move run \
+  --function-id 'YOUR_ADDR::order_escrow::initialize' \
+  --profile movement-testnet
+```
+
+### 7. Verify Deployment
+
+```bash
+# Test a view function
+aptos move view \
+  --function-id 'YOUR_ADDR::product_registry::get_product_count' \
+  --profile movement-testnet
+```
+
+## Ember Contract Deployment Order
+
+Deploy in this order (dependencies matter):
+
+1. `seller_registry` - No dependencies
+2. `product_registry` - Depends on seller_registry
+3. `order_escrow` - Depends on product_registry
+4. `review_registry` - Depends on order_escrow
+5. `tip_jar` - No dependencies
+6. `gift_shop` - No dependencies
 
 ## Success Checklist
 
-Before marking this task complete, verify:
+- [ ] All tests pass locally
+- [ ] Contracts compile without errors
+- [ ] Publish transaction succeeds
+- [ ] Module initialization succeeds
+- [ ] View functions return expected results
 
-- [ ] All tests pass (`forge test` exits 0)
-- [ ] Contracts deployed successfully (tx hashes in broadcast file)
-- [ ] ALL contracts verified on Blockscout (check each explorer link)
-- [ ] Frontend token configs updated with new addresses
-- [ ] ABIs copied to `frontend/constants/contracts/{chainId}/abis/`
-- [ ] `deployment.config.json` updated with addresses, txHash, blockNumber, verified
+## Example Usage
 
-**Run this to confirm:**
-```bash
-cd contracts && forge test && echo "Tests passed"
-cat deployment.config.json | jq '.deployments'
-ls ../frontend/constants/contracts/*/abis/
+```
+/deploy-contracts testnet
 ```
 
----
+```
+/deploy-contracts mainnet for production launch
+```
 
 ## If This Fails
 
-### Error: "Script failed: ... insufficient funds"
-**Cause:** Deployer wallet doesn't have enough ETH for gas.
-**Fix:**
-1. Check deployer address: `cast wallet address --private-key $PRIVATE_KEY`
-2. Get testnet ETH from faucet (Sepolia: https://sepoliafaucet.com)
-3. Retry deployment
+### Error: "INSUFFICIENT_BALANCE_FOR_TRANSACTION_FEE"
+**Fix:** Fund the deployer account with MOVE tokens
 
-### Error: "PRIVATE_KEY not set" or "RPC_URL not set"
-**Cause:** Environment variables not loaded.
-**Fix:**
-1. Verify `.env` file exists: `cat contracts/.env`
-2. Run `source contracts/.env` before commands
-3. Check variable names match what script expects
+### Error: "MODULE_ALREADY_PUBLISHED"
+**Fix:** Use a different address or upgrade existing module
 
-### Error: "Contract verification failed"
-**Cause:** Explorer API issue, wrong compiler settings, or already verified.
-**Fix:**
-1. If "Already verified" - this is OK, continue
-2. Check compiler version matches: `forge config | grep solc`
-3. Check optimizer settings match deployed contract
-4. Try again in 1 minute (rate limiting)
-5. Verify manually on explorer website if API fails
-
-### Error: "Execution reverted" during deployment
-**Cause:** Constructor arguments invalid or contract logic issue.
-**Fix:**
-1. Check constructor args in `Deploy.s.sol`
-2. Run `forge test -vvvv` to debug
-3. Look for revert reason in trace output
-
-### Error: "broadcast/Deploy.s.sol/.../run-latest.json not found"
-**Cause:** Deployment didn't complete or wrong directory.
-**Fix:**
-1. Check if deployment ran: `ls contracts/broadcast/`
-2. Ensure `--broadcast` flag was used
-3. Check chainId matches: `cast chain-id --rpc-url $RPC_URL`
-
-### General Debugging
-
-1. Check `contracts/.env` has correct values
-2. Verify network connectivity: `cast block-number --rpc-url $RPC_URL`
-3. Check gas prices: `cast gas-price --rpc-url $RPC_URL`
-4. If still stuck, run with `-vvvv` for max verbosity
+### Error: "DEPENDENCY_NOT_RESOLVED"
+**Fix:** Check Move.toml dependencies, ensure all referenced modules exist
