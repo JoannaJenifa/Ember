@@ -112,10 +112,10 @@ cd frontend && npm run build
 
 | Prompt | Status |
 |--------|--------|
-| 1. Move Setup & Core Registries | ⏳ Pending |
-| 2. Order & Review System | ⏳ Pending |
-| 3. Streamer Monetization | ⏳ Pending |
-| 4. Frontend Foundation | ⏳ Pending |
+| 1. Move Setup & Core Registries | ✅ Complete |
+| 2. Order & Review System | ✅ Complete |
+| 3. Streamer Monetization | ✅ Complete |
+| 4. Frontend Foundation | ✅ Complete |
 | 5. Data Layer | ⏳ Pending |
 | 6. Product & Discovery | ⏳ Pending |
 | 7. Live Streaming | ⏳ Pending |

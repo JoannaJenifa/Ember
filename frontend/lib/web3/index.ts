@@ -1,8 +1,8 @@
 /**
- * Web3 Interface - WEPIN Auth Provider
+ * Web3 Interface - REOWN Auth Provider
  *
  * This is the STABLE API that all protocols use.
- * WEPIN is the auth layer for VeryChain mainnet integration.
+ * REOWN is the auth layer for Movement blockchain integration.
  *
  * Usage in protocols:
  * ```typescript
@@ -12,18 +12,12 @@
  *   const { address, isConnected } = useAccount()
  *   const walletClient = useWalletClient()
  *   const publicClient = usePublicClient()
- *   // ... works with WEPIN auth provider
  * }
- * ```
- *
- * For WEPIN-specific features:
- * ```typescript
- * import { useWepinContext, useWepinProvider } from '@/lib/web3'
  * ```
  */
 
 // =============================================================================
-// Re-export everything from the active provider (WEPIN)
+// Re-export everything from the active provider (REOWN)
 // =============================================================================
 
 export {
@@ -66,30 +60,7 @@ export {
 
   // Provider Component
   Web3Provider,
-
-  // Provider-specific exports (WEPIN)
-  useWepinContext,
-  useWepinProvider,
-  useWepinNetworkProvider,
-  isWepinConfigured,
-  getWepinConfig,
-  getWepinNetworkName,
-
-  // Config exports
-  supportedChains,
-  getSupportedChainIds,
-
-  // Widget SDK exports
-  useWepinWidget,
-  useWepinStatus,
-  useWepinWidgetControl,
-  useWepinAccounts,
-  useWepinNFTs,
-  useWepinSend,
-  useWepinReceive,
-  useWepinUser,
-  WepinWidgetContext,
-} from './providers'
+} from './providers';
 
 // =============================================================================
 // Re-export types from the active provider
@@ -140,19 +111,7 @@ export type {
   // Signature
   UseSignMessageReturn,
   UseSignTypedDataReturn,
-
-  // Widget SDK Types
-  WepinAccount,
-  WepinBalance,
-  WepinNFT,
-  WepinUserInfo,
-  WepinUserStatus,
-  WepinUser,
-  WepinLifecycle,
-  WepinTxData,
-  WepinSendResult,
-  WepinWidgetContextValue,
-} from './providers'
+} from './providers';
 
 // =============================================================================
 // Re-export viem types (used by all providers)
@@ -165,33 +124,36 @@ export type {
   Address,
   Hash,
   Hex,
-} from 'viem'
+} from 'viem';
 
 // =============================================================================
 // Shared Utilities (not provider-specific)
 // =============================================================================
 
 // Common formatting utilities
-export { formatAddress, formatBalance, formatUSD, formatTokenAmount, isValidAddress } from './format'
+export {
+  formatAddress,
+  formatBalance,
+  formatUSD,
+  formatTokenAmount,
+  isValidAddress,
+} from './format';
 
 // Chain utilities
-export { getChainById, getChainName, getExplorerLink, isTestnet, getExplorerUrl, getChainIcon } from '@/lib/config/chains'
+export {
+  getChainById,
+  getChainName,
+  getExplorerLink,
+  isTestnet,
+  getExplorerUrl,
+  getChainIcon,
+} from '@/lib/config/chains';
 
 // Asset utilities
-export { getChainLogoUrl, getTokenLogoUrl, getChainMetadata, CHAIN_IDS, CHAIN_METADATA } from './assets'
-
-// =============================================================================
-// For less common utilities, import directly from their modules:
-// - import { ... } from '@/lib/web3/format'
-// - import { ... } from '@/lib/config/chains'
-// - import { ... } from '@/lib/web3/contracts'
-// - import { ... } from '@/lib/web3/eth-transfer'
-// - import { ... } from '@/lib/web3/assets'
-// - import { ... } from '@/lib/web3/price'
-// - import { ... } from '@/lib/web3/ipfs'
-// - import { ... } from '@/lib/web3/pinata'
-// - import { ... } from '@/lib/web3/tenderly'
-// - import { ... } from '@/lib/web3/tenderly-cache'
-// - import { ... } from '@/lib/web3/abis'
-// - import { ... } from '@/lib/web3/addresses'
-// =============================================================================
+export {
+  getChainLogoUrl,
+  getTokenLogoUrl,
+  getChainMetadata,
+  CHAIN_IDS,
+  CHAIN_METADATA,
+} from './assets';

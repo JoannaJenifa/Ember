@@ -3,6 +3,9 @@ module ember::product_registry {
     use std::string::String;
     use std::signer;
     use std::vector;
+
+    friend ember::order_escrow;
+    friend ember::review_registry;
     use aptos_std::smart_table::{Self, SmartTable};
     use aptos_framework::timestamp;
     use aptos_framework::event;

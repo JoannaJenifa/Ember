@@ -4,6 +4,7 @@ import { ThemeProvider } from 'next-themes';
 import './globals.css';
 import { Providers } from './providers';
 import { Navbar } from '@/components/navbar';
+import { TranslationProvider } from '@/lib/i18n';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -29,10 +30,12 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <Providers>
-            <Navbar />
-            {children}
-          </Providers>
+          <TranslationProvider>
+            <Providers>
+              <Navbar />
+              {children}
+            </Providers>
+          </TranslationProvider>
         </ThemeProvider>
       </body>
     </html>
