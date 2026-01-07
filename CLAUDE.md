@@ -1,8 +1,35 @@
-# Labang (라방) - VeryChain dApp
+# Ember - Movement Live Commerce dApp
 
-**⭐ Reference Implementation: `../04-shinroe/`**
+## Overview
 
-Always look at Shinroe for patterns, code structure, and implementation details. Copy and adapt from Shinroe, not from template/.
+Ember is a **live commerce platform** built on Movement blockchain where streamers sell products in real-time and viewers purchase with crypto. KYC-verified reviews ensure authentic feedback, and instant crypto payments remove traditional payment friction.
+
+**Migrated from:** Labang (VeryChain EVM project)
+**Target:** Movement blockchain
+
+---
+
+## Git Configuration
+
+**Account:** JoannaJenifa (Jenifa)
+```
+user.name: JoannaJenifa
+user.email: testerbuster564@gmail.com
+```
+
+### Auto-Commit Rule
+**IMPORTANT:** After EVERY response that modifies code/files, you MUST run:
+```bash
+cd /Users/gabrielantonyxaviour/Documents/starters/movement/Ember && \
+git add -A && \
+git commit -m "$(cat <<'EOF'
+<concise description of changes>
+EOF
+)" && \
+git push
+```
+
+This ensures all changes are tracked and pushed to JoannaJenifa/Ember.
 
 ---
 
@@ -10,11 +37,40 @@ Always look at Shinroe for patterns, code structure, and implementation details.
 
 | Layer | Technology | Notes |
 |-------|------------|-------|
-| **Auth** | WEPIN | Only auth layer supporting VeryChain mainnet |
-| **Chat** | VeryChat API | Messaging integration |
-| **Indexing** | TheGraph (self-hosted) | No external indexers support VeryChain |
-| **Contracts** | Foundry | EVM compatible |
-| **Frontend** | Next.js + shadcn/ui | Standard template |
+| **Contracts** | Move | Movement-native smart contracts |
+| **Frontend** | Next.js + shadcn/ui | Existing React frontend |
+| **Indexing** | TBD | Movement indexer integration |
+| **Wallet** | Movement-compatible | TBD - needs research |
+
+---
+
+## Migration Notes
+
+### DB Operations → On-Chain Operations
+
+The original project used SQLite for data storage. For Movement, we're migrating to fully on-chain:
+
+| Original DB | Movement On-Chain |
+|-------------|-------------------|
+| `users` table | On-chain identity via wallet |
+| `transactions` table | Native transaction history |
+| `tokens` table | Query token balances from chain |
+| `nfts` table | Query NFT ownership from chain |
+| Products | Move module: ProductRegistry |
+| Orders | Move module: OrderEscrow |
+| Reviews | Move module: ReviewRegistry |
+| Seller profiles | Move module: SellerRegistry |
+
+### Existing Smart Contracts (Solidity → Move)
+
+These need to be rewritten in Move:
+
+1. **OrderEscrow.sol** → `order_escrow.move`
+2. **ReviewRegistry.sol** → `review_registry.move`
+3. **ProductRegistry.sol** → `product_registry.move`
+4. **SellerRegistry.sol** → `seller_registry.move`
+5. **TipJar.sol** → `tip_jar.move`
+6. **GiftShop.sol** → `gift_shop.move`
 
 ---
 
@@ -24,68 +80,33 @@ Always look at Shinroe for patterns, code structure, and implementation details.
 
 - No scope creep - only implement what's requested
 - No assumptions - ask for clarification
-- Follow existing patterns in Shinroe (`../04-shinroe/`)
 - Verify work before completing
 - Use conventional commits (`feat:`, `fix:`, `refactor:`)
 
 ---
 
-## Before Starting Any Work
-
-1. **Read the PRD:** `../../prds/08-labang-prd.md`
-2. **Reference Shinroe:** Look at `../04-shinroe/` for all patterns
-3. **Load required skills** before starting tasks
-
----
-
-## File Size Limits (CRITICAL)
+## File Size Limits
 
 **HARD LIMIT: 300 lines per file maximum. NO EXCEPTIONS.**
 
 ---
 
-## Documentation Lookup (MANDATORY)
+## Key Features
 
-**ALWAYS use Context7 MCP for documentation. NEVER use WebFetch for docs.**
-
----
-
-## DO NOT
-
-- **Create files over 300 lines**
-- **Use WebFetch for documentation** - Use Context7
-- **Skip loading skills**
-- Mock WEPIN/VeryChat implementations
-- Use `template/` as reference - use `04-shinroe/` instead
-
-## DO
-
-- **Reference `../04-shinroe/`** for all patterns and code
-- **Use `/strategy`** to plan multi-step integrations
-- **Use Context7 MCP** for all documentation
-- Keep files under 300 lines
+1. **Live Streaming** - Real-time product showcases
+2. **One-Tap Purchase** - Buy during live streams
+3. **Instant Settlement** - Sellers receive crypto immediately
+4. **Verified Reviews** - Only purchasers can review (on-chain verified)
+5. **Watch-to-Earn** - Viewers earn for engagement
+6. **Low Fees** - 3% platform fee
 
 ---
 
-## Issues & Learnings (READ BEFORE STARTING)
+## Next Steps
 
-### Before Starting These Tasks, Read Relevant Issues:
-
-| Task Type | Read First |
-|-----------|------------|
-| Contract deployment | `docs/issues/contracts/README.md` → CONTRACT-001 (get PRIVATE_KEY first!) |
-| Contract testing | `docs/issues/contracts/README.md` → CONTRACT-001 |
-| Subgraph deployment | `docs/issues/subgraph/README.md` → SUBGRAPH-001 (local graph-node only!) |
-| Subgraph integration | `docs/issues/subgraph/README.md` → SUBGRAPH-001 |
-| i18n / multilingual | `docs/issues/ui/README.md` |
-| VeryChain specifics | `docs/issues/verychain/README.md` |
-
-### Key Learnings Summary
-
-1. **Contract Deployment**: Copy `.env` from `../04-shinroe/contracts/.env` for `PRIVATE_KEY`. Deploy to **Polygon Amoy** testnet.
-
-2. **Subgraph Deployment**: ALWAYS deploy to local graph-node at `/Users/gabrielantonyxaviour/Documents/starters/very/graph-node/`, NEVER to Graph Studio.
-   ```bash
-   graph create --node http://localhost:8020/ <project-name>
-   graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 <project-name>
-   ```
+1. [ ] Set up Movement development environment
+2. [ ] Research Movement wallet integration
+3. [ ] Rewrite smart contracts in Move language
+4. [ ] Update frontend to use Movement SDK
+5. [ ] Replace all DB operations with on-chain queries
+6. [ ] Set up Movement indexer for efficient querying
