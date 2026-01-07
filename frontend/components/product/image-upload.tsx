@@ -101,13 +101,13 @@ export function ImageUpload({ images, onChange, onUploadingChange, maxImages = 5
           onDragLeave={handleDragLeave}
           className={cn(
             'border-2 border-dashed rounded-lg p-8 transition-colors text-center',
-            dragActive ? 'border-coral bg-coral/5' : 'border-border hover:border-coral/50',
+            dragActive ? 'border-ember bg-ember/5' : 'border-border hover:border-ember/50',
             disabled && 'opacity-50 cursor-not-allowed'
           )}
         >
           {uploading ? (
             <div className="flex flex-col items-center gap-2">
-              <Loader2 className="h-8 w-8 animate-spin text-coral" />
+              <Loader2 className="h-8 w-8 animate-spin text-ember" />
               <p className="text-sm text-muted-foreground">{t('product.uploadImages')}...</p>
             </div>
           ) : (
@@ -138,7 +138,7 @@ export function ImageUpload({ images, onChange, onUploadingChange, maxImages = 5
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={url} alt={`${t('product.images')} ${index + 1}`} className="w-full h-full object-cover" />
               {index === 0 && (
-                <span className="absolute top-1 left-1 bg-coral text-white text-xs px-1.5 py-0.5 rounded">
+                <span className="absolute top-1 left-1 bg-ember text-white text-xs px-1.5 py-0.5 rounded">
                   {t('product.mainImage')}
                 </span>
               )}

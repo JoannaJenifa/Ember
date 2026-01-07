@@ -66,7 +66,7 @@ export function ProductQuickView({ product, open, onClose, onPurchase }: Product
 
           {/* Price */}
           <div className="flex items-baseline gap-2">
-            <span className="text-2xl font-bold text-coral">{formatVeryPrice(product.priceVery)}</span>
+            <span className="text-2xl font-bold text-ember">{formatVeryPrice(product.priceVery)}</span>
             <span className="text-sm text-muted-foreground">VERY</span>
           </div>
 
@@ -110,7 +110,7 @@ export function ProductQuickView({ product, open, onClose, onPurchase }: Product
           {inventory > 0 && (
             <div className="flex items-center justify-between py-2 border-t">
               <span className="text-sm text-muted-foreground">{t('order.total')}</span>
-              <span className="text-lg font-bold text-coral">
+              <span className="text-lg font-bold text-ember">
                 {totalPrice.toFixed(4)} <span className="text-sm font-normal">VERY</span>
               </span>
             </div>
@@ -119,7 +119,7 @@ export function ProductQuickView({ product, open, onClose, onPurchase }: Product
           {/* Actions */}
           <div className="flex gap-2">
             <Button
-              className="flex-1 bg-coral hover:bg-coral/90 text-white"
+              className="flex-1 bg-ember hover:bg-ember/90 text-white"
               onClick={handlePurchase}
               disabled={inventory === 0}
             >

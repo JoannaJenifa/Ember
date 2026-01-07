@@ -29,7 +29,7 @@ export function ProductSidebar({
     return (
       <Card className={cn('bg-card border-border p-4', className)}>
         <div className="flex items-center gap-2 mb-4">
-          <ShoppingBag className="h-5 w-5 text-coral" />
+          <ShoppingBag className="h-5 w-5 text-ember" />
           <h2 className="font-semibold">{t('stream.products')}</h2>
         </div>
         <div className="text-center py-8 text-muted-foreground text-sm">
@@ -42,7 +42,7 @@ export function ProductSidebar({
   return (
     <Card className={cn('bg-card border-border p-4', className)}>
       <div className="flex items-center gap-2 mb-4">
-        <ShoppingBag className="h-5 w-5 text-coral" />
+        <ShoppingBag className="h-5 w-5 text-ember" />
         <h2 className="font-semibold">{t('stream.products')}</h2>
         <Badge variant="secondary" className="ml-auto">{products.length}</Badge>
       </div>
@@ -93,7 +93,7 @@ const ProductItem = memo(function ProductItem({ product, onClick, onQuickBuy }: 
           </div>
         )}
         {isFlashSale && (
-          <div className="absolute top-0 left-0 bg-coral text-white text-[10px] px-1 rounded-br">
+          <div className="absolute top-0 left-0 bg-ember text-white text-[10px] px-1 rounded-br">
             <Zap className="h-2.5 w-2.5 inline" />
           </div>
         )}
@@ -102,7 +102,7 @@ const ProductItem = memo(function ProductItem({ product, onClick, onQuickBuy }: 
       {/* Info */}
       <div className="flex-1 min-w-0">
         <p className="text-sm font-medium line-clamp-1">{displayTitle}</p>
-        <p className="text-sm font-bold text-coral">
+        <p className="text-sm font-bold text-ember">
           {formatVeryPrice(product.priceVery)} <span className="text-xs font-normal">VERY</span>
         </p>
       </div>

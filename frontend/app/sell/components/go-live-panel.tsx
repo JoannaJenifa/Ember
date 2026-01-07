@@ -66,8 +66,8 @@ export function GoLivePanel({ sellerAddress }: GoLivePanelProps) {
     <div className="grid gap-6 md:grid-cols-2">
       <Card className="p-6 bg-card border-border">
         <div className="flex items-center gap-3 mb-6">
-          <div className="h-10 w-10 rounded-full bg-coral/20 flex items-center justify-center">
-            <Video className="h-5 w-5 text-coral" />
+          <div className="h-10 w-10 rounded-full bg-ember/20 flex items-center justify-center">
+            <Video className="h-5 w-5 text-ember" />
           </div>
           <div>
             <h2 className="font-semibold text-foreground">Go Live</h2>
@@ -113,7 +113,7 @@ export function GoLivePanel({ sellerAddress }: GoLivePanelProps) {
             </div>
           ) : (
             <Button
-              className="w-full bg-coral hover:bg-coral/90"
+              className="w-full bg-ember hover:bg-ember/90"
               onClick={handleStartLive}
               disabled={!youtubeUrl || selectedProducts.length === 0}
             >
@@ -145,7 +145,7 @@ export function GoLivePanel({ sellerAddress }: GoLivePanelProps) {
                   key={product.id}
                   className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${
                     isSelected
-                      ? 'border-coral bg-coral/10'
+                      ? 'border-ember bg-ember/10'
                       : 'border-border hover:border-muted-foreground'
                   }`}
                   onClick={() => !isLive && toggleProduct(product.id)}
@@ -176,7 +176,7 @@ export function GoLivePanel({ sellerAddress }: GoLivePanelProps) {
                       {formatMoveAmount(product.price)} MOVE · Stock: {product.inventory}
                     </p>
                   </div>
-                  {isSelected && <CheckCircle className="h-5 w-5 text-coral flex-shrink-0" />}
+                  {isSelected && <CheckCircle className="h-5 w-5 text-ember flex-shrink-0" />}
                 </div>
               );
             })}

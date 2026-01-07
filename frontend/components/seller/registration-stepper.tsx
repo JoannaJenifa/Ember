@@ -34,9 +34,9 @@ export function RegistrationStepper({ currentStep }: RegistrationStepperProps) {
                 className={cn(
                   'flex h-10 w-10 items-center justify-center rounded-full border-2 transition-colors',
                   currentStep > step.id
-                    ? 'border-coral bg-coral text-white'
+                    ? 'border-ember bg-ember text-white'
                     : currentStep === step.id
-                      ? 'border-coral text-coral'
+                      ? 'border-ember text-ember'
                       : 'border-border text-muted-foreground'
                 )}
               >
@@ -62,7 +62,7 @@ export function RegistrationStepper({ currentStep }: RegistrationStepperProps) {
               <div
                 className={cn(
                   'flex-1 h-0.5 mx-2',
-                  currentStep > step.id ? 'bg-coral' : 'bg-border'
+                  currentStep > step.id ? 'bg-ember' : 'bg-border'
                 )}
               />
             )}

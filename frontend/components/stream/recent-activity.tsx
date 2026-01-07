@@ -100,7 +100,7 @@ export function RecentActivity({ streamerAddress, recentPurchase, recentTip }: R
     <Card className="bg-card border-border p-4">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <ShoppingBag className="h-5 w-5 text-coral" />
+          <ShoppingBag className="h-5 w-5 text-ember" />
           <h2 className="font-semibold">{t('stream.onchainActivity')}</h2>
         </div>
         <Button variant="ghost" size="icon" className="h-6 w-6" onClick={handleRefresh}>
@@ -171,12 +171,12 @@ function ActivityItem({ activity }: { activity: any }) {
           <p className="text-xs text-muted-foreground truncate">{activity.message}</p>
         )}
         {isPurchase && activity.product?.priceVery && (
-          <p className="text-xs text-coral font-medium">
+          <p className="text-xs text-ember font-medium">
             {formatVeryPrice(activity.product.priceVery)} VERY
           </p>
         )}
       </div>
-      <a href={explorerUrl} target="_blank" rel="noopener noreferrer" className="text-coral">
+      <a href={explorerUrl} target="_blank" rel="noopener noreferrer" className="text-ember">
         <ExternalLink className="h-3 w-3" />
       </a>
     </div>

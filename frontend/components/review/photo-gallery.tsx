@@ -128,7 +128,7 @@ export function PhotoGallery({ open, onOpenChange, photos, initialIndex = 0 }: P
                   }}
                   className={cn(
                     'w-2 h-2 rounded-full transition-colors',
-                    index === currentIndex ? 'bg-coral' : 'bg-muted-foreground/30'
+                    index === currentIndex ? 'bg-ember' : 'bg-muted-foreground/30'
                   )}
                 />
               ))}

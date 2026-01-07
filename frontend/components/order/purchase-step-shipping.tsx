@@ -131,7 +131,7 @@ export function PurchaseStepShipping({
         </Button>
         <Button
           onClick={handleSubmit}
-          className="flex-1 bg-coral hover:bg-coral/90"
+          className="flex-1 bg-ember hover:bg-ember/90"
         >
           {t('common.next')}
         </Button>

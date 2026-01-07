@@ -43,7 +43,7 @@ export function MobileNav({ className }: MobileNavProps) {
               href={link.href}
               className={cn(
                 'flex flex-col items-center gap-1 px-3 py-2 transition-colors',
-                isActive ? 'text-coral' : 'text-muted-foreground'
+                isActive ? 'text-ember' : 'text-muted-foreground'
               )}
             >
               <link.icon className="h-5 w-5" />

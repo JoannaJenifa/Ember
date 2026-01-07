@@ -59,7 +59,7 @@ export function ProductList({ sellerAddress }: ProductListProps) {
             <List className="h-4 w-4" />
           </Button>
         </div>
-        <Button onClick={() => setShowForm(true)} className="bg-coral hover:bg-coral/90">
+        <Button onClick={() => setShowForm(true)} className="bg-ember hover:bg-ember/90">
           <Plus className="h-4 w-4 mr-2" />
           Add Product
         </Button>
@@ -67,14 +67,14 @@ export function ProductList({ sellerAddress }: ProductListProps) {
 
       {loading ? (
         <div className="flex items-center justify-center py-12">
-          <Loader2 className="h-8 w-8 animate-spin text-coral" />
+          <Loader2 className="h-8 w-8 animate-spin text-ember" />
         </div>
       ) : products.length === 0 ? (
         <Card className="p-12 text-center bg-card border-border">
           <Package className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
           <h2 className="text-lg font-semibold text-foreground mb-2">No products yet</h2>
           <p className="text-muted-foreground mb-4">Add your first product to start selling</p>
-          <Button onClick={() => setShowForm(true)} className="bg-coral hover:bg-coral/90">
+          <Button onClick={() => setShowForm(true)} className="bg-ember hover:bg-ember/90">
             <Plus className="h-4 w-4 mr-2" />
             Add Product
           </Button>
@@ -107,7 +107,7 @@ export function ProductList({ sellerAddress }: ProductListProps) {
                   {product.title}
                 </h3>
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-coral font-semibold text-sm">
+                  <span className="text-ember font-semibold text-sm">
                     {formatMoveAmount(product.price)} MOVE
                   </span>
                   <span className="text-xs text-muted-foreground">

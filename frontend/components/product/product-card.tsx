@@ -72,7 +72,7 @@ export function ProductCard({ product, onBuy, showSeller = true, className }: Pr
       <div className="p-3 space-y-2">
         {/* Title */}
         <Link href={`/product/${product.id}`}>
-          <h3 className="font-medium text-foreground line-clamp-2 hover:text-coral transition-colors">
+          <h3 className="font-medium text-foreground line-clamp-2 hover:text-ember transition-colors">
             {product.titleKo || product.title}
           </h3>
         </Link>
@@ -82,7 +82,7 @@ export function ProductCard({ product, onBuy, showSeller = true, className }: Pr
 
         {/* Price */}
         <div className="flex items-baseline gap-1">
-          <span className="text-lg font-bold text-coral">{formatPrice(product.priceVery)}</span>
+          <span className="text-lg font-bold text-ember">{formatPrice(product.priceVery)}</span>
           <span className="text-sm text-muted-foreground">VERY</span>
         </div>
 
@@ -101,7 +101,7 @@ export function ProductCard({ product, onBuy, showSeller = true, className }: Pr
 
         {/* Buy Button */}
         <Button
-          className="w-full bg-coral hover:bg-coral/90 text-white"
+          className="w-full bg-ember hover:bg-ember/90 text-white"
           size="sm"
           disabled={product.inventory === 0}
           onClick={(e) => {

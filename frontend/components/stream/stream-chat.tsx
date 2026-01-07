@@ -85,7 +85,7 @@ export function StreamChat({ streamId, className }: StreamChatProps) {
   return (
     <Card className={cn('bg-card border-border flex flex-col', className)}>
       <div className="flex items-center gap-2 p-4 border-b">
-        <MessageCircle className="h-5 w-5 text-coral" />
+        <MessageCircle className="h-5 w-5 text-ember" />
         <h2 className="font-semibold">{t('stream.chat')}</h2>
         {isConnected && (
           <Badge variant="secondary" className="ml-auto text-[10px]">
@@ -139,7 +139,7 @@ const ChatMessageItem = memo(function ChatMessageItem({ message }: { message: Ch
 
   return (
     <div className="flex gap-2 text-sm">
-      <span className="font-medium text-coral shrink-0">{message.username}</span>
+      <span className="font-medium text-ember shrink-0">{message.username}</span>
       <span className="text-foreground break-words">{message.message}</span>
     </div>
   )

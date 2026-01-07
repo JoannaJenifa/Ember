@@ -79,7 +79,7 @@ export function OrderConfirmation({
               <p className="text-sm text-muted-foreground">
                 {t('order.quantity')}: {order.quantity}
               </p>
-              <p className="text-coral font-medium">
+              <p className="text-ember font-medium">
                 {order.totalVery || order.total_price_very || '0'} VERY
               </p>
             </div>
@@ -131,7 +131,7 @@ export function OrderConfirmation({
           <Link href="/">{t('common.goBack')}</Link>
         </Button>
         <Button
-          className="flex-1 bg-coral hover:bg-coral/90"
+          className="flex-1 bg-ember hover:bg-ember/90"
           onClick={onViewOrders}
           asChild
         >

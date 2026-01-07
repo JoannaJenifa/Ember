@@ -78,7 +78,7 @@ export function ProductGallery({ images, title }: ProductGalleryProps) {
               onClick={() => setActiveIndex(index)}
               className={cn(
                 'flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-colors',
-                index === activeIndex ? 'border-coral' : 'border-transparent hover:border-border'
+                index === activeIndex ? 'border-ember' : 'border-transparent hover:border-border'
               )}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}

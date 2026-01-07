@@ -88,7 +88,7 @@ export function PurchaseForm({ product }: PurchaseFormProps) {
           <span className="text-foreground">{product.inventory} {t('product.available')}</span>
         </div>
         <Button
-          className="w-full bg-coral hover:bg-coral/90 h-12 text-lg"
+          className="w-full bg-ember hover:bg-ember/90 h-12 text-lg"
           onClick={() => setShowForm(true)}
         >
           {t('order.buyNow')}
@@ -142,7 +142,7 @@ export function PurchaseForm({ product }: PurchaseFormProps) {
 
       <div className="flex items-baseline justify-between pt-2 border-t border-border">
         <span className="text-muted-foreground">{t('order.total')}:</span>
-        <span className="text-2xl font-bold text-coral">{totalPrice.toFixed(4)} MOVE</span>
+        <span className="text-2xl font-bold text-ember">{totalPrice.toFixed(4)} MOVE</span>
       </div>
 
       <div className="flex gap-2">
@@ -150,7 +150,7 @@ export function PurchaseForm({ product }: PurchaseFormProps) {
           {t('common.cancel')}
         </Button>
         <Button
-          className="flex-1 bg-coral hover:bg-coral/90"
+          className="flex-1 bg-ember hover:bg-ember/90"
           onClick={handlePurchase}
           disabled={loading || !connected}
         >

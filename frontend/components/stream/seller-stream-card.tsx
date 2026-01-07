@@ -61,7 +61,7 @@ export function SellerStreamCard({
   return (
     <Card
       className={cn(
-        'bg-card border-border overflow-hidden hover:border-coral/50 transition-colors',
+        'bg-card border-border overflow-hidden hover:border-ember/50 transition-colors',
         className
       )}
     >
@@ -156,7 +156,7 @@ export function SellerStreamCard({
         <div className="mt-3 flex gap-2">
           {isLive && (
             <Link href={`/sell/streams/${stream.id}/live`} className="flex-1">
-              <Button size="sm" className="w-full gap-2 bg-coral hover:bg-coral/90">
+              <Button size="sm" className="w-full gap-2 bg-ember hover:bg-ember/90">
                 <Radio className="h-4 w-4" />
                 {t('seller.dashboard')}
               </Button>

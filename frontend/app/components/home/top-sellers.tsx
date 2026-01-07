@@ -59,7 +59,7 @@ export function TopSellers() {
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl font-bold text-foreground">{t('home.topSellers')}</h2>
         <Link href="/sellers">
-          <Button variant="ghost" className="text-coral hover:text-coral/80">
+          <Button variant="ghost" className="text-ember hover:text-ember/80">
             {t('common.viewAll')}
             <ArrowRight className="h-4 w-4 ml-1" />
           </Button>
@@ -69,16 +69,16 @@ export function TopSellers() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {sellers.map((seller, index) => (
           <Link key={seller.address} href={`/seller/${seller.address}`}>
-            <Card className="bg-card border-border p-4 hover:border-coral/50 transition-colors cursor-pointer h-full">
+            <Card className="bg-card border-border p-4 hover:border-ember/50 transition-colors cursor-pointer h-full">
               <div className="flex items-center gap-3 mb-3">
                 <div className="relative">
                   <Avatar className="h-12 w-12">
-                    <AvatarFallback className="bg-coral/10 text-coral">
+                    <AvatarFallback className="bg-ember/10 text-ember">
                       {getInitials(seller.shopName)}
                     </AvatarFallback>
                   </Avatar>
                   {index < 3 && (
-                    <div className="absolute -top-1 -right-1 h-5 w-5 bg-coral rounded-full flex items-center justify-center text-xs font-bold text-white">
+                    <div className="absolute -top-1 -right-1 h-5 w-5 bg-ember rounded-full flex items-center justify-center text-xs font-bold text-white">
                       {index + 1}
                     </div>
                   )}

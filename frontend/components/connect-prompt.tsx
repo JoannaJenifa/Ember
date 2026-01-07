@@ -38,8 +38,8 @@ export function ConnectPrompt({
     <div className="min-h-[60vh] flex items-center justify-center p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <div className="mx-auto mb-4 h-16 w-16 rounded-full bg-coral/10 flex items-center justify-center">
-            <Flame className="h-8 w-8 text-coral" />
+          <div className="mx-auto mb-4 h-16 w-16 rounded-full bg-ember/10 flex items-center justify-center">
+            <Flame className="h-8 w-8 text-ember" />
           </div>
           <CardTitle className="text-2xl">{title}</CardTitle>
           <CardDescription>{description}</CardDescription>
@@ -49,7 +49,7 @@ export function ConnectPrompt({
             {benefits.map((benefit) => (
               <div key={benefit.title} className="flex items-start gap-3">
                 <div className="h-10 w-10 rounded-lg bg-muted flex items-center justify-center shrink-0">
-                  <benefit.icon className="h-5 w-5 text-coral" />
+                  <benefit.icon className="h-5 w-5 text-ember" />
                 </div>
                 <div>
                   <h4 className="font-medium">{benefit.title}</h4>
@@ -62,7 +62,7 @@ export function ConnectPrompt({
           <Button
             onClick={login}
             disabled={!isReady}
-            className="w-full bg-coral hover:bg-coral/90"
+            className="w-full bg-ember hover:bg-ember/90"
             size="lg"
           >
             <Wallet className="h-5 w-5 mr-2" />

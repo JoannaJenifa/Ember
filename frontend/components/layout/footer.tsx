@@ -20,8 +20,8 @@ export function Footer() {
           {/* Logo and Copyright */}
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
-              <div className="p-1.5 rounded-lg bg-coral/10">
-                <ShoppingBag className="h-4 w-4 text-coral" />
+              <div className="p-1.5 rounded-lg bg-ember/10">
+                <ShoppingBag className="h-4 w-4 text-ember" />
               </div>
               <span className="font-bold text-foreground">{t('common.appName')}</span>
             </div>

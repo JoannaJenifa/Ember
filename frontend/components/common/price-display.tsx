@@ -27,7 +27,7 @@ export function PriceDisplay({
   const suffix = currency === 'VERY' ? ' VERY' : ''
 
   return (
-    <span className={cn('font-semibold text-coral', sizeClasses[size], className)}>
+    <span className={cn('font-semibold text-ember', sizeClasses[size], className)}>
       {prefix}{formattedAmount}{suffix}
     </span>
   )

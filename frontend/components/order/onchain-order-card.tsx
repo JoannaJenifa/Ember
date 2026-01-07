@@ -39,7 +39,7 @@ export function OnchainOrderCard({ order }: OnchainOrderCardProps) {
   const explorerUrl = `https://www.veryscan.io/tx/${order.txHash}`
 
   return (
-    <Card className="bg-card border-border p-4 hover:border-coral/50 transition-colors">
+    <Card className="bg-card border-border p-4 hover:border-ember/50 transition-colors">
       <div className="flex items-start justify-between gap-4">
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-2">
@@ -55,7 +55,7 @@ export function OnchainOrderCard({ order }: OnchainOrderCardProps) {
           <div className="space-y-1 text-sm">
             <div className="flex items-center gap-2">
               <span className="text-muted-foreground">Amount:</span>
-              <span className="font-semibold text-coral">{order.amountFormatted} VERY</span>
+              <span className="font-semibold text-ember">{order.amountFormatted} VERY</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="text-muted-foreground">Product ID:</span>
@@ -77,7 +77,7 @@ export function OnchainOrderCard({ order }: OnchainOrderCardProps) {
             href={explorerUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-xs text-coral hover:underline flex items-center gap-1"
+            className="text-xs text-ember hover:underline flex items-center gap-1"
           >
             View on Explorer
             <ExternalLink className="h-3 w-3" />

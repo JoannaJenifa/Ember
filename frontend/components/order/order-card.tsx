@@ -91,7 +91,7 @@ export function OrderCard({
                 <StatusIcon />
                 {statusLabel?.ko}
               </Badge>
-              <span className="text-coral font-bold">
+              <span className="text-ember font-bold">
                 {order.totalVery || order.total_price_very || '0'} VERY
               </span>
             </div>
@@ -132,7 +132,7 @@ export function OrderCard({
         <div className="flex gap-2 mt-4 pt-4 border-t border-border">
           <Button
             size="sm"
-            className="flex-1 bg-coral hover:bg-coral/90"
+            className="flex-1 bg-ember hover:bg-ember/90"
             onClick={(e) => {
               e.preventDefault()
               onShip?.()

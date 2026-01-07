@@ -16,7 +16,7 @@ export function ReviewPrompt({ product, onWriteReview }: ReviewPromptProps) {
   const { t } = useTranslation()
 
   return (
-    <Card className="bg-gradient-to-r from-coral/10 to-gold/10 border-coral/20 p-6">
+    <Card className="bg-gradient-to-r from-ember/10 to-gold/10 border-ember/20 p-6">
       <div className="flex items-center gap-4">
         {/* Product image */}
         {product.images && product.images[0] && (
@@ -43,7 +43,7 @@ export function ReviewPrompt({ product, onWriteReview }: ReviewPromptProps) {
           </Badge>
         </div>
 
-        <Button onClick={onWriteReview} className="shrink-0 bg-coral hover:bg-coral/90">
+        <Button onClick={onWriteReview} className="shrink-0 bg-ember hover:bg-ember/90">
           {t('order.writeReview')}
         </Button>
       </div>

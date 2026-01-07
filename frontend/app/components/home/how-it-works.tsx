@@ -39,10 +39,10 @@ export function HowItWorks() {
             <div key={step.titleKey} className="relative">
               <Card className="bg-card border-border p-6 text-center h-full">
                 <div className="relative inline-flex">
-                  <div className="h-16 w-16 rounded-full bg-coral/10 flex items-center justify-center mb-4 mx-auto">
-                    <Icon className="h-8 w-8 text-coral" />
+                  <div className="h-16 w-16 rounded-full bg-ember/10 flex items-center justify-center mb-4 mx-auto">
+                    <Icon className="h-8 w-8 text-ember" />
                   </div>
-                  <div className="absolute -top-2 -right-2 h-8 w-8 bg-coral rounded-full flex items-center justify-center text-white font-bold">
+                  <div className="absolute -top-2 -right-2 h-8 w-8 bg-ember rounded-full flex items-center justify-center text-white font-bold">
                     {index + 1}
                   </div>
                 </div>
@@ -51,7 +51,7 @@ export function HowItWorks() {
               </Card>
               {index < STEPS.length - 1 && (
                 <div className="hidden md:flex absolute top-1/2 -right-3 transform -translate-y-1/2 z-10">
-                  <ArrowRight className="h-6 w-6 text-coral" />
+                  <ArrowRight className="h-6 w-6 text-ember" />
                 </div>
               )}
             </div>

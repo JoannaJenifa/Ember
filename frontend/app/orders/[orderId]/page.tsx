@@ -60,7 +60,7 @@ export default function OrderDetailPage({ params }: OrderDetailPageProps) {
     return (
       <main className="min-h-screen bg-background">
         <div className="container mx-auto px-4 py-16 flex items-center justify-center">
-          <Loader2 className="h-8 w-8 animate-spin text-coral" />
+          <Loader2 className="h-8 w-8 animate-spin text-ember" />
         </div>
       </main>
     );
@@ -128,7 +128,7 @@ export default function OrderDetailPage({ params }: OrderDetailPageProps) {
                   {product?.title || `Product #${order.productId}`}
                 </h3>
                 <p className="text-sm text-muted-foreground">Quantity: {order.quantity}</p>
-                <p className="text-coral font-bold mt-1">
+                <p className="text-ember font-bold mt-1">
                   {formatMoveAmount(order.totalPrice)} MOVE
                 </p>
               </div>
@@ -144,7 +144,7 @@ export default function OrderDetailPage({ params }: OrderDetailPageProps) {
                   href={getAccountExplorerUrl(order.seller)}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-foreground font-mono hover:text-coral flex items-center gap-1"
+                  className="text-foreground font-mono hover:text-ember flex items-center gap-1"
                 >
                   {formatAddress(order.seller)}
                   <ExternalLink className="h-3 w-3" />

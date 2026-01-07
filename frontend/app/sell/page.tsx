@@ -30,7 +30,7 @@ export default function SellPage() {
             </p>
             <button
               onClick={login}
-              className="bg-coral hover:bg-coral/90 text-white px-6 py-2 rounded-lg font-medium"
+              className="bg-ember hover:bg-ember/90 text-white px-6 py-2 rounded-lg font-medium"
             >
               Connect Wallet
             </button>
@@ -44,7 +44,7 @@ export default function SellPage() {
     return (
       <main className="min-h-screen bg-background">
         <div className="container mx-auto px-4 py-16 flex items-center justify-center">
-          <Loader2 className="h-8 w-8 animate-spin text-coral" />
+          <Loader2 className="h-8 w-8 animate-spin text-ember" />
         </div>
       </main>
     );

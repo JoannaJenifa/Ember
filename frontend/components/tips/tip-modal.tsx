@@ -95,7 +95,7 @@ export function TipModal({
                   onClick={() => handlePresetClick(preset)}
                   className={cn(
                     'flex-1',
-                    amount === preset && 'bg-coral hover:bg-coral/90'
+                    amount === preset && 'bg-ember hover:bg-ember/90'
                   )}
                 >
                   {preset}
@@ -117,7 +117,7 @@ export function TipModal({
                 min={0}
                 step={0.1}
               />
-              <span className="text-sm font-medium text-coral">VERY</span>
+              <span className="text-sm font-medium text-ember">VERY</span>
             </div>
           </div>
 
@@ -150,7 +150,7 @@ export function TipModal({
               </div>
               <div className="flex justify-between font-bold pt-1 border-t border-border">
                 <span className="text-foreground">{t('order.total')}:</span>
-                <span className="text-coral">{feeInfo.total} VERY</span>
+                <span className="text-ember">{feeInfo.total} VERY</span>
               </div>
             </div>
           )}
@@ -164,7 +164,7 @@ export function TipModal({
 
           {/* Send Button */}
           <Button
-            className="w-full bg-coral hover:bg-coral/90 text-white"
+            className="w-full bg-ember hover:bg-ember/90 text-white"
             onClick={handleSend}
             disabled={!amount || parseFloat(amount) <= 0 || !hasEnoughBalance}
           >

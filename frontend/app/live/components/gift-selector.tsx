@@ -112,8 +112,8 @@ export function GiftSelector({ streamerAddress, onSuccess, className }: GiftSele
                 className={cn(
                   'flex flex-col items-center p-2 rounded-lg border transition-all',
                   selectedGift === index
-                    ? 'border-coral bg-coral/10'
-                    : 'border-border hover:border-coral/50'
+                    ? 'border-ember bg-ember/10'
+                    : 'border-border hover:border-ember/50'
                 )}
               >
                 <span className="text-2xl">{gift.emoji}</span>
@@ -171,7 +171,7 @@ export function GiftSelector({ streamerAddress, onSuccess, className }: GiftSele
               <div className="border-t pt-3">
                 <div className="flex items-center justify-between mb-3">
                   <span className="text-sm text-muted-foreground">Total</span>
-                  <span className="font-bold text-coral">
+                  <span className="font-bold text-ember">
                     {formatPrice(totalCost)} MOVE
                   </span>
                 </div>

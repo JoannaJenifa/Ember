@@ -53,13 +53,13 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        coral: {
-          DEFAULT: "hsl(var(--coral))",
-          foreground: "hsl(var(--coral-foreground))",
+        ember: {
+          DEFAULT: "hsl(var(--ember))",
+          foreground: "hsl(var(--ember-foreground))",
         },
-        violet: {
-          DEFAULT: "hsl(var(--violet))",
-          foreground: "hsl(var(--violet-foreground))",
+        amber: {
+          DEFAULT: "hsl(var(--amber))",
+          foreground: "hsl(var(--amber-foreground))",
         },
         gold: {
           DEFAULT: "hsl(var(--gold))",

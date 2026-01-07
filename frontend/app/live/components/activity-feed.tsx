@@ -112,7 +112,7 @@ export function ActivityFeed({
     <Card className={cn('p-4', className)}>
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <Activity className="h-5 w-5 text-coral" />
+          <Activity className="h-5 w-5 text-ember" />
           <h3 className="font-semibold">Live Activity</h3>
         </div>
         <Button variant="ghost" size="icon" className="h-6 w-6" onClick={handleRefresh}>

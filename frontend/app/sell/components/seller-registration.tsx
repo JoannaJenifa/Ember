@@ -78,8 +78,8 @@ export function SellerRegistration({ walletAddress }: SellerRegistrationProps) {
     <div className="max-w-lg mx-auto">
       <Card className="p-6 bg-card border-border">
         <div className="text-center mb-6">
-          <div className="h-16 w-16 mx-auto mb-4 rounded-full bg-coral/20 flex items-center justify-center">
-            <Store className="h-8 w-8 text-coral" />
+          <div className="h-16 w-16 mx-auto mb-4 rounded-full bg-ember/20 flex items-center justify-center">
+            <Store className="h-8 w-8 text-ember" />
           </div>
           <h1 className="text-2xl font-bold text-foreground mb-2">Become a Seller</h1>
           <p className="text-muted-foreground">
@@ -141,7 +141,7 @@ export function SellerRegistration({ walletAddress }: SellerRegistrationProps) {
 
           <Button
             type="submit"
-            className="w-full bg-coral hover:bg-coral/90"
+            className="w-full bg-ember hover:bg-ember/90"
             disabled={loading}
           >
             {loading ? (

@@ -24,7 +24,7 @@ export function ProductCard({ product }: ProductCardProps) {
 
   return (
     <Link href={`/product/${product.id}`}>
-      <Card className="overflow-hidden hover:shadow-lg hover:border-coral/50 transition-all cursor-pointer h-full bg-card border-border">
+      <Card className="overflow-hidden hover:shadow-lg hover:border-ember/50 transition-all cursor-pointer h-full bg-card border-border">
         <div className="aspect-square relative bg-muted">
           {product.imageUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
@@ -53,7 +53,7 @@ export function ProductCard({ product }: ProductCardProps) {
           <h3 className="font-semibold truncate text-foreground mb-1">
             {product.title}
           </h3>
-          <p className="text-lg font-bold text-coral">
+          <p className="text-lg font-bold text-ember">
             {formatPrice(product.price)} MOVE
           </p>
           <div className="flex items-center gap-1 text-sm text-muted-foreground mt-1">

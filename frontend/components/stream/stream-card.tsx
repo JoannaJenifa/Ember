@@ -39,7 +39,7 @@ export function StreamCard({
   return (
     <Link href={`/live/${stream.id}`}>
       <Card className={cn(
-        'bg-card border-border overflow-hidden hover:border-coral/50 transition-colors cursor-pointer group',
+        'bg-card border-border overflow-hidden hover:border-ember/50 transition-colors cursor-pointer group',
         className
       )}>
         {/* Thumbnail */}

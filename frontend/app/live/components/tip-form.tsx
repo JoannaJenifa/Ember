@@ -102,7 +102,7 @@ export function TipForm({ streamerAddress, onSuccess, className }: TipFormProps)
   return (
     <Card className={cn('p-4', className)}>
       <div className="flex items-center gap-2 mb-4">
-        <DollarSign className="h-5 w-5 text-coral" />
+        <DollarSign className="h-5 w-5 text-ember" />
         <h3 className="font-semibold">Send Tip</h3>
       </div>
 

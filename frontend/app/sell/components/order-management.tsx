@@ -84,7 +84,7 @@ export function OrderManagement({ sellerAddress }: OrderManagementProps) {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <Loader2 className="h-8 w-8 animate-spin text-coral" />
+        <Loader2 className="h-8 w-8 animate-spin text-ember" />
       </div>
     );
   }
@@ -139,7 +139,7 @@ export function OrderManagement({ sellerAddress }: OrderManagementProps) {
                       </span>
                     </div>
                     <div className="flex items-center gap-3">
-                      <span className="text-coral font-semibold">
+                      <span className="text-ember font-semibold">
                         {formatMoveAmount(order.totalPrice)} MOVE
                       </span>
                       {isExpanded ? (
@@ -168,7 +168,7 @@ export function OrderManagement({ sellerAddress }: OrderManagementProps) {
                     </div>
                     {order.status === OrderStatus.Paid && (
                       <Button
-                        className="bg-coral hover:bg-coral/90"
+                        className="bg-ember hover:bg-ember/90"
                         onClick={(e) => {
                           e.stopPropagation();
                           handleMarkShipped(order.id);

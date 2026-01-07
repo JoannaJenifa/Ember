@@ -38,13 +38,13 @@ function GiftMessage({ item }: { item: GiftFeedItem }) {
       transition={{ duration: 0.3 }}
       className={cn(
         'flex items-center gap-2 py-1.5 px-3 rounded-full',
-        'bg-gradient-to-r from-coral/20 to-coral/10',
-        'border border-coral/30 backdrop-blur-sm'
+        'bg-gradient-to-r from-ember/20 to-ember/10',
+        'border border-ember/30 backdrop-blur-sm'
       )}
     >
       <span className="text-lg">{item.giftEmoji}</span>
       <span className="text-sm">
-        <span className="font-medium text-coral">{displayName}</span>
+        <span className="font-medium text-ember">{displayName}</span>
         <span className="text-muted-foreground"> sent </span>
         <span className="font-medium text-foreground">
           {item.quantity > 1 ? `${item.quantity}x ` : ''}
@@ -124,11 +124,11 @@ export function StackedGiftIndicator({ giftEmoji, count, senderName }: StackedGi
       animate={{ scale: 1, y: 0 }}
       className={cn(
         'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full',
-        'bg-coral/20 border border-coral/40'
+        'bg-ember/20 border border-ember/40'
       )}
     >
       <span className="text-xl">{giftEmoji}</span>
-      <span className="text-coral font-bold">x{count}</span>
+      <span className="text-ember font-bold">x{count}</span>
       <span className="text-xs text-muted-foreground">from {senderName}</span>
     </motion.div>
   )

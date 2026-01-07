@@ -40,7 +40,7 @@ export default function OrdersPage() {
             <p className="text-muted-foreground mb-6">
               Connect your wallet to view your orders
             </p>
-            <Button onClick={login} className="bg-coral hover:bg-coral/90">
+            <Button onClick={login} className="bg-ember hover:bg-ember/90">
               Connect Wallet
             </Button>
           </Card>
@@ -74,7 +74,7 @@ export default function OrdersPage() {
 
         {loading ? (
           <div className="flex items-center justify-center py-12">
-            <Loader2 className="h-8 w-8 animate-spin text-coral" />
+            <Loader2 className="h-8 w-8 animate-spin text-ember" />
           </div>
         ) : filteredOrders.length === 0 ? (
           <Card className="p-12 text-center bg-card border-border">
@@ -83,7 +83,7 @@ export default function OrdersPage() {
             <p className="text-muted-foreground mb-4">
               Start shopping to see your orders here
             </p>
-            <Button asChild className="bg-coral hover:bg-coral/90">
+            <Button asChild className="bg-ember hover:bg-ember/90">
               <a href="/products">Browse Products</a>
             </Button>
           </Card>

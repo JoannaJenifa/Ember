@@ -72,14 +72,14 @@ export function ReviewSuccess({ open, onOpenChange, txHash, reward = 5 }: Review
             href={explorerUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 text-sm text-coral hover:underline"
+            className="inline-flex items-center gap-1 text-sm text-ember hover:underline"
           >
             {t('common.view')}
             <ExternalLink className="h-3 w-3" />
           </a>
         </div>
 
-        <Button onClick={() => onOpenChange(false)} className="w-full bg-coral hover:bg-coral/90">
+        <Button onClick={() => onOpenChange(false)} className="w-full bg-ember hover:bg-ember/90">
           {t('common.confirm')}
         </Button>
       </DialogContent>

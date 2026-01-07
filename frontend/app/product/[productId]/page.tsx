@@ -116,16 +116,16 @@ export default function ProductDetailPage({ params }: PageProps) {
             </div>
 
             <div className="flex items-baseline gap-2">
-              <span className="text-3xl font-bold text-coral">{formatPrice(product.price)}</span>
+              <span className="text-3xl font-bold text-ember">{formatPrice(product.price)}</span>
               <span className="text-lg text-muted-foreground">MOVE</span>
             </div>
 
             {seller && (
               <Link href={`/seller/${product.seller}`}>
-                <Card className="bg-card border-border p-4 hover:border-coral/50 transition-colors">
+                <Card className="bg-card border-border p-4 hover:border-ember/50 transition-colors">
                   <div className="flex items-center gap-3">
-                    <div className="h-12 w-12 rounded-full bg-coral/10 flex items-center justify-center">
-                      <Store className="h-6 w-6 text-coral" />
+                    <div className="h-12 w-12 rounded-full bg-ember/10 flex items-center justify-center">
+                      <Store className="h-6 w-6 text-ember" />
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center gap-2">

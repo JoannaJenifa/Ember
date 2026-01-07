@@ -55,7 +55,7 @@ export function PurchaseStepQuantity({
           {product.descriptionKo && (
             <p className="text-xs text-muted-foreground line-clamp-2">{product.descriptionKo}</p>
           )}
-          <p className="text-base font-bold text-coral mt-1">
+          <p className="text-base font-bold text-ember mt-1">
             {formatVeryPrice(product.priceVery)} VERY
           </p>
         </div>
@@ -95,7 +95,7 @@ export function PurchaseStepQuantity({
       {/* Total */}
       <div className="flex justify-between items-center py-4 border-t border-border">
         <span className="text-muted-foreground">{t('order.totalAmount')}</span>
-        <span className="text-xl font-bold text-coral">
+        <span className="text-xl font-bold text-ember">
           {totalPrice.toFixed(4)} VERY
         </span>
       </div>
@@ -107,7 +107,7 @@ export function PurchaseStepQuantity({
         </Button>
         <Button
           onClick={() => onNext(quantity)}
-          className="flex-1 bg-coral hover:bg-coral/90"
+          className="flex-1 bg-ember hover:bg-ember/90"
         >
           {t('common.next')}
         </Button>

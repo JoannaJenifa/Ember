@@ -72,7 +72,7 @@ export function ProductReviews({ reviews, averageRating, totalCount }: ProductRe
             <Card key={review.id} className="bg-card border-border p-4">
               <div className="flex items-start gap-3">
                 <Avatar className="h-10 w-10">
-                  <AvatarFallback className="bg-coral/10 text-coral">
+                  <AvatarFallback className="bg-ember/10 text-ember">
                     {review.buyer_address?.slice(2, 4).toUpperCase() || '??'}
                   </AvatarFallback>
                 </Avatar>

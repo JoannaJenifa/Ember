@@ -20,9 +20,9 @@ const GIFT_CONFIGS: Record<GiftAnimationType, {
 }> = {
   heart: { emoji: '💕', color: 'text-pink-500', particleCount: 12 },
   star: { emoji: '⭐', color: 'text-amber-500', particleCount: 15 },
-  rocket: { emoji: '🚀', color: 'text-coral', particleCount: 8 },
+  rocket: { emoji: '🚀', color: 'text-ember', particleCount: 8 },
   crown: { emoji: '👑', color: 'text-yellow-500', particleCount: 10 },
-  default: { emoji: '🎁', color: 'text-coral', particleCount: 10 },
+  default: { emoji: '🎁', color: 'text-ember', particleCount: 10 },
 }
 
 // Single particle animation
@@ -176,7 +176,7 @@ export function GiftAnimation({
         >
           {/* Backdrop glow */}
           <motion.div
-            className="absolute inset-0 bg-gradient-to-t from-coral/20 to-transparent"
+            className="absolute inset-0 bg-gradient-to-t from-ember/20 to-transparent"
             initial={{ opacity: 0 }}
             animate={{ opacity: [0, 0.5, 0] }}
             transition={{ duration: 2 }}

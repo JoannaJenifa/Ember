@@ -82,7 +82,7 @@ export function GiftModal({
 
         {loadingGifts ? (
           <div className="flex items-center justify-center py-8">
-            <Loader2 className="h-6 w-6 animate-spin text-coral" />
+            <Loader2 className="h-6 w-6 animate-spin text-ember" />
           </div>
         ) : (
           <div className="space-y-4">
@@ -94,9 +94,9 @@ export function GiftModal({
                   onClick={() => setSelectedGift(gift)}
                   className={cn(
                     'flex flex-col items-center gap-1 p-3 rounded-lg border transition-all',
-                    'hover:border-coral hover:bg-coral/5',
+                    'hover:border-ember hover:bg-ember/5',
                     selectedGift?.id === gift.id
-                      ? 'border-coral bg-coral/10'
+                      ? 'border-ember bg-ember/10'
                       : 'border-border bg-background'
                   )}
                 >
@@ -104,7 +104,7 @@ export function GiftModal({
                   <span className="text-xs font-medium text-foreground">
                     {gift.name}
                   </span>
-                  <span className="text-xs text-coral">
+                  <span className="text-xs text-ember">
                     {gift.priceFormatted} VERY
                   </span>
                 </button>
@@ -126,7 +126,7 @@ export function GiftModal({
                         setCustomQuantity('')
                       }}
                       className={cn(
-                        quantity === q && !customQuantity && 'bg-coral hover:bg-coral/90'
+                        quantity === q && !customQuantity && 'bg-ember hover:bg-ember/90'
                       )}
                     >
                       {q}
@@ -152,7 +152,7 @@ export function GiftModal({
             {selectedGift && effectiveQuantity > 0 && (
               <div className="flex justify-between items-center p-3 rounded-lg bg-background">
                 <span className="text-sm text-muted-foreground">{t('order.total')}:</span>
-                <span className="text-lg font-bold text-coral">
+                <span className="text-lg font-bold text-ember">
                   {formatUnits(totalCost, 18)} VERY
                 </span>
               </div>
@@ -172,7 +172,7 @@ export function GiftModal({
 
             {/* Send Button */}
             <Button
-              className="w-full bg-coral hover:bg-coral/90 text-white"
+              className="w-full bg-ember hover:bg-ember/90 text-white"
               onClick={handleSend}
               disabled={!selectedGift || effectiveQuantity <= 0 || !hasEnoughBalance || sending}
             >

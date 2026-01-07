@@ -202,7 +202,7 @@ const ChatMessageItem = memo(function ChatMessageItem({
 
   return (
     <div className="text-xs">
-      <span className={`font-medium ${isSeller ? 'text-coral' : 'text-primary'}`}>
+      <span className={`font-medium ${isSeller ? 'text-ember' : 'text-primary'}`}>
         {isSeller
           ? t('common.seller')
           : message.username || maskAddress(message.user_address)}

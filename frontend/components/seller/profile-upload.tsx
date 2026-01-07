@@ -87,7 +87,7 @@ export function ProfileUpload({
         className={cn(
           'relative rounded-lg border-2 border-dashed border-border',
           'flex items-center justify-center overflow-hidden',
-          'transition-colors hover:border-coral/50',
+          'transition-colors hover:border-ember/50',
           isBanner ? 'h-32' : 'h-40 w-40',
           error && 'border-destructive',
           disabled && 'opacity-50 pointer-events-none'

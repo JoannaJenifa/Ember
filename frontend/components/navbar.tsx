@@ -36,7 +36,7 @@ export function Navbar({ className }: NavbarProps) {
       <div className="container mx-auto px-4 h-16 flex items-center">
         <div className="flex items-center gap-2 shrink-0">
           <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-            <Flame className="h-8 w-8 text-coral" />
+            <Flame className="h-8 w-8 text-ember" />
             <span className="font-bold text-xl hidden sm:block">Ember</span>
           </Link>
         </div>
@@ -49,7 +49,7 @@ export function Navbar({ className }: NavbarProps) {
               className={cn(
                 'px-3 py-2 text-sm font-medium transition-colors flex items-center gap-2',
                 pathname === link.href || pathname.startsWith(link.href + '/')
-                  ? 'text-coral'
+                  ? 'text-ember'
                   : 'text-muted-foreground hover:text-foreground'
               )}
             >
@@ -72,7 +72,7 @@ export function Navbar({ className }: NavbarProps) {
             <SheetContent side="right" className="w-72">
               <div className="flex flex-col gap-4 mt-8">
                 <div className="flex items-center gap-2 mb-4">
-                  <Flame className="h-8 w-8 text-coral" />
+                  <Flame className="h-8 w-8 text-ember" />
                   <span className="font-bold text-xl">Ember</span>
                 </div>
                 {allNavLinks.map((link) => (
@@ -82,7 +82,7 @@ export function Navbar({ className }: NavbarProps) {
                     className={cn(
                       'flex items-center gap-3 px-3 py-2 rounded-lg transition-colors',
                       pathname === link.href || pathname.startsWith(link.href + '/')
-                        ? 'bg-coral/10 text-coral'
+                        ? 'bg-ember/10 text-ember'
                         : 'text-muted-foreground hover:text-foreground hover:bg-accent'
                     )}
                   >

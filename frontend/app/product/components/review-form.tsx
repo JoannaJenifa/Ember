@@ -130,7 +130,7 @@ export function ReviewForm({ productId, sellerAddress, onSuccess }: ReviewFormPr
         <Button
           onClick={handleSubmit}
           disabled={loading || !connected}
-          className="w-full bg-coral hover:bg-coral/90"
+          className="w-full bg-ember hover:bg-ember/90"
         >
           {loading ? (
             <>

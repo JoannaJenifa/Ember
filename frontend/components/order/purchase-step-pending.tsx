@@ -123,7 +123,7 @@ export function PurchaseStepPending({
             <CheckCircle2 className="h-5 w-5 text-green-500" />
           )}
           {status === 'current' && (
-            <Loader2 className="h-5 w-5 text-coral animate-spin" />
+            <Loader2 className="h-5 w-5 text-ember animate-spin" />
           )}
           {status === 'pending' && (
             <div className="h-5 w-5 rounded-full border-2 border-muted" />

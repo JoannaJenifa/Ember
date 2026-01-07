@@ -99,14 +99,14 @@ export default function SellerPage({ params }: SellerPageProps) {
   return (
     <div className="min-h-[calc(100vh-64px)] bg-background">
       {/* Banner */}
-      <div className="h-32 md:h-48 bg-gradient-to-r from-coral/30 to-coral/10" />
+      <div className="h-32 md:h-48 bg-gradient-to-r from-ember/30 to-ember/10" />
 
       {/* Profile Header */}
       <div className="max-w-4xl mx-auto px-6">
         <div className="flex flex-col md:flex-row md:items-end gap-4 -mt-12 mb-8">
           <div className="flex-shrink-0">
-            <div className="w-24 h-24 md:w-32 md:h-32 rounded-full bg-coral/10 border-4 border-background flex items-center justify-center">
-              <Store className="h-12 w-12 text-coral" />
+            <div className="w-24 h-24 md:w-32 md:h-32 rounded-full bg-ember/10 border-4 border-background flex items-center justify-center">
+              <Store className="h-12 w-12 text-ember" />
             </div>
           </div>
 
@@ -121,7 +121,7 @@ export default function SellerPage({ params }: SellerPageProps) {
               )}
             </div>
             <div className="flex items-center gap-4 text-sm text-muted-foreground">
-              <span className="text-coral">{CATEGORY_LABELS[seller.category] || 'General'}</span>
+              <span className="text-ember">{CATEGORY_LABELS[seller.category] || 'General'}</span>
               <div className="flex items-center gap-1">
                 <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
                 <span>{avgRating ?? t('product.new')}</span>

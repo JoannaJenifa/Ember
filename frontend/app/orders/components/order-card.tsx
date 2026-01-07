@@ -78,7 +78,7 @@ export function BuyerOrderCard({ order, onConfirmDelivery, onDispute }: BuyerOrd
                   <StatusIcon className="h-3 w-3" />
                   {config.label}
                 </Badge>
-                <span className="text-coral font-bold">
+                <span className="text-ember font-bold">
                   {formatMoveAmount(order.totalPrice)} MOVE
                 </span>
               </div>

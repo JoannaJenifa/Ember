@@ -52,7 +52,7 @@ export function CategoryTabs({ selectedCategory, onCategoryChange }: CategoryTab
             variant={isSelected ? 'default' : 'outline'}
             size="sm"
             onClick={() => onCategoryChange(cat.id)}
-            className={isSelected ? 'bg-coral hover:bg-coral/90' : ''}
+            className={isSelected ? 'bg-ember hover:bg-ember/90' : ''}
           >
             {Icon && <Icon className="h-4 w-4 mr-1" />}
             {t(cat.labelKey)}

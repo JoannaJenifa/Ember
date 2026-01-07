@@ -113,7 +113,7 @@ export default function SellersPage() {
               variant={cat.id === category ? 'default' : 'outline'}
               size="sm"
               onClick={() => setCategory(cat.id)}
-              className={cat.id === category ? 'bg-coral hover:bg-coral/90' : ''}
+              className={cat.id === category ? 'bg-ember hover:bg-ember/90' : ''}
             >
               {t(cat.labelKey)}
             </Button>
@@ -124,12 +124,12 @@ export default function SellersPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {filteredSellers.map((seller) => (
               <Link key={seller.addr} href={`/seller/${seller.addr}`}>
-                <Card className="bg-card border-border overflow-hidden hover:border-coral/50 transition-colors cursor-pointer h-full">
-                  <div className="h-24 bg-gradient-to-r from-coral/20 to-coral/10" />
+                <Card className="bg-card border-border overflow-hidden hover:border-ember/50 transition-colors cursor-pointer h-full">
+                  <div className="h-24 bg-gradient-to-r from-ember/20 to-ember/10" />
                   <div className="p-4">
                     <div className="flex items-start gap-4">
                       <Avatar className="h-16 w-16 -mt-10 border-4 border-card">
-                        <AvatarFallback className="bg-coral/10 text-coral text-lg">
+                        <AvatarFallback className="bg-ember/10 text-ember text-lg">
                           {getInitials(seller.shopName)}
                         </AvatarFallback>
                       </Avatar>
@@ -162,7 +162,7 @@ export default function SellersPage() {
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="mt-3 text-coral hover:text-coral/80 p-0 h-auto"
+                      className="mt-3 text-ember hover:text-ember/80 p-0 h-auto"
                     >
                       {t('sellersPage.viewShop')}
                       <ExternalLink className="h-3.5 w-3.5 ml-1" />

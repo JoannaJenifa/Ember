@@ -52,13 +52,13 @@ export function TipNotification({
           className={cn(
             'fixed top-20 left-1/2 -translate-x-1/2 z-50',
             'p-4 rounded-xl shadow-2xl',
-            'bg-gradient-to-r from-coral/90 to-coral/70',
+            'bg-gradient-to-r from-ember/90 to-ember/70',
             'border border-white/20 backdrop-blur-lg',
             'min-w-[280px] max-w-[400px]'
           )}
         >
           {/* Glow effect */}
-          <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-coral to-coral/70 opacity-50 blur-xl -z-10" />
+          <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-ember to-ember/70 opacity-50 blur-xl -z-10" />
 
           <div className="flex flex-col items-center text-center gap-2">
             {/* Tip Icon */}

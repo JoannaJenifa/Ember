@@ -49,7 +49,7 @@ export function LiveNowSection() {
           <h2 className="text-2xl font-bold text-foreground">{t('home.liveNow')}</h2>
         </div>
         <Link href="/live">
-          <Button variant="ghost" className="text-coral hover:text-coral/80">
+          <Button variant="ghost" className="text-ember hover:text-ember/80">
             {t('common.seeAll')}
             <ArrowRight className="h-4 w-4 ml-1" />
           </Button>
@@ -60,7 +60,7 @@ export function LiveNowSection() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {liveStreams.map((stream) => (
             <Link key={stream.id} href={`/live/${stream.id}`}>
-              <Card className="overflow-hidden hover:border-coral/50 transition-colors cursor-pointer bg-card border-border">
+              <Card className="overflow-hidden hover:border-ember/50 transition-colors cursor-pointer bg-card border-border">
                 <div className="aspect-video relative bg-muted">
                   <div className="absolute inset-0 flex items-center justify-center">
                     <Store className="h-12 w-12 text-muted-foreground" />

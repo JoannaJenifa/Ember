@@ -81,7 +81,7 @@ export function PurchaseStepSummary({
       {/* Total */}
       <div className="flex justify-between items-center py-4 border-t border-b border-border">
         <span className="font-medium text-foreground">{t('order.totalAmount')}</span>
-        <span className="text-xl font-bold text-coral">
+        <span className="text-xl font-bold text-ember">
           {totalPrice.toFixed(4)} VERY
         </span>
       </div>
@@ -98,7 +98,7 @@ export function PurchaseStepSummary({
         </Button>
         <Button
           onClick={onConfirm}
-          className="flex-1 bg-coral hover:bg-coral/90"
+          className="flex-1 bg-ember hover:bg-ember/90"
         >
           {t('order.buyNow')}
         </Button>

@@ -59,7 +59,7 @@ export function RegistrationStepReview({
               {basicInfo.shopNameKo && (
                 <p className="text-muted-foreground">{basicInfo.shopNameKo}</p>
               )}
-              <p className="text-sm text-coral mt-1">
+              <p className="text-sm text-ember mt-1">
                 {getCategoryIcon(basicInfo.category)} {getCategoryLabel(basicInfo.category)}
               </p>
             </div>

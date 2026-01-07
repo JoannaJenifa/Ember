@@ -60,7 +60,7 @@ export function ProductOverlay({ products, onBuy, className }: ProductOverlayPro
                 />
               </div>
               <p className="text-xs font-medium truncate">{product.title}</p>
-              <p className="text-xs text-coral font-bold">{formatPrice(product.price)} MOVE</p>
+              <p className="text-xs text-ember font-bold">{formatPrice(product.price)} MOVE</p>
             </Card>
           ))}
           {hasMore && (
@@ -91,7 +91,7 @@ export function ProductOverlay({ products, onBuy, className }: ProductOverlayPro
             {products.map((product) => (
               <Card
                 key={product.id}
-                className="p-2 cursor-pointer hover:border-coral transition-colors"
+                className="p-2 cursor-pointer hover:border-ember transition-colors"
                 onClick={() => {
                   handleProductClick(product);
                   setExpanded(false);
@@ -106,7 +106,7 @@ export function ProductOverlay({ products, onBuy, className }: ProductOverlayPro
                 </div>
                 <p className="text-sm font-medium truncate">{product.title}</p>
                 <div className="flex items-center justify-between mt-1">
-                  <p className="text-sm text-coral font-bold">{formatPrice(product.price)} MOVE</p>
+                  <p className="text-sm text-ember font-bold">{formatPrice(product.price)} MOVE</p>
                   {product.inventory < 10 && (
                     <Badge variant="outline" className="text-xs">Low stock</Badge>
                   )}
@@ -139,7 +139,7 @@ export function ProductOverlay({ products, onBuy, className }: ProductOverlayPro
                     <p className="text-sm text-muted-foreground line-clamp-2">
                       {selectedProduct.description}
                     </p>
-                    <p className="text-lg text-coral font-bold mt-1">
+                    <p className="text-lg text-ember font-bold mt-1">
                       {formatPrice(selectedProduct.price)} MOVE
                     </p>
                   </div>
@@ -178,7 +178,7 @@ export function ProductOverlay({ products, onBuy, className }: ProductOverlayPro
                 <div className="border-t pt-4">
                   <div className="flex items-center justify-between mb-4">
                     <span className="font-medium">Total</span>
-                    <span className="text-xl font-bold text-coral">
+                    <span className="text-xl font-bold text-ember">
                       {formatPrice(selectedProduct.price * quantity)} MOVE
                     </span>
                   </div>

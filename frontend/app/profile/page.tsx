@@ -57,7 +57,7 @@ export default function ProfilePage() {
             <User className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
             <h1 className="text-2xl font-bold text-foreground mb-4">My Profile</h1>
             <p className="text-muted-foreground mb-6">Connect your wallet to view your profile</p>
-            <Button onClick={login} className="bg-coral hover:bg-coral/90">
+            <Button onClick={login} className="bg-ember hover:bg-ember/90">
               Connect Wallet
             </Button>
           </Card>
@@ -76,8 +76,8 @@ export default function ProfilePage() {
         {/* Wallet Info */}
         <Card className="p-6 bg-card border-border mb-6">
           <div className="flex items-center gap-4 mb-4">
-            <div className="h-14 w-14 rounded-full bg-coral/20 flex items-center justify-center">
-              <Wallet className="h-7 w-7 text-coral" />
+            <div className="h-14 w-14 rounded-full bg-ember/20 flex items-center justify-center">
+              <Wallet className="h-7 w-7 text-ember" />
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm text-muted-foreground">Wallet Address</p>
@@ -120,7 +120,7 @@ export default function ProfilePage() {
         {/* Quick Stats */}
         {loading ? (
           <div className="flex items-center justify-center py-8">
-            <Loader2 className="h-6 w-6 animate-spin text-coral" />
+            <Loader2 className="h-6 w-6 animate-spin text-ember" />
           </div>
         ) : (
           <>
@@ -163,8 +163,8 @@ export default function ProfilePage() {
 
               <Card className="p-4 bg-card border-border">
                 <div className="flex items-center gap-3">
-                  <div className="h-10 w-10 rounded-full bg-coral/20 flex items-center justify-center">
-                    <Heart className="h-5 w-5 text-coral" />
+                  <div className="h-10 w-10 rounded-full bg-ember/20 flex items-center justify-center">
+                    <Heart className="h-5 w-5 text-ember" />
                   </div>
                   <div>
                     <p className="text-xs text-muted-foreground">Total Spent</p>

@@ -215,7 +215,7 @@ export default function StreamPage({ params }: StreamPageProps) {
               <span className="hidden sm:inline">{t('nav.live')}</span>
             </Link>
           </Button>
-          <span className="font-semibold text-coral">{t('stream.labangLive')}</span>
+          <span className="font-semibold text-ember">{t('stream.labangLive')}</span>
           <div className="flex items-center gap-2">
             <Button variant="ghost" size="icon">
               <Share2 className="h-5 w-5" />

@@ -55,7 +55,7 @@ export function SellerSidebar({ className }: SellerSidebarProps) {
                     className={cn(
                       'flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors',
                       isActive
-                        ? 'bg-coral/10 text-coral'
+                        ? 'bg-ember/10 text-ember'
                         : 'text-muted-foreground hover:text-foreground hover:bg-accent'
                     )}
                   >

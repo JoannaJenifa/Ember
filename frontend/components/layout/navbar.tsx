@@ -65,7 +65,7 @@ export function Navbar({ className }: NavbarProps) {
               className={cn(
                 'px-3 py-2 text-sm font-medium transition-colors flex items-center gap-2',
                 pathname === link.href || pathname.startsWith(link.href + '/')
-                  ? 'text-coral'
+                  ? 'text-ember'
                   : 'text-muted-foreground hover:text-foreground'
               )}
             >
@@ -108,7 +108,7 @@ export function Navbar({ className }: NavbarProps) {
                     className={cn(
                       'flex items-center gap-3 px-3 py-2 rounded-lg transition-colors',
                       pathname === link.href || pathname.startsWith(link.href + '/')
-                        ? 'bg-coral/10 text-coral'
+                        ? 'bg-ember/10 text-ember'
                         : 'text-muted-foreground hover:text-foreground hover:bg-accent'
                     )}
                   >

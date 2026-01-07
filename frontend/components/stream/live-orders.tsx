@@ -53,7 +53,7 @@ export function LiveOrders({ orders }: LiveOrdersProps) {
                   <span>{order.quantity}</span>
                 </p>
                 <div className="flex items-center justify-between mt-0.5">
-                  <span className="text-xs font-medium text-coral">
+                  <span className="text-xs font-medium text-ember">
                     {order.totalVery.toLocaleString()} VERY
                   </span>
                   <span className="text-xs text-muted-foreground flex items-center gap-1">

@@ -63,7 +63,7 @@ export function SellerInfo({ sellerAddress, className }: SellerInfoProps) {
   return (
     <Card className={cn('p-4', className)}>
       <div className="flex items-start gap-3 mb-4">
-        <div className="h-12 w-12 rounded-full bg-gradient-to-br from-coral to-orange-500 flex items-center justify-center">
+        <div className="h-12 w-12 rounded-full bg-gradient-to-br from-ember to-orange-500 flex items-center justify-center">
           <Store className="h-6 w-6 text-white" />
         </div>
         <div className="flex-1 min-w-0">
@@ -82,7 +82,7 @@ export function SellerInfo({ sellerAddress, className }: SellerInfoProps) {
       {/* Stats */}
       <div className="grid grid-cols-3 gap-2 mb-4">
         <div className="bg-muted/50 rounded-lg p-2 text-center">
-          <p className="text-lg font-bold text-coral">
+          <p className="text-lg font-bold text-ember">
             {seller.totalOrders}
           </p>
           <p className="text-xs text-muted-foreground">Orders</p>

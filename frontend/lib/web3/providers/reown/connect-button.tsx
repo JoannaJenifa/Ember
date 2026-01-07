@@ -80,16 +80,16 @@ export function ConnectButton({ className }: ConnectButtonProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" className={`border-coral/30 hover:border-coral hover:bg-coral/5 ${className || ''}`}>
+        <Button variant="outline" className={`border-ember/30 hover:border-ember hover:bg-ember/5 ${className || ''}`}>
           <div className="flex items-center gap-2">
-            <span className="text-coral font-medium">
+            <span className="text-ember font-medium">
               {isBalanceLoading ? (
-                <Loader2 className="h-3 w-3 animate-spin inline text-coral" />
+                <Loader2 className="h-3 w-3 animate-spin inline text-ember" />
               ) : (
                 `${parseFloat(formatted || '0').toFixed(4)} ${symbol || 'ETH'}`
               )}
             </span>
-            <div className="h-5 w-px bg-coral/30" />
+            <div className="h-5 w-px bg-ember/30" />
             <Avatar className="h-6 w-6 ring-1 ring-coral/20">
               <AvatarImage src={avatarUrl || undefined} alt="Wallet avatar" />
               <AvatarFallback className="text-xs bg-gradient-to-br from-red-400 to-red-600 text-white">

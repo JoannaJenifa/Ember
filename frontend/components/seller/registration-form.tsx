@@ -157,7 +157,7 @@ export function RegistrationForm({ walletAddress }: RegistrationFormProps) {
           </Button>
 
           {currentStep < REGISTRATION_STEPS.length ? (
-            <Button onClick={handleNext} disabled={isPending} className="bg-coral hover:bg-coral/90">
+            <Button onClick={handleNext} disabled={isPending} className="bg-ember hover:bg-ember/90">
               {t('common.next')}
               <ArrowRight className="h-4 w-4 ml-2" />
             </Button>
@@ -165,7 +165,7 @@ export function RegistrationForm({ walletAddress }: RegistrationFormProps) {
             <Button
               onClick={handleSubmit}
               disabled={isPending || !termsAccepted}
-              className="bg-coral hover:bg-coral/90"
+              className="bg-ember hover:bg-ember/90"
             >
               {isPending ? (
                 <>

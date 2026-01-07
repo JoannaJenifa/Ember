@@ -127,7 +127,7 @@ export function DateTimePicker({
             Clear
           </Button>
           <Button
-            className="flex-1 bg-coral hover:bg-coral/90"
+            className="flex-1 bg-ember hover:bg-ember/90"
             onClick={() => setIsOpen(false)}
           >
             Done

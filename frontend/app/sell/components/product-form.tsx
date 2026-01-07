@@ -123,7 +123,7 @@ export function ProductForm({ sellerAddress, productId, onCancel, onSuccess }: P
   if (loadingProduct && isEditing) {
     return (
       <div className="flex items-center justify-center py-12">
-        <Loader2 className="h-8 w-8 animate-spin text-coral" />
+        <Loader2 className="h-8 w-8 animate-spin text-ember" />
       </div>
     );
   }
@@ -225,7 +225,7 @@ export function ProductForm({ sellerAddress, productId, onCancel, onSuccess }: P
           <Button type="button" variant="outline" onClick={onCancel} disabled={loading}>
             Cancel
           </Button>
-          <Button type="submit" className="bg-coral hover:bg-coral/90" disabled={loading}>
+          <Button type="submit" className="bg-ember hover:bg-ember/90" disabled={loading}>
             {loading ? (
               <>
                 <Loader2 className="h-4 w-4 mr-2 animate-spin" />

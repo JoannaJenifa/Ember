@@ -41,7 +41,7 @@ export function FeaturedProducts() {
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl font-bold text-foreground">{t('home.featuredProducts')}</h2>
         <Link href="/products">
-          <Button variant="ghost" className="text-coral hover:text-coral/80">
+          <Button variant="ghost" className="text-ember hover:text-ember/80">
             {t('common.viewAll')}
             <ArrowRight className="h-4 w-4 ml-1" />
           </Button>
@@ -64,7 +64,7 @@ export function FeaturedProducts() {
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {products.map((product) => (
             <Link key={product.id} href={`/product/${product.id}`}>
-              <Card className="overflow-hidden hover:border-coral/50 transition-colors cursor-pointer h-full bg-card border-border">
+              <Card className="overflow-hidden hover:border-ember/50 transition-colors cursor-pointer h-full bg-card border-border">
                 <div className="aspect-square relative bg-muted">
                   {product.imageUrl ? (
                     // eslint-disable-next-line @next/next/no-img-element
@@ -86,7 +86,7 @@ export function FeaturedProducts() {
                 </div>
                 <div className="p-3">
                   <h3 className="font-medium text-foreground line-clamp-2 mb-1">{product.title}</h3>
-                  <p className="text-lg font-bold text-coral">{formatPrice(product.price)} MOVE</p>
+                  <p className="text-lg font-bold text-ember">{formatPrice(product.price)} MOVE</p>
                   <div className="flex items-center gap-1 text-sm text-muted-foreground mt-1">
                     <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
                     <span>{getAvgRating(product) ?? t('product.new')}</span>

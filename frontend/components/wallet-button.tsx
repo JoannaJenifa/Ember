@@ -49,7 +49,7 @@ export function WalletButton() {
     return (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="default" size="sm" className="bg-coral hover:bg-coral/90">
+          <Button variant="default" size="sm" className="bg-ember hover:bg-ember/90">
             <Wallet className="h-4 w-4 mr-2" />
             Connect
             <ChevronDown className="h-4 w-4 ml-2" />

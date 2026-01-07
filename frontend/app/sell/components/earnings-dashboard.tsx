@@ -33,7 +33,7 @@ export function EarningsDashboard({ sellerAddress }: EarningsDashboardProps) {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <Loader2 className="h-8 w-8 animate-spin text-coral" />
+        <Loader2 className="h-8 w-8 animate-spin text-ember" />
       </div>
     );
   }
@@ -58,8 +58,8 @@ export function EarningsDashboard({ sellerAddress }: EarningsDashboardProps) {
 
         <Card className="p-4 bg-card border-border">
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-full bg-coral/20 flex items-center justify-center">
-              <TrendingUp className="h-5 w-5 text-coral" />
+            <div className="h-10 w-10 rounded-full bg-ember/20 flex items-center justify-center">
+              <TrendingUp className="h-5 w-5 text-ember" />
             </div>
             <div>
               <p className="text-xs text-muted-foreground">Sales Revenue</p>
@@ -115,7 +115,7 @@ export function EarningsDashboard({ sellerAddress }: EarningsDashboardProps) {
                     </p>
                     <p className="text-xs text-muted-foreground">{formatTime(tip.timestamp)}</p>
                   </div>
-                  <span className="text-coral font-semibold">
+                  <span className="text-ember font-semibold">
                     +{formatMoveAmount(tip.amount)} MOVE
                   </span>
                 </div>

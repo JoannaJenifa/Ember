@@ -107,7 +107,7 @@ export default function SellerLivePage({ params }: SellerLivePageProps) {
               <span className="hidden sm:inline">Live</span>
             </Link>
           </Button>
-          <span className="font-semibold text-coral">{seller.shopName}</span>
+          <span className="font-semibold text-ember">{seller.shopName}</span>
           <div className="flex items-center gap-2">
             <Button variant="ghost" size="icon">
               <Share2 className="h-5 w-5" />
