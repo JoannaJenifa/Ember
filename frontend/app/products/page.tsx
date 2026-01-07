@@ -1,69 +1,44 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import {
-  Search,
-  Package,
-  ShoppingCart,
-  Shirt,
-  Sparkles,
-  UtensilsCrossed,
-  Smartphone,
-  Sofa,
-  Dumbbell,
-} from 'lucide-react';
+import { Search, Package } from 'lucide-react';
 import { useTranslation } from '@/lib/i18n';
-import Link from 'next/link';
-
-const CATEGORIES = [
-  { id: 'all', labelKey: 'common.all', icon: null },
-  { id: 'fashion', labelKey: 'categories.fashion', icon: Shirt },
-  { id: 'beauty', labelKey: 'categories.beauty', icon: Sparkles },
-  { id: 'food', labelKey: 'categories.food', icon: UtensilsCrossed },
-  { id: 'electronics', labelKey: 'categories.electronics', icon: Smartphone },
-  { id: 'home', labelKey: 'categories.home', icon: Sofa },
-  { id: 'sports', labelKey: 'categories.sports', icon: Dumbbell },
-] as const;
-
-type CategoryId = (typeof CATEGORIES)[number]['id'];
-
-interface Product {
-  id: string;
-  title: string;
-  category: string;
-  priceMove: string;
-  inventory: string;
-  images: string[];
-  seller?: { shopName: string };
-}
+import { getActiveProducts, getProductsByCategory, Product } from '@/lib/ember/product-queries';
+import { ProductCard } from './components/product-card';
+import { CategoryTabs, CATEGORY_IDS } from './components/category-tabs';
 
 export default function ProductsPage() {
-  const { t, locale } = useTranslation();
-  const [products] = useState<Product[]>([]);
-  const [loading] = useState(false);
-  const [category, setCategory] = useState<CategoryId>('all');
+  const { t } = useTranslation();
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [category, setCategory] = useState<number | null>(null);
   const [search, setSearch] = useState('');
 
-  const filteredProducts = useMemo(() => {
-    return products.filter((product) => {
-      if (category !== 'all' && product.category !== category) return false;
-      if (search) {
-        const searchLower = search.toLowerCase();
-        const matchesTitle = product.title.toLowerCase().includes(searchLower);
-        if (!matchesTitle) return false;
+  useEffect(() => {
+    async function fetchProducts() {
+      setLoading(true);
+      try {
+        const data = category === null
+          ? await getActiveProducts(50)
+          : await getProductsByCategory(category, 50);
+        setProducts(data);
+      } catch (err) {
+        console.error('Failed to load products:', err);
+      } finally {
+        setLoading(false);
       }
-      return true;
-    });
-  }, [products, category, search]);
+    }
+    fetchProducts();
+  }, [category]);
 
-  const formatPrice = (priceMove: string) => {
-    const price = parseFloat(priceMove) / 1e8;
-    return `${price.toFixed(4)} MOVE`;
-  };
+  const filteredProducts = products.filter((product) => {
+    if (!search) return true;
+    const searchLower = search.toLowerCase();
+    return product.title.toLowerCase().includes(searchLower);
+  });
 
   return (
     <main className="min-h-screen bg-background">
@@ -84,19 +59,10 @@ export default function ProductsPage() {
           </div>
         </div>
 
-        <div className="flex items-center gap-2 mb-8 overflow-x-auto pb-2">
-          {CATEGORIES.map((cat) => (
-            <Button
-              key={cat.id}
-              variant={cat.id === category ? 'default' : 'outline'}
-              size="sm"
-              onClick={() => setCategory(cat.id)}
-              className={cat.id === category ? 'bg-coral hover:bg-coral/90' : ''}
-            >
-              {t(cat.labelKey)}
-            </Button>
-          ))}
-        </div>
+        <CategoryTabs
+          selectedCategory={category}
+          onCategoryChange={setCategory}
+        />
 
         {loading ? (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -113,46 +79,7 @@ export default function ProductsPage() {
         ) : filteredProducts.length > 0 ? (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {filteredProducts.map((product) => (
-              <Link key={product.id} href={`/product/${product.id}`}>
-                <Card className="bg-card border-border overflow-hidden hover:border-coral/50 transition-colors cursor-pointer h-full">
-                  <div className="aspect-square bg-muted relative">
-                    {product.images[0] ? (
-                      <img
-                        src={product.images[0]}
-                        alt={product.title}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center">
-                        <Package className="h-12 w-12 text-muted-foreground" />
-                      </div>
-                    )}
-                    {parseInt(product.inventory) < 10 && (
-                      <Badge className="absolute top-2 right-2 bg-orange-500">
-                        {t('product.lowStock')}
-                      </Badge>
-                    )}
-                  </div>
-                  <div className="p-3">
-                    <h3 className="font-medium text-foreground text-sm line-clamp-2 mb-1">
-                      {product.title}
-                    </h3>
-                    {product.seller && (
-                      <p className="text-xs text-muted-foreground mb-2 truncate">
-                        {product.seller.shopName}
-                      </p>
-                    )}
-                    <div className="flex items-center justify-between">
-                      <span className="text-coral font-semibold text-sm">
-                        {formatPrice(product.priceMove)}
-                      </span>
-                      <Button size="sm" variant="ghost" className="h-8 w-8 p-0">
-                        <ShoppingCart className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </div>
-                </Card>
-              </Link>
+              <ProductCard key={product.id} product={product} />
             ))}
           </div>
         ) : (
