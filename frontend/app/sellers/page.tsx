@@ -1,16 +1,17 @@
 'use client';
 
 import { useState, useMemo } from 'react';
+import Link from 'next/link';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import {
   Search,
   Users,
-  Star,
   Package,
+  ShieldCheck,
   ExternalLink,
   Shirt,
   Sparkles,
@@ -20,53 +21,69 @@ import {
   Dumbbell,
 } from 'lucide-react';
 import { useTranslation } from '@/lib/i18n';
-import Link from 'next/link';
 
 const CATEGORIES = [
   { id: 'all', labelKey: 'common.all', icon: null },
-  { id: 'fashion', labelKey: 'categories.fashion', icon: Shirt },
-  { id: 'beauty', labelKey: 'categories.beauty', icon: Sparkles },
-  { id: 'food', labelKey: 'categories.food', icon: UtensilsCrossed },
-  { id: 'electronics', labelKey: 'categories.electronics', icon: Smartphone },
-  { id: 'home', labelKey: 'categories.home', icon: Sofa },
-  { id: 'sports', labelKey: 'categories.sports', icon: Dumbbell },
-] as const;
+  { id: 0, labelKey: 'categories.fashion', icon: Shirt },
+  { id: 1, labelKey: 'categories.beauty', icon: Sparkles },
+  { id: 2, labelKey: 'categories.food', icon: UtensilsCrossed },
+  { id: 3, labelKey: 'categories.electronics', icon: Smartphone },
+  { id: 4, labelKey: 'categories.home', icon: Sofa },
+  { id: 5, labelKey: 'categories.sports', icon: Dumbbell },
+];
 
-type CategoryId = (typeof CATEGORIES)[number]['id'];
-
-interface Seller {
-  id: string;
-  wallet: string;
-  shopName: string;
-  category: string;
-  isActive: boolean;
-  totalOrders: number;
-  totalSales: string;
-  profileImage?: string;
-  bannerImage?: string;
-  shopNameKo?: string;
-  description?: string;
-}
+// Placeholder sellers (would come from indexer in production)
+const MOCK_SELLERS = [
+  {
+    addr: '0x1234567890abcdef1234567890abcdef12345678',
+    shopName: 'Fashion Hub',
+    description: 'Best fashion items at affordable prices',
+    category: 0,
+    totalSales: 1250000000000,
+    totalOrders: 156,
+    isVerified: true,
+  },
+  {
+    addr: '0xabcdef1234567890abcdef1234567890abcdef12',
+    shopName: 'Tech World',
+    description: 'Latest gadgets and electronics',
+    category: 3,
+    totalSales: 980000000000,
+    totalOrders: 89,
+    isVerified: true,
+  },
+  {
+    addr: '0x9876543210fedcba9876543210fedcba98765432',
+    shopName: 'Beauty Corner',
+    description: 'Premium beauty and skincare products',
+    category: 1,
+    totalSales: 750000000000,
+    totalOrders: 234,
+    isVerified: false,
+  },
+];
 
 export default function SellersPage() {
   const { t } = useTranslation();
-  const [sellers] = useState<Seller[]>([]);
-  const [loading] = useState(false);
-  const [category, setCategory] = useState<CategoryId>('all');
+  const [category, setCategory] = useState<number | 'all'>('all');
   const [search, setSearch] = useState('');
 
   const filteredSellers = useMemo(() => {
-    return sellers.filter((seller) => {
+    return MOCK_SELLERS.filter((seller) => {
       if (category !== 'all' && seller.category !== category) return false;
       if (search) {
         const searchLower = search.toLowerCase();
-        const matchesName = seller.shopName.toLowerCase().includes(searchLower);
-        const matchesNameKo = seller.shopNameKo?.toLowerCase().includes(searchLower);
-        if (!matchesName && !matchesNameKo) return false;
+        return seller.shopName.toLowerCase().includes(searchLower);
       }
       return true;
     });
-  }, [sellers, category, search]);
+  }, [category, search]);
+
+  const formatSales = (sales: number) => {
+    const move = sales / 1e8;
+    if (move >= 1000) return (move / 1000).toFixed(1) + 'K';
+    return move.toFixed(0);
+  };
 
   const getInitials = (name: string) => name.slice(0, 2).toUpperCase();
 
@@ -103,41 +120,15 @@ export default function SellersPage() {
           ))}
         </div>
 
-        {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {[...Array(6)].map((_, i) => (
-              <Card key={i} className="overflow-hidden animate-pulse">
-                <div className="h-24 bg-muted" />
-                <div className="p-4">
-                  <div className="flex items-start gap-4">
-                    <div className="h-16 w-16 rounded-full bg-muted -mt-10 border-4 border-card" />
-                    <div className="flex-1 space-y-2 pt-2">
-                      <div className="h-4 w-24 bg-muted rounded" />
-                      <div className="h-3 w-16 bg-muted rounded" />
-                    </div>
-                  </div>
-                </div>
-              </Card>
-            ))}
-          </div>
-        ) : filteredSellers.length > 0 ? (
+        {filteredSellers.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {filteredSellers.map((seller) => (
-              <Link key={seller.id} href={`/seller/${seller.wallet}`}>
+              <Link key={seller.addr} href={`/seller/${seller.addr}`}>
                 <Card className="bg-card border-border overflow-hidden hover:border-coral/50 transition-colors cursor-pointer h-full">
-                  <div className="h-24 bg-gradient-to-r from-coral/20 to-coral/10 relative">
-                    {seller.bannerImage && (
-                      <img
-                        src={seller.bannerImage}
-                        alt=""
-                        className="w-full h-full object-cover"
-                      />
-                    )}
-                  </div>
+                  <div className="h-24 bg-gradient-to-r from-coral/20 to-coral/10" />
                   <div className="p-4">
                     <div className="flex items-start gap-4">
                       <Avatar className="h-16 w-16 -mt-10 border-4 border-card">
-                        <AvatarImage src={seller.profileImage} alt={seller.shopName} />
                         <AvatarFallback className="bg-coral/10 text-coral text-lg">
                           {getInitials(seller.shopName)}
                         </AvatarFallback>
@@ -147,28 +138,19 @@ export default function SellersPage() {
                           <h3 className="font-semibold text-foreground truncate">
                             {seller.shopName}
                           </h3>
-                          {seller.isActive && (
-                            <Badge variant="secondary" className="text-xs shrink-0">
+                          {seller.isVerified && (
+                            <Badge variant="secondary" className="text-xs shrink-0 gap-1">
+                              <ShieldCheck className="h-3 w-3" />
                               {t('common.verified')}
                             </Badge>
                           )}
                         </div>
-                        {seller.shopNameKo && (
-                          <p className="text-sm text-muted-foreground truncate mb-1">
-                            {seller.shopNameKo}
-                          </p>
-                        )}
                         <div className="flex items-center gap-4 text-sm text-muted-foreground">
                           <div className="flex items-center gap-1">
                             <Package className="h-3.5 w-3.5" />
-                            <span>
-                              {seller.totalOrders} {t('seller.orders')}
-                            </span>
+                            <span>{seller.totalOrders} {t('seller.orders')}</span>
                           </div>
-                          <div className="flex items-center gap-1">
-                            <Star className="h-3.5 w-3.5 text-yellow-500" />
-                            <span>{seller.totalSales}</span>
-                          </div>
+                          <span>{formatSales(seller.totalSales)} MOVE</span>
                         </div>
                       </div>
                     </div>

@@ -11,16 +11,15 @@ import { RegistrationStepImages, ImagesData } from './registration-step-images'
 import { RegistrationStepWallet } from './registration-step-wallet'
 import { RegistrationStepReview } from './registration-step-review'
 import { useSellerRegistration } from '@/lib/hooks/use-seller'
-import { useTranslation, type Locale } from '@/lib/i18n'
+import { useTranslation } from '@/lib/i18n'
 import { getDemoSeller } from '@/lib/demo/templates'
 
 // Get random demo data for seller registration
-function getRandomSellerData(locale: Locale): BasicInfoData {
-  const template = getDemoSeller(locale)
-  const templateOther = getDemoSeller(locale === 'en' ? 'ko' : 'en')
+function getRandomSellerData(): BasicInfoData {
+  const template = getDemoSeller()
   return {
-    shopName: locale === 'en' ? template.shopName : templateOther.shopName,
-    shopNameKo: locale === 'ko' ? template.shopName : templateOther.shopName,
+    shopName: template.shopName,
+    shopNameKo: '',
     category: template.category,
     description: template.description,
   }
@@ -31,7 +30,7 @@ interface RegistrationFormProps {
 }
 
 export function RegistrationForm({ walletAddress }: RegistrationFormProps) {
-  const { t, locale } = useTranslation()
+  const { t } = useTranslation()
   const router = useRouter()
   const { register, isLoading, isOnchainLoading, error: registrationError } = useSellerRegistration(walletAddress)
   const [currentStep, setCurrentStep] = useState(1)
@@ -42,8 +41,8 @@ export function RegistrationForm({ walletAddress }: RegistrationFormProps) {
   // Combined loading state
   const isPending = isLoading || isOnchainLoading
 
-  // Random demo prefill data based on current language - editable by user
-  const demoData = useMemo(() => getRandomSellerData(locale), [])
+  // Random demo prefill data - editable by user
+  const demoData = useMemo(() => getRandomSellerData(), [])
   const [basicInfo, setBasicInfo] = useState<BasicInfoData>(demoData)
 
   const [images, setImages] = useState<ImagesData>({

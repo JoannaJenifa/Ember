@@ -2,7 +2,6 @@
 
 import { useAccount, ConnectButton } from '@/lib/web3'
 import { ThemeToggle } from '@/components/ui/theme-toggle'
-import { LanguageSwitcher } from '@/components/ui/language-switcher'
 import { Button } from '@/components/ui/button'
 import { Radio, Grid, ClipboardList, Store, Menu, Users } from 'lucide-react'
 import Image from 'next/image'
@@ -10,7 +9,6 @@ import { cn } from '@/lib/utils'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
-import { useTranslation } from '@/lib/i18n'
 
 interface NavbarProps {
   className?: string
@@ -19,17 +17,16 @@ interface NavbarProps {
 export function Navbar({ className }: NavbarProps) {
   const { isConnected } = useAccount()
   const pathname = usePathname()
-  const { t } = useTranslation()
 
   const publicNavLinks = [
-    { href: '/live', labelKey: 'nav.live', icon: Radio },
-    { href: '/products', labelKey: 'nav.products', icon: Grid },
-    { href: '/sellers', labelKey: 'nav.sellers', icon: Users },
+    { href: '/live', label: 'Live', icon: Radio },
+    { href: '/products', label: 'Products', icon: Grid },
+    { href: '/sellers', label: 'Sellers', icon: Users },
   ]
 
   const authNavLinks = [
-    { href: '/orders', labelKey: 'nav.orders', icon: ClipboardList },
-    { href: '/sell', labelKey: 'nav.sell', icon: Store },
+    { href: '/orders', label: 'My Orders', icon: ClipboardList },
+    { href: '/sell', label: 'Sell', icon: Store },
   ]
 
   const allNavLinks = [...publicNavLinks, ...(isConnected ? authNavLinks : [])]
@@ -42,7 +39,7 @@ export function Navbar({ className }: NavbarProps) {
           <Link href="/" className="flex items-center hover:opacity-80 transition-opacity">
             <Image
               src="/labang-long.png"
-              alt="Labang"
+              alt="Ember"
               width={120}
               height={40}
               className="h-8 w-auto hidden sm:block"
@@ -50,7 +47,7 @@ export function Navbar({ className }: NavbarProps) {
             />
             <Image
               src="/labang.png"
-              alt="Labang"
+              alt="Ember"
               width={32}
               height={32}
               className="h-8 w-8 sm:hidden"
@@ -73,7 +70,7 @@ export function Navbar({ className }: NavbarProps) {
               )}
             >
               <link.icon className="h-4 w-4" />
-              {t(link.labelKey)}
+              {link.label}
             </Link>
           ))}
         </div>
@@ -82,9 +79,6 @@ export function Navbar({ className }: NavbarProps) {
         <div className="flex items-center gap-2 sm:gap-3 shrink-0">
           {/* Wallet Connection */}
           <ConnectButton />
-
-          {/* Language Switcher */}
-          <LanguageSwitcher />
 
           {/* Theme Toggle */}
           <ThemeToggle />
@@ -101,7 +95,7 @@ export function Navbar({ className }: NavbarProps) {
                 <div className="flex items-center gap-2 mb-4">
                   <Image
                     src="/labang-long.png"
-                    alt="Labang"
+                    alt="Ember"
                     width={120}
                     height={40}
                     className="h-8 w-auto"
@@ -119,7 +113,7 @@ export function Navbar({ className }: NavbarProps) {
                     )}
                   >
                     <link.icon className="h-5 w-5" />
-                    <p className="font-medium">{t(link.labelKey)}</p>
+                    <p className="font-medium">{link.label}</p>
                   </Link>
                 ))}
               </div>

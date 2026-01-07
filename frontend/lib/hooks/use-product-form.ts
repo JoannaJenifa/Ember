@@ -1,6 +1,5 @@
 import { useState, useMemo } from 'react'
 import type { CreateProductInput, CategoryId, ProductWithSeller } from '@/lib/types/product'
-import type { Locale } from '@/lib/i18n'
 import { useCreateProduct, useUpdateProduct } from '@/lib/web3/product-registry'
 import { getDemoProduct } from '@/lib/demo/templates'
 
@@ -12,20 +11,18 @@ export interface ProductFormResult {
 interface UseProductFormOptions {
   product?: ProductWithSeller | null
   sellerId: string
-  locale?: Locale
   onSuccess?: (result: ProductFormResult) => void
   onError?: (error: Error) => void
 }
 
 // Get random demo data for product form
-function getRandomDemoData(locale: Locale): CreateProductInput {
-  const template = getDemoProduct(locale)
-  const templateOther = getDemoProduct(locale === 'en' ? 'ko' : 'en')
+function getRandomDemoData(): CreateProductInput {
+  const template = getDemoProduct()
   return {
-    title: locale === 'en' ? template.title : templateOther.title,
-    titleKo: locale === 'ko' ? template.title : templateOther.title,
-    description: locale === 'en' ? template.description : templateOther.description,
-    descriptionKo: locale === 'ko' ? template.description : templateOther.description,
+    title: template.title,
+    titleKo: '',
+    description: template.description,
+    descriptionKo: '',
     images: [],
     priceVery: template.priceVery,
     inventory: parseInt(template.inventory),
@@ -33,9 +30,9 @@ function getRandomDemoData(locale: Locale): CreateProductInput {
   }
 }
 
-export function useProductForm({ product, sellerId, locale = 'en', onSuccess, onError }: UseProductFormOptions) {
+export function useProductForm({ product, sellerId, onSuccess, onError }: UseProductFormOptions) {
   // useMemo with empty deps to only generate random data once on mount
-  const initialFormData = useMemo(() => getRandomDemoData(locale), [])
+  const initialFormData = useMemo(() => getRandomDemoData(), [])
   const [formData, setFormData] = useState<CreateProductInput>(
     product
       ? {

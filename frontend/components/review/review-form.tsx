@@ -14,7 +14,7 @@ import { Spinner } from '@/components/ui/loader'
 import { StarRatingInput } from './star-rating-input'
 import { PhotoUpload } from './photo-upload'
 import type { LabangProduct, LabangOrder } from '@/lib/db/supabase'
-import { useTranslation, type Locale } from '@/lib/i18n'
+import { useTranslation } from '@/lib/i18n'
 import { getDemoReview } from '@/lib/demo/templates'
 
 interface ReviewFormProps {
@@ -26,9 +26,9 @@ interface ReviewFormProps {
 }
 
 export function ReviewForm({ open, onOpenChange, product, order, onSubmit }: ReviewFormProps) {
-  const { t, locale } = useTranslation()
+  const { t } = useTranslation()
   // Get random demo review data for faster demos
-  const demoReview = useMemo(() => getDemoReview(locale as Locale), [])
+  const demoReview = useMemo(() => getDemoReview(), [])
   const [rating, setRating] = useState(demoReview.rating)
   const [content, setContent] = useState(demoReview.content)
   const [photos, setPhotos] = useState<File[]>([])

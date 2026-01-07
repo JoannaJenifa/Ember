@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import type { LabangStream } from './use-streams';
-import type { Locale } from '@/lib/i18n';
 import { getDemoStream } from '@/lib/demo/templates';
 
 interface StreamFormData {
@@ -25,16 +24,14 @@ interface UseStreamFormOptions {
   walletAddress: string;
   shopName?: string;
   category?: string;
-  locale?: Locale;
   onSuccess?: (stream: LabangStream) => void;
 }
 
-function getRandomStreamData(locale: Locale): StreamFormData {
-  const template = getDemoStream(locale);
-  const templateOther = getDemoStream(locale === 'en' ? 'ko' : 'en');
+function getRandomStreamData(): StreamFormData {
+  const template = getDemoStream();
   return {
-    title: locale === 'en' ? template.title : templateOther.title,
-    titleKo: locale === 'ko' ? template.title : templateOther.title,
+    title: template.title,
+    titleKo: '',
     thumbnail: '',
     scheduledAt: '',
     productIds: [],
@@ -47,10 +44,9 @@ export function useStreamForm({
   walletAddress,
   shopName,
   category,
-  locale = 'en',
   onSuccess,
 }: UseStreamFormOptions) {
-  const initialFormData = useMemo(() => getRandomStreamData(locale), []);
+  const initialFormData = useMemo(() => getRandomStreamData(), []);
   const [formData, setFormData] = useState<StreamFormData>(initialFormData);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<StreamFormErrors>({});

@@ -1,6 +1,6 @@
 {
   "common": {
-    "appName": "Labang",
+    "appName": "Ember",
     "loading": "Loading...",
     "cancel": "Cancel",
     "confirm": "Confirm",
@@ -15,6 +15,8 @@
     "success": "Success",
     "all": "All",
     "seeMore": "See More",
+    "seeAll": "See All",
+    "viewAll": "View All",
     "devTools": "Developer Tools",
     "goBack": "Go Back",
     "follow": "Follow",
@@ -54,11 +56,34 @@
   },
   "hero": {
     "badge": "Live Commerce Platform",
-    "title": "Labang",
-    "tagline": "Shop Live, Pay Crypto",
+    "title": "Ignite Your Shopping",
+    "tagline": "Shop Live, Pay Crypto. Instant settlements on Movement.",
     "taglineKo": "Shop Live, Pay Crypto",
     "watchLive": "Watch Live",
-    "startSelling": "Start Selling"
+    "startSelling": "Start Selling",
+    "startShopping": "Start Shopping",
+    "becomeSeller": "Become a Seller",
+    "platformFee": "Platform Fee",
+    "settlement": "Settlement",
+    "reviews": "Reviews"
+  },
+  "home": {
+    "liveNow": "Live Now",
+    "featuredProducts": "Featured Products",
+    "topSellers": "Top Sellers",
+    "noLiveStreams": "No live streams right now",
+    "noLiveStreamsDesc": "Check back later for live shopping streams",
+    "browseStreams": "Browse Streams"
+  },
+  "howItWorks": {
+    "title": "How It Works",
+    "subtitle": "Start shopping in 3 simple steps",
+    "step1Title": "Connect Wallet",
+    "step1Desc": "Connect your Movement wallet to get started",
+    "step2Title": "Browse Live Streams",
+    "step2Desc": "Watch sellers showcase products in real-time",
+    "step3Title": "Buy with Crypto",
+    "step3Desc": "Instant checkout with MOVE tokens"
   },
   "features": {
     "liveShopping": {
@@ -330,6 +355,11 @@
     "buyNow": "Buy Now",
     "addToCart": "Add to Cart",
     "soldOut": "Sold Out",
+    "shippingRequired": "Please enter shipping information",
+    "shippingPlaceholder": "Enter your full shipping address including name, phone, and address",
+    "purchaseSuccess": "Purchase successful! Your order has been placed.",
+    "purchaseFailed": "Purchase failed. Please try again.",
+    "confirmPurchase": "Confirm Purchase",
     "enterShippingInfo": "Enter Shipping Info",
     "namePlaceholder": "Enter your name",
     "phonePlaceholder": "Enter phone number",
@@ -364,6 +394,7 @@
     "uploadPhotos": "Upload Photos",
     "photoLimit": "Up to {count} photos",
     "reviewSubmitted": "Review submitted successfully",
+    "submitSuccess": "Review submitted successfully!",
     "thankYou": "Thank you for your review!"
   },
   "earnings": {
@@ -471,6 +502,8 @@
     "productSaved": "Product saved successfully",
     "noProducts": "No products yet",
     "addFirstProduct": "Add your first product to start selling",
+    "new": "New",
+    "available": "available",
     "inStock": "In Stock",
     "outOfStock": "Out of Stock",
     "lowStock": "Low Stock",
@@ -550,6 +583,8 @@
     "following": "Following",
     "rating": "Rating",
     "totalSales": "Total Sales",
+    "sales": "sales",
+    "sold": "sold",
     "joinedDate": "Joined",
     "verified": "Verified Seller",
     "contactSeller": "Contact Seller",

@@ -1,27 +1,9 @@
 'use client'
 
-import { createContext, useContext, useState, useCallback, useEffect, ReactNode } from 'react'
-import { type Locale, defaultLocale, locales } from './config'
-import enMessages from './messages/en.json'
-import koMessages from './messages/ko.json'
+import { createContext, useContext, useCallback, ReactNode } from 'react'
+import messages from './messages/en.json'
 
-type Messages = typeof enMessages
-
-const messages: Record<Locale, Messages> = {
-  en: enMessages,
-  ko: koMessages,
-}
-
-const LOCALE_STORAGE_KEY = 'labang-locale'
-
-interface TranslationContextType {
-  locale: Locale
-  setLocale: (locale: Locale) => void
-  t: (key: string, params?: Record<string, string | number>) => string
-  messages: Messages
-}
-
-const TranslationContext = createContext<TranslationContextType | null>(null)
+type Messages = typeof messages
 
 function getNestedValue(obj: Record<string, unknown>, path: string): string | undefined {
   const keys = path.split('.')
@@ -44,40 +26,22 @@ function interpolate(template: string, params: Record<string, string | number>):
   })
 }
 
+interface TranslationContextType {
+  t: (key: string, params?: Record<string, string | number>) => string
+  messages: Messages
+}
+
+const TranslationContext = createContext<TranslationContextType | null>(null)
+
 interface TranslationProviderProps {
   children: ReactNode
 }
 
 export function TranslationProvider({ children }: TranslationProviderProps) {
-  const [locale, setLocaleState] = useState<Locale>(defaultLocale)
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => {
-    const savedLocale = localStorage.getItem(LOCALE_STORAGE_KEY) as Locale | null
-    if (savedLocale && locales.includes(savedLocale)) {
-      setLocaleState(savedLocale)
-    } else {
-      const browserLang = navigator.language || (navigator as { userLanguage?: string }).userLanguage || ''
-      const detectedLocale: Locale = browserLang.toLowerCase().startsWith('ko') ? 'ko' : 'en'
-      setLocaleState(detectedLocale)
-      localStorage.setItem(LOCALE_STORAGE_KEY, detectedLocale)
-      document.documentElement.lang = detectedLocale
-    }
-    setMounted(true)
-  }, [])
-
-  const setLocale = useCallback((newLocale: Locale) => {
-    setLocaleState(newLocale)
-    localStorage.setItem(LOCALE_STORAGE_KEY, newLocale)
-    document.documentElement.lang = newLocale
-  }, [])
-
   const t = useCallback((key: string, params?: Record<string, string | number>): string => {
-    const currentMessages = messages[locale]
-    const value = getNestedValue(currentMessages as unknown as Record<string, unknown>, key)
+    const value = getNestedValue(messages as unknown as Record<string, unknown>, key)
 
     if (!value) {
-      console.warn(`Translation missing for key: ${key}`)
       return key
     }
 
@@ -86,20 +50,10 @@ export function TranslationProvider({ children }: TranslationProviderProps) {
     }
 
     return value
-  }, [locale])
-
-  const currentMessages = messages[locale]
-
-  if (!mounted) {
-    return (
-      <TranslationContext.Provider value={{ locale: defaultLocale, setLocale, t, messages: messages[defaultLocale] }}>
-        {children}
-      </TranslationContext.Provider>
-    )
-  }
+  }, [])
 
   return (
-    <TranslationContext.Provider value={{ locale, setLocale, t, messages: currentMessages }}>
+    <TranslationContext.Provider value={{ t, messages }}>
       {children}
     </TranslationContext.Provider>
   )
