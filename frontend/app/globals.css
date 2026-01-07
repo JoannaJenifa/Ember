@@ -85,8 +85,21 @@
   * {
     @apply border-border;
   }
+  html {
+    font-size: 14px; /* Smaller base font size (default is 16px) */
+  }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground text-sm;
     font-family: 'Noto Sans KR', Arial, Helvetica, sans-serif;
+  }
+  /* Adjust heading sizes */
+  h1 {
+    @apply text-2xl;
+  }
+  h2 {
+    @apply text-xl;
+  }
+  h3 {
+    @apply text-lg;
   }
 }
