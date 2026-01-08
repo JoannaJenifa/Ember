@@ -9,14 +9,26 @@ export function HeroSection() {
   const { t } = useTranslation();
 
   return (
-    <section className="relative overflow-hidden">
-      {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-background to-primary/5" />
+    <section className="relative overflow-hidden min-h-[600px] flex items-center">
+      {/* Background Video */}
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover"
+      >
+        <source src="/hero-video.mp4" type="video/mp4" />
+      </video>
 
-      <div className="container mx-auto px-4 py-16 md:py-24 relative">
+      {/* Dark overlay for text readability */}
+      <div className="absolute inset-0 bg-black/60" />
+
+      {/* Content */}
+      <div className="container mx-auto px-4 py-16 md:py-24 relative z-10">
         <div className="max-w-4xl mx-auto text-center">
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/20 border border-primary/30 mb-6">
             <Flame className="h-4 w-4 text-primary animate-pulse" />
             <span className="text-sm text-primary font-medium">{t('hero.badge')}</span>
           </div>
@@ -25,13 +37,13 @@ export function HeroSection() {
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6">
             <span className="text-primary">Ember</span>
             <br />
-            <span className="text-foreground">
+            <span className="text-white">
               {t('hero.title')}
             </span>
           </h1>
 
           {/* Tagline */}
-          <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+          <p className="text-xl md:text-2xl text-white/80 mb-8 max-w-2xl mx-auto">
             {t('hero.tagline')}
           </p>
 
@@ -50,7 +62,7 @@ export function HeroSection() {
               <Button
                 size="lg"
                 variant="outline"
-                className="border-primary text-primary hover:bg-primary/10 px-8 h-12 text-lg"
+                className="border-white text-white hover:bg-white/10 px-8 h-12 text-lg"
               >
                 {t('hero.becomeSeller')}
               </Button>

@@ -18,18 +18,7 @@ user.email: testerbuster564@gmail.com
 ```
 
 ### Auto-Commit Rule
-**IMPORTANT:** After EVERY response that modifies code/files, you MUST run:
-```bash
-cd /Users/gabrielantonyxaviour/Documents/starters/movement/Ember && \
-git add -A && \
-git commit -m "$(cat <<'EOF'
-<concise description of changes>
-EOF
-)" && \
-git push
-```
-
-This ensures all changes are tracked and pushed to JoannaJenifa/Ember.
+**After completing ANY command/prompt, commit and push your changes to GitHub.**
 
 ---
 
