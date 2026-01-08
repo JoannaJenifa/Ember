@@ -1,15 +1,11 @@
-import { aptos, EMBER_ADDRESS } from '@/lib/aptos';
+import { aptos, EMBER_ADDRESS, SHINAMI_GAS_ENABLED } from '@/lib/aptos';
 import {
   generateSigningMessageForTransaction,
   AccountAuthenticatorEd25519,
   Ed25519PublicKey,
   Ed25519Signature,
-  RawTransaction,
-  TransactionPayloadEntryFunction,
-  EntryFunction,
-  ModuleId,
-  Identifier,
 } from '@aptos-labs/ts-sdk';
+import { getGasStationClient, isShinamiConfigured } from '@/lib/shinami/client';
 
 export type SignRawHashFunction = (
   hash: string,
@@ -21,6 +17,8 @@ export interface TransactionContext {
   signRawHash?: SignRawHashFunction;
   publicKeyHex?: string | null;
   signAndSubmitTransaction?: (payload: unknown) => Promise<{ hash: string }>;
+  /** Force disable gas sponsorship for this transaction */
+  disableSponsorship?: boolean;
 }
 
 /**
@@ -31,7 +29,58 @@ export function toHex(str: string): Uint8Array {
 }
 
 /**
- * Sign and submit transaction using Privy embedded wallet
+ * Sign and submit SPONSORED transaction using Privy embedded wallet + Shinami Gas Station
+ * User pays $0 gas - Shinami sponsors the transaction
+ */
+export async function signAndSubmitSponsoredWithPrivy(
+  walletAddress: string,
+  functionId: string,
+  typeArgs: string[],
+  args: unknown[],
+  signRawHash: SignRawHashFunction,
+  publicKeyHex: string
+): Promise<string> {
+  const [moduleAddr, moduleName, funcName] = functionId.split('::');
+  const gasClient = getGasStationClient();
+
+  // Build fee-payer transaction (Shinami will pay gas)
+  const rawTxn = await aptos.transaction.build.simple({
+    sender: walletAddress,
+    withFeePayer: true, // Enable fee payer sponsorship
+    data: {
+      function: `${moduleAddr}::${moduleName}::${funcName}`,
+      typeArguments: typeArgs,
+      functionArguments: args,
+    },
+  });
+
+  // Generate signing message for sender
+  const signingMessage = generateSigningMessageForTransaction(rawTxn);
+  const messageHex = Buffer.from(signingMessage).toString('hex');
+
+  // Sign via Privy
+  const signatureHex = await signRawHash(messageHex, { address: walletAddress });
+
+  // Clean up keys/signatures
+  const cleanPubKey = publicKeyHex.startsWith('0x') ? publicKeyHex.slice(2) : publicKeyHex;
+  const cleanSig = signatureHex.startsWith('0x') ? signatureHex.slice(2) : signatureHex;
+
+  // Build sender authenticator
+  const publicKey = new Ed25519PublicKey(cleanPubKey);
+  const signature = new Ed25519Signature(cleanSig);
+  const senderAuth = new AccountAuthenticatorEd25519(publicKey, signature);
+
+  // Shinami sponsors and submits the transaction
+  const pendingTxn = await gasClient.sponsorAndSubmitSignedTransaction(rawTxn, senderAuth);
+
+  // Wait for transaction completion
+  const txHash = (pendingTxn as { hash: string }).hash;
+  await aptos.waitForTransaction({ transactionHash: txHash });
+  return txHash;
+}
+
+/**
+ * Sign and submit transaction using Privy embedded wallet (user pays gas)
  */
 export async function signAndSubmitWithPrivy(
   walletAddress: string,
@@ -41,10 +90,8 @@ export async function signAndSubmitWithPrivy(
   signRawHash: SignRawHashFunction,
   publicKeyHex: string
 ): Promise<string> {
-  // Parse function ID (e.g., "0x1::module::function")
   const [moduleAddr, moduleName, funcName] = functionId.split('::');
 
-  // Build the raw transaction
   const rawTxn = await aptos.transaction.build.simple({
     sender: walletAddress,
     data: {
@@ -54,27 +101,18 @@ export async function signAndSubmitWithPrivy(
     },
   });
 
-  // Generate signing message
   const signingMessage = generateSigningMessageForTransaction(rawTxn);
   const messageHex = Buffer.from(signingMessage).toString('hex');
 
-  // Sign via Privy
   const signatureHex = await signRawHash(messageHex, { address: walletAddress });
 
-  // Remove 0x prefix if present
-  const cleanPubKey = publicKeyHex.startsWith('0x')
-    ? publicKeyHex.slice(2)
-    : publicKeyHex;
-  const cleanSig = signatureHex.startsWith('0x')
-    ? signatureHex.slice(2)
-    : signatureHex;
+  const cleanPubKey = publicKeyHex.startsWith('0x') ? publicKeyHex.slice(2) : publicKeyHex;
+  const cleanSig = signatureHex.startsWith('0x') ? signatureHex.slice(2) : signatureHex;
 
-  // Build authenticator
   const publicKey = new Ed25519PublicKey(cleanPubKey);
   const signature = new Ed25519Signature(cleanSig);
   const authenticator = new AccountAuthenticatorEd25519(publicKey, signature);
 
-  // Submit and wait
   const pendingTxn = await aptos.transaction.submit.simple({
     transaction: rawTxn,
     senderAuthenticator: authenticator,
@@ -108,7 +146,12 @@ export async function signAndSubmitWithNative(
 }
 
 /**
- * Universal transaction submitter that handles both Privy and native wallets
+ * Universal transaction submitter that handles Privy, native wallets, and gas sponsorship
+ *
+ * Priority:
+ * 1. Privy + Shinami Gas Station (gasless, best UX)
+ * 2. Privy without sponsorship (user pays gas)
+ * 3. Native wallet adapter (user pays gas)
  */
 export async function submitTransaction(
   walletAddress: string,
@@ -117,7 +160,22 @@ export async function submitTransaction(
   args: unknown[],
   context: TransactionContext
 ): Promise<string> {
+  const useSponsorship = SHINAMI_GAS_ENABLED && isShinamiConfigured() && !context.disableSponsorship;
+
+  // Privy embedded wallet flow
   if (context.isPrivy && context.signRawHash && context.publicKeyHex) {
+    if (useSponsorship) {
+      // Gasless transaction via Shinami
+      return signAndSubmitSponsoredWithPrivy(
+        walletAddress,
+        functionId,
+        typeArgs,
+        args,
+        context.signRawHash,
+        context.publicKeyHex
+      );
+    }
+    // User pays gas
     return signAndSubmitWithPrivy(
       walletAddress,
       functionId,
@@ -126,13 +184,12 @@ export async function submitTransaction(
       context.signRawHash,
       context.publicKeyHex
     );
-  } else if (context.signAndSubmitTransaction) {
-    return signAndSubmitWithNative(
-      functionId,
-      typeArgs,
-      args,
-      context.signAndSubmitTransaction
-    );
   }
+
+  // Native wallet adapter flow
+  if (context.signAndSubmitTransaction) {
+    return signAndSubmitWithNative(functionId, typeArgs, args, context.signAndSubmitTransaction);
+  }
+
   throw new Error('No signing method available');
 }
