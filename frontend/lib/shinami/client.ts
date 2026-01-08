@@ -1,39 +1,60 @@
 /**
- * Shinami Gas Station client for sponsored transactions on Movement
+ * Shinami Gas Station client utilities
  *
- * This module provides gasless transaction support using Shinami's Gas Station API.
- * Users don't pay gas fees - the platform sponsors all transactions.
+ * All Shinami API calls go through server-side API routes.
+ * This module provides client-side utilities for interacting with those routes.
  */
 
-import { GasStationClient } from '@shinami/clients/aptos';
+let sponsorshipEnabled: boolean | null = null;
 
-// Shinami API configuration (server-side keys should use SHINAMI_ prefix without NEXT_PUBLIC_)
-const SHINAMI_GAS_KEY = process.env.NEXT_PUBLIC_SHINAMI_GAS_KEY || '';
-
-// Validate configuration
-export function isShinamiConfigured(): boolean {
-  return !!SHINAMI_GAS_KEY;
-}
-
-// Gas Station client singleton
-let gasStationClient: GasStationClient | null = null;
-
-export function getGasStationClient(): GasStationClient {
-  if (!gasStationClient) {
-    if (!SHINAMI_GAS_KEY) {
-      throw new Error('NEXT_PUBLIC_SHINAMI_GAS_KEY not configured');
-    }
-    gasStationClient = new GasStationClient(SHINAMI_GAS_KEY);
+/**
+ * Check if gas sponsorship is available (calls server API)
+ */
+export async function isShinamiEnabled(): Promise<boolean> {
+  if (sponsorshipEnabled !== null) {
+    return sponsorshipEnabled;
   }
-  return gasStationClient;
+
+  try {
+    const response = await fetch('/api/shinami/sponsor');
+    const data = await response.json();
+    sponsorshipEnabled = data.enabled === true;
+    return sponsorshipEnabled;
+  } catch {
+    sponsorshipEnabled = false;
+    return false;
+  }
 }
 
-// Get Shinami Node RPC endpoint for Movement
-export function getShinamiNodeUrl(): string | null {
-  const nodeKey = process.env.NEXT_PUBLIC_SHINAMI_NODE_KEY;
-  if (!nodeKey) return null;
-  return `https://api.shinami.com/node/v1/${nodeKey}`;
+/**
+ * Submit a sponsored transaction via the server API
+ *
+ * @param rawTransaction - Hex-encoded raw transaction bytes
+ * @param senderSignature - Hex-encoded sender authenticator bytes
+ * @returns Transaction hash
+ */
+export async function submitSponsoredTransaction(
+  rawTransaction: string,
+  senderSignature: string
+): Promise<string> {
+  const response = await fetch('/api/shinami/sponsor', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ rawTransaction, senderSignature }),
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.error || 'Sponsorship request failed');
+  }
+
+  return data.hash;
 }
 
-// Export for type checking
-export { GasStationClient };
+/**
+ * Reset the cached sponsorship status (useful for testing)
+ */
+export function resetSponsorshipCache(): void {
+  sponsorshipEnabled = null;
+}

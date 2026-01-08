@@ -15,7 +15,8 @@ export const MOVEMENT_CONFIGS = {
 
 export const CURRENT_NETWORK = 'testnet' as keyof typeof MOVEMENT_CONFIGS;
 
-// Use Shinami Node Service if configured, otherwise fallback to public RPC
+// Use Shinami Node Service if configured (optional - just for reliable RPC)
+// Note: Node key is safe to expose client-side as it's just for read operations
 const SHINAMI_NODE_KEY = process.env.NEXT_PUBLIC_SHINAMI_NODE_KEY;
 const fullnodeUrl = SHINAMI_NODE_KEY
   ? `https://api.shinami.com/node/v1/${SHINAMI_NODE_KEY}`
@@ -29,9 +30,6 @@ export const aptos = new Aptos(
 );
 
 export const EMBER_ADDRESS = process.env.NEXT_PUBLIC_EMBER_ADDRESS || '0x1';
-
-// Check if Shinami Gas Station is enabled
-export const SHINAMI_GAS_ENABLED = !!process.env.NEXT_PUBLIC_SHINAMI_GAS_KEY;
 
 export const getExplorerUrl = (txHash: string): string => {
   const network = MOVEMENT_CONFIGS[CURRENT_NETWORK].explorer;

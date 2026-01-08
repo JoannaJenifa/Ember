@@ -1,11 +1,11 @@
-import { aptos, EMBER_ADDRESS, SHINAMI_GAS_ENABLED } from '@/lib/aptos';
+import { aptos } from '@/lib/aptos';
 import {
   generateSigningMessageForTransaction,
   AccountAuthenticatorEd25519,
   Ed25519PublicKey,
   Ed25519Signature,
 } from '@aptos-labs/ts-sdk';
-import { getGasStationClient, isShinamiConfigured } from '@/lib/shinami/client';
+import { isShinamiEnabled, submitSponsoredTransaction } from '@/lib/shinami/client';
 
 export type SignRawHashFunction = (
   hash: string,
@@ -29,8 +29,8 @@ export function toHex(str: string): Uint8Array {
 }
 
 /**
- * Sign and submit SPONSORED transaction using Privy embedded wallet + Shinami Gas Station
- * User pays $0 gas - Shinami sponsors the transaction
+ * Sign and submit SPONSORED transaction using Privy + Shinami Gas Station API
+ * User pays $0 gas - Shinami sponsors the transaction via server-side API
  */
 export async function signAndSubmitSponsoredWithPrivy(
   walletAddress: string,
@@ -41,12 +41,11 @@ export async function signAndSubmitSponsoredWithPrivy(
   publicKeyHex: string
 ): Promise<string> {
   const [moduleAddr, moduleName, funcName] = functionId.split('::');
-  const gasClient = getGasStationClient();
 
   // Build fee-payer transaction (Shinami will pay gas)
   const rawTxn = await aptos.transaction.build.simple({
     sender: walletAddress,
-    withFeePayer: true, // Enable fee payer sponsorship
+    withFeePayer: true,
     data: {
       function: `${moduleAddr}::${moduleName}::${funcName}`,
       typeArguments: typeArgs,
@@ -70,11 +69,14 @@ export async function signAndSubmitSponsoredWithPrivy(
   const signature = new Ed25519Signature(cleanSig);
   const senderAuth = new AccountAuthenticatorEd25519(publicKey, signature);
 
-  // Shinami sponsors and submits the transaction
-  const pendingTxn = await gasClient.sponsorAndSubmitSignedTransaction(rawTxn, senderAuth);
+  // Serialize for API call
+  const rawTxnHex = rawTxn.rawTransaction.bcsToHex().toString();
+  const senderAuthHex = senderAuth.bcsToHex().toString();
+
+  // Submit via server-side API (Shinami sponsors and submits)
+  const txHash = await submitSponsoredTransaction(rawTxnHex, senderAuthHex);
 
   // Wait for transaction completion
-  const txHash = (pendingTxn as { hash: string }).hash;
   await aptos.waitForTransaction({ transactionHash: txHash });
   return txHash;
 }
@@ -149,7 +151,7 @@ export async function signAndSubmitWithNative(
  * Universal transaction submitter that handles Privy, native wallets, and gas sponsorship
  *
  * Priority:
- * 1. Privy + Shinami Gas Station (gasless, best UX)
+ * 1. Privy + Shinami Gas Station (gasless, best UX) - via server API
  * 2. Privy without sponsorship (user pays gas)
  * 3. Native wallet adapter (user pays gas)
  */
@@ -160,12 +162,13 @@ export async function submitTransaction(
   args: unknown[],
   context: TransactionContext
 ): Promise<string> {
-  const useSponsorship = SHINAMI_GAS_ENABLED && isShinamiConfigured() && !context.disableSponsorship;
-
   // Privy embedded wallet flow
   if (context.isPrivy && context.signRawHash && context.publicKeyHex) {
+    // Check if sponsorship is available and not disabled
+    const useSponsorship = !context.disableSponsorship && (await isShinamiEnabled());
+
     if (useSponsorship) {
-      // Gasless transaction via Shinami
+      // Gasless transaction via Shinami server API
       return signAndSubmitSponsoredWithPrivy(
         walletAddress,
         functionId,
