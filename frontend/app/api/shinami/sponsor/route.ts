@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { GasStationClient } from '@shinami/clients/aptos';
 import { AccountAuthenticator, Deserializer } from '@aptos-labs/ts-sdk';
 
-// Server-side only - no NEXT_PUBLIC_ prefix
-const SHINAMI_GAS_KEY = process.env.SHINAMI_GAS_KEY;
+// Server-side only
+const SHINAMI_KEY = process.env.SHINAMI_KEY;
 
 /**
  * POST /api/shinami/sponsor
@@ -17,8 +17,7 @@ const SHINAMI_GAS_KEY = process.env.SHINAMI_GAS_KEY;
  */
 export async function POST(request: NextRequest) {
   try {
-    // Check if Gas Station is configured
-    if (!SHINAMI_GAS_KEY) {
+    if (!SHINAMI_KEY) {
       return NextResponse.json(
         { error: 'Gas sponsorship not configured' },
         { status: 503 }
@@ -35,8 +34,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Initialize Gas Station client
-    const gasClient = new GasStationClient(SHINAMI_GAS_KEY);
+    const gasClient = new GasStationClient(SHINAMI_KEY);
 
     // Deserialize the sender authenticator
     const sigBytes = hexToBytes(senderSignature);
@@ -74,7 +72,7 @@ export async function POST(request: NextRequest) {
  */
 export async function GET() {
   return NextResponse.json({
-    enabled: !!SHINAMI_GAS_KEY,
+    enabled: !!SHINAMI_KEY,
   });
 }
 
