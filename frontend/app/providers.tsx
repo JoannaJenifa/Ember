@@ -68,6 +68,9 @@ export function Providers({ children }: { children: ReactNode }) {
           appId={PRIVY_APP_ID!}
           config={{
             loginMethods: ['email', 'google', 'twitter', 'discord', 'github'],
+            appearance: {
+              theme: 'dark',
+            },
           }}
         >
           {children}
