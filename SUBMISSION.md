@@ -15,7 +15,7 @@
 - [Market Opportunity](#market-opportunity)
 - [Competitive Advantage](#competitive-advantage)
 - [Future Roadmap](#future-roadmap)
-- [Demo & Links](#demo--links)
+- [Why Ember](#why-ember-should-win)
 
 ---
 
@@ -320,35 +320,6 @@ Tip (20 MOVE):
 - [ ] Creator DAOs
 - [ ] White-label solution for brands
 - [ ] Movement DeFi integrations (collateralized inventory)
-
----
-
-## Demo & Links
-
-### Repository
-- **GitHub**: https://github.com/JoannaJenifa/Ember
-
-### How to Test
-
-```bash
-# Clone repository
-git clone https://github.com/JoannaJenifa/Ember.git
-cd Ember
-
-# Install dependencies
-pnpm install
-
-# Set environment variables
-cp .env.example .env.local
-# Fill in SHINAMI_KEY, NEXT_PUBLIC_MODULE_ADDRESS
-
-# Run locally
-pnpm dev
-
-# Visit http://localhost:3000
-```
-
-See `APP_FLOW.md` for detailed testing instructions.
 
 ---
 
