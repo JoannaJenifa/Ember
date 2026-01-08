@@ -58,7 +58,7 @@ export function HeroSection() {
             <Link href="/sell">
               <Button
                 size="lg"
-                className="bg-white/10 text-white hover:bg-white/20 border-0 px-8 h-12 text-lg"
+                className="bg-background text-foreground hover:bg-background/90 px-8 h-12 text-lg"
               >
                 {t('hero.becomeSeller')}
               </Button>
