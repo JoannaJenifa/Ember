@@ -11,12 +11,13 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Minus, Plus, Loader2, ShoppingBag, MapPin, CreditCard } from 'lucide-react';
+import { Minus, Plus, Loader2, ShoppingBag, MapPin, CreditCard, AlertCircle, Wallet } from 'lucide-react';
 import { toast } from 'sonner';
 import { formatUsdcAmount } from '@/lib/aptos';
 import { Product } from '@/lib/ember/product-queries';
 import { createOrder } from '@/lib/ember/order-transactions';
 import { useWalletContext } from '@/hooks/use-wallet-context';
+import { useUsdcBalance } from '@/hooks/use-usdc-balance';
 
 interface BuyDialogProps {
   product: Product | null;
@@ -54,10 +55,13 @@ export function BuyDialog({ product, open, onOpenChange, onSuccess }: BuyDialogP
     signAndSubmitTransaction,
   } = useWalletContext();
 
+  const { balance: usdcBalance, rawBalance } = useUsdcBalance(walletAddress);
+
   if (!product) return null;
 
   const maxQuantity = Math.min(product.inventory, 10);
   const totalPrice = product.price * quantity;
+  const hasInsufficientBalance = rawBalance !== null && rawBalance < totalPrice;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -301,7 +305,34 @@ export function BuyDialog({ product, open, onOpenChange, onSuccess }: BuyDialogP
               </span>
             </div>
 
-            <Button type="submit" className="w-full" disabled={isLoading}>
+            {/* Balance Info */}
+            {walletAddress && (
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-muted-foreground">Your Balance</span>
+                <span className={hasInsufficientBalance ? 'text-destructive font-medium' : ''}>
+                  ${usdcBalance ?? '0.00'}
+                </span>
+              </div>
+            )}
+
+            {/* Insufficient Balance Warning */}
+            {hasInsufficientBalance && (
+              <div className="flex items-start gap-3 p-3 rounded-lg bg-destructive/10 border border-destructive/20">
+                <AlertCircle className="h-5 w-5 text-destructive shrink-0 mt-0.5" />
+                <div className="space-y-1">
+                  <p className="text-sm font-medium text-destructive">Insufficient Balance</p>
+                  <p className="text-xs text-muted-foreground">
+                    You need ${formatUsdcAmount(totalPrice)} but only have ${usdcBalance ?? '0.00'}.
+                  </p>
+                  <div className="flex items-center gap-1.5 text-xs text-primary mt-2">
+                    <Wallet className="h-3.5 w-3.5" />
+                    <span>Get free tUSDC from the faucet in the wallet dropdown (top right)</span>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <Button type="submit" className="w-full" disabled={isLoading || hasInsufficientBalance}>
               {isLoading ? (
                 <>
                   <Loader2 className="h-4 w-4 mr-2 animate-spin" />
