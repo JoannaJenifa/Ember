@@ -9,7 +9,7 @@ export function HeroSection() {
   const { t } = useTranslation();
 
   return (
-    <section className="relative overflow-hidden min-h-[600px] flex items-center">
+    <section className="relative overflow-hidden min-h-[600px] lg:min-h-[700px] 2xl:min-h-[800px] flex items-center">
       {/* Background Video */}
       <video
         autoPlay
@@ -23,6 +23,9 @@ export function HeroSection() {
 
       {/* Dark overlay for text readability */}
       <div className="absolute inset-0 bg-black/60" />
+
+      {/* Bottom fade effect */}
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent" />
 
       {/* Content */}
       <div className="container mx-auto px-4 py-16 md:py-24 relative z-10">
