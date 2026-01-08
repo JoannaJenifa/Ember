@@ -91,6 +91,26 @@
   body {
     @apply bg-background text-foreground text-sm;
     font-family: 'Noto Sans KR', Arial, Helvetica, sans-serif;
+
+    /* Privy modal customization - Ember dark theme */
+    --privy-color-background: #141210;
+    --privy-color-background-2: #1c1917;
+    --privy-color-background-3: #292524;
+    --privy-color-foreground: #f5f5f4;
+    --privy-color-foreground-2: #a8a29e;
+    --privy-color-foreground-3: #78716c;
+    --privy-color-foreground-4: #57534e;
+    --privy-color-accent: #FF5C33;
+    --privy-color-accent-light: #ff7a57;
+    --privy-color-accent-lightest: #ffb8a3;
+    --privy-color-accent-dark: #cc4a29;
+    --privy-color-accent-darkest: #992f1a;
+    --privy-color-success: #22c55e;
+    --privy-color-error: #ef4444;
+    --privy-color-error-light: #fca5a5;
+    --privy-border-radius-sm: 6px;
+    --privy-border-radius-md: 8px;
+    --privy-border-radius-lg: 12px;
   }
   /* Adjust heading sizes */
   h1 {
