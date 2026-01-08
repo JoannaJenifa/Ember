@@ -36,23 +36,16 @@ export function Navbar({ className }: NavbarProps) {
       <div className="container mx-auto px-4 h-16 flex items-center">
         {/* Logo */}
         <div className="flex items-center gap-2 shrink-0">
-          <Link href="/" className="flex items-center hover:opacity-80 transition-opacity">
+          <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
             <Image
-              src="/labang-long.png"
-              alt="Ember"
-              width={120}
-              height={40}
-              className="h-8 w-auto hidden sm:block"
-              priority
-            />
-            <Image
-              src="/labang.png"
+              src="/logo.png"
               alt="Ember"
               width={32}
               height={32}
-              className="h-8 w-8 sm:hidden"
+              className="h-8 w-8"
               priority
             />
+            <span className="hidden sm:block text-xl font-bold text-ember">Ember</span>
           </Link>
         </div>
 
@@ -94,12 +87,13 @@ export function Navbar({ className }: NavbarProps) {
               <div className="flex flex-col gap-4 mt-8">
                 <div className="flex items-center gap-2 mb-4">
                   <Image
-                    src="/labang-long.png"
+                    src="/logo.png"
                     alt="Ember"
-                    width={120}
-                    height={40}
-                    className="h-8 w-auto"
+                    width={32}
+                    height={32}
+                    className="h-8 w-8"
                   />
+                  <span className="text-xl font-bold text-ember">Ember</span>
                 </div>
                 {allNavLinks.map((link) => (
                   <Link

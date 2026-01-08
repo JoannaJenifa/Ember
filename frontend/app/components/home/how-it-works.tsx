@@ -28,7 +28,7 @@ export function HowItWorks() {
   return (
     <section className="container mx-auto px-4 py-12">
       <div className="text-center mb-10">
-        <h2 className="text-2xl font-bold text-foreground mb-2">{t('howItWorks.title')}</h2>
+        <h2 className="text-2xl font-bold bg-gradient-to-r from-ember via-amber to-gold bg-clip-text text-transparent mb-2">{t('howItWorks.title')}</h2>
         <p className="text-muted-foreground">{t('howItWorks.subtitle')}</p>
       </div>
 
@@ -37,12 +37,12 @@ export function HowItWorks() {
           const Icon = step.icon;
           return (
             <div key={step.titleKey} className="relative">
-              <Card className="bg-card border-border p-6 text-center h-full">
+              <Card className="bg-gradient-to-br from-card to-ember/5 border-ember/20 p-6 text-center h-full hover:shadow-lg hover:shadow-ember/10 transition-all">
                 <div className="relative inline-flex">
-                  <div className="h-16 w-16 rounded-full bg-ember/10 flex items-center justify-center mb-4 mx-auto">
-                    <Icon className="h-8 w-8 text-ember" />
+                  <div className="h-16 w-16 rounded-full bg-gradient-to-br from-ember/20 to-amber/20 flex items-center justify-center mb-4 mx-auto">
+                    <Icon className="h-8 w-8 text-amber" />
                   </div>
-                  <div className="absolute -top-2 -right-2 h-8 w-8 bg-ember rounded-full flex items-center justify-center text-white font-bold">
+                  <div className="absolute -top-2 -right-2 h-8 w-8 bg-gradient-to-br from-ember to-amber rounded-full flex items-center justify-center text-white font-bold shadow-lg">
                     {index + 1}
                   </div>
                 </div>
