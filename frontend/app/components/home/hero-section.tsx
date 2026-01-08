@@ -64,8 +64,8 @@ export function HeroSection() {
             <Link href="/sell">
               <Button
                 size="lg"
-                variant="outline"
-                className="border-white text-white hover:bg-white/10 px-8 h-12 text-lg"
+                variant="ghost"
+                className="text-white hover:bg-white/10 px-8 h-12 text-lg"
               >
                 {t('hero.becomeSeller')}
               </Button>
