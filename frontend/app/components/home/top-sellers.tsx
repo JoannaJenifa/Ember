@@ -57,9 +57,9 @@ export function TopSellers() {
   return (
     <section className="container mx-auto px-4 py-12">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold text-foreground">{t('home.topSellers')}</h2>
+        <h2 className="text-2xl font-bold bg-gradient-to-r from-amber to-gold bg-clip-text text-transparent">{t('home.topSellers')}</h2>
         <Link href="/sellers">
-          <Button variant="ghost" className="text-ember hover:text-ember/80">
+          <Button variant="ghost" className="text-gold hover:text-gold/80 hover:bg-gold/10">
             {t('common.viewAll')}
             <ArrowRight className="h-4 w-4 ml-1" />
           </Button>
@@ -69,16 +69,16 @@ export function TopSellers() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {sellers.map((seller, index) => (
           <Link key={seller.address} href={`/seller/${seller.address}`}>
-            <Card className="bg-card border-border p-4 hover:border-ember/50 transition-colors cursor-pointer h-full">
+            <Card className="bg-gradient-to-br from-card to-amber/5 border-amber/20 p-4 hover:border-gold/50 hover:shadow-lg hover:shadow-amber/10 transition-all cursor-pointer h-full">
               <div className="flex items-center gap-3 mb-3">
                 <div className="relative">
-                  <Avatar className="h-12 w-12">
-                    <AvatarFallback className="bg-ember/10 text-ember">
+                  <Avatar className="h-12 w-12 ring-2 ring-amber/30">
+                    <AvatarFallback className="bg-gradient-to-br from-amber/20 to-gold/20 text-amber font-bold">
                       {getInitials(seller.shopName)}
                     </AvatarFallback>
                   </Avatar>
                   {index < 3 && (
-                    <div className="absolute -top-1 -right-1 h-5 w-5 bg-ember rounded-full flex items-center justify-center text-xs font-bold text-white">
+                    <div className="absolute -top-1 -right-1 h-5 w-5 bg-gradient-to-br from-gold to-amber rounded-full flex items-center justify-center text-xs font-bold text-white shadow-lg">
                       {index + 1}
                     </div>
                   )}
