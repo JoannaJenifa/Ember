@@ -47,32 +47,10 @@ export function WalletButton() {
 
   if (!isConnected) {
     return (
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="default" size="sm" className="bg-ember hover:bg-ember/90">
-            <Wallet className="h-4 w-4 mr-2" />
-            Connect
-            <ChevronDown className="h-4 w-4 ml-2" />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-56">
-          <DropdownMenuLabel>Connect Wallet</DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={login}>
-            <Wallet className="h-4 w-4 mr-2" />
-            Social Login (Privy)
-          </DropdownMenuItem>
-          {wallets.map((wallet) => (
-            <DropdownMenuItem
-              key={wallet.name}
-              onClick={() => connect(wallet.name)}
-            >
-              <Wallet className="h-4 w-4 mr-2" />
-              {wallet.name}
-            </DropdownMenuItem>
-          ))}
-        </DropdownMenuContent>
-      </DropdownMenu>
+      <Button variant="default" size="sm" className="bg-primary hover:bg-primary/90" onClick={login}>
+        <Wallet className="h-4 w-4 mr-2" />
+        Connect Wallet
+      </Button>
     );
   }
 

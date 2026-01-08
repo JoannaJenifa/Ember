@@ -1,7 +1,6 @@
 'use client';
 
 import { WalletButton } from '@/components/wallet-button';
-import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Radio, Grid, ClipboardList, Store, Menu, Users, Flame } from 'lucide-react';
@@ -61,7 +60,6 @@ export function Navbar({ className }: NavbarProps) {
 
         <div className="flex items-center gap-2 sm:gap-3 shrink-0">
           <WalletButton />
-          <ThemeToggle />
 
           <Sheet>
             <SheetTrigger asChild className="md:hidden">
