@@ -32,14 +32,12 @@ export function Navbar({ className }: NavbarProps) {
   const allNavLinks = [...publicNavLinks, ...(isConnected ? authNavLinks : [])];
 
   return (
-    <nav className={cn('border-b border-ember/20 bg-gradient-to-r from-background via-background to-ember/5', className)}>
+    <nav className={cn('border-b border-border bg-background', className)}>
       <div className="container mx-auto px-4 h-16 flex items-center">
         <div className="flex items-center gap-2 shrink-0">
           <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-            <div className="p-1.5 rounded-lg bg-gradient-to-br from-ember to-amber">
-              <Flame className="h-5 w-5 text-white" />
-            </div>
-            <span className="font-bold text-xl hidden sm:block bg-gradient-to-r from-ember to-amber bg-clip-text text-transparent">Ember</span>
+            <Flame className="h-8 w-8 text-primary" />
+            <span className="font-bold text-xl hidden sm:block text-primary">Ember</span>
           </Link>
         </div>
 

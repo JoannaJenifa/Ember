@@ -42,14 +42,14 @@ export function LiveNowSection() {
     <section className="container mx-auto px-4 py-12">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
-          <div className="relative p-2 rounded-lg bg-gradient-to-br from-ember to-amber">
-            <Radio className="h-5 w-5 text-white" />
-            <span className="absolute -top-1 -right-1 h-3 w-3 bg-white rounded-full animate-pulse" />
+          <div className="relative">
+            <Radio className="h-6 w-6 text-live" />
+            <span className="absolute -top-1 -right-1 h-3 w-3 bg-live rounded-full animate-pulse" />
           </div>
-          <h2 className="text-2xl font-bold bg-gradient-to-r from-ember to-amber bg-clip-text text-transparent">{t('home.liveNow')}</h2>
+          <h2 className="text-2xl font-bold text-foreground">{t('home.liveNow')}</h2>
         </div>
         <Link href="/live">
-          <Button variant="ghost" className="text-amber hover:text-amber/80 hover:bg-amber/10">
+          <Button variant="ghost" className="text-primary hover:text-primary/80 hover:bg-primary/10">
             {t('common.seeAll')}
             <ArrowRight className="h-4 w-4 ml-1" />
           </Button>
@@ -60,12 +60,12 @@ export function LiveNowSection() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {liveStreams.map((stream) => (
             <Link key={stream.id} href={`/live/${stream.id}`}>
-              <Card className="overflow-hidden hover:border-amber/50 hover:shadow-lg hover:shadow-ember/10 transition-all cursor-pointer bg-card border-border">
-                <div className="aspect-video relative bg-gradient-to-br from-ember/10 to-amber/5">
+              <Card className="overflow-hidden hover:border-primary/50 transition-colors cursor-pointer bg-card border-border">
+                <div className="aspect-video relative bg-muted">
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <Store className="h-12 w-12 text-amber/50" />
+                    <Store className="h-12 w-12 text-muted-foreground" />
                   </div>
-                  <Badge className="absolute top-2 left-2 bg-gradient-to-r from-ember to-amber text-white gap-1">
+                  <Badge className="absolute top-2 left-2 bg-live text-white gap-1">
                     <Radio className="h-3 w-3" />
                     LIVE
                   </Badge>
