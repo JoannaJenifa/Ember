@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Flame } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { useTranslation } from '@/lib/i18n';
 
 export function HeroSection() {
@@ -30,12 +30,6 @@ export function HeroSection() {
       {/* Content */}
       <div className="container mx-auto px-4 py-16 md:py-24 relative z-10">
         <div className="max-w-4xl mx-auto text-center">
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/20 border border-primary/30 mb-6">
-            <Flame className="h-4 w-4 text-primary animate-pulse" />
-            <span className="text-sm text-primary font-medium">{t('hero.badge')}</span>
-          </div>
-
           {/* Main heading */}
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6">
             <span className="text-primary">Ember</span>
@@ -64,8 +58,7 @@ export function HeroSection() {
             <Link href="/sell">
               <Button
                 size="lg"
-                variant="ghost"
-                className="text-white hover:bg-white/10 px-8 h-12 text-lg"
+                className="bg-white/10 text-white hover:bg-white/20 border-0 px-8 h-12 text-lg"
               >
                 {t('hero.becomeSeller')}
               </Button>
