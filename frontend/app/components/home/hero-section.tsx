@@ -31,6 +31,17 @@ export function HeroSection() {
       {/* Content */}
       <div className="container mx-auto px-4 py-16 md:py-24 relative z-10">
         <div className="max-w-4xl mx-auto text-center">
+          {/* Logo */}
+          <div className="flex justify-center mb-4">
+            <Image
+              src="/logo.png"
+              alt="Ember"
+              width={120}
+              height={120}
+              className="h-24 w-24 md:h-28 md:w-28"
+            />
+          </div>
+
           {/* Main heading */}
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6">
             <span className="text-primary">Ember</span>
