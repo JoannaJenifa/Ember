@@ -22,9 +22,10 @@ import { PurchaseModal, type PurchaseDetails } from '@/components/order/purchase
 import { useStream } from '@/lib/hooks/use-stream'
 import { useWalletContext } from '@/hooks/use-wallet-context'
 import { useTranslation } from '@/lib/i18n'
+import { createOrder } from '@/lib/ember/order-transactions'
 import type { ProductWithSeller } from '@/lib/types/product'
 
-const EXPLORER_URL = 'https://sepolia.basescan.org/tx/'
+const EXPLORER_URL = 'https://explorer.movementnetwork.xyz/txn/'
 
 interface StreamPageProps {
   params: Promise<{ streamId: string }>
@@ -33,13 +34,14 @@ interface StreamPageProps {
 export default function StreamPage({ params }: StreamPageProps) {
   const { streamId } = use(params)
   const { stream, loading, error } = useStream(streamId)
-  const { walletAddress: address, isConnected } = useWalletContext()
+  const { walletAddress: address, isConnected, isPrivy, signRawHash, publicKeyHex, signAndSubmitTransaction } = useWalletContext()
   const { t } = useTranslation()
   const [selectedProduct, setSelectedProduct] = useState<ProductWithSeller | null>(null)
   const [quickViewOpen, setQuickViewOpen] = useState(false)
   const [purchaseModalOpen, setPurchaseModalOpen] = useState(false)
   const [purchaseProduct, setPurchaseProduct] = useState<ProductWithSeller | null>(null)
   const [recentPurchase, setRecentPurchase] = useState<{ txHash: string; product: ProductWithSeller } | null>(null)
+  const [orderLoading, setOrderLoading] = useState(false)
 
   // Track viewer join/leave for viewer count
   useEffect(() => {
@@ -105,11 +107,46 @@ export default function StreamPage({ params }: StreamPageProps) {
       return
     }
 
-    // TODO: Implement Move-based order creation
-    toast.info('Order functionality coming soon', {
-      description: 'Move contract integration in progress'
-    })
-  }, [address, t])
+    setOrderLoading(true)
+    const loadingToast = toast.loading(t('order.processing'))
+
+    try {
+      const productId = parseInt(details.product.id)
+      const shippingJson = JSON.stringify({
+        name: details.shipping.name,
+        phone: details.shipping.phone,
+        address: details.shipping.address,
+        memo: details.shipping.memo || '',
+      })
+
+      const txHash = await createOrder(
+        address,
+        productId,
+        details.quantity,
+        shippingJson,
+        {
+          isPrivy,
+          signRawHash: signRawHash || undefined,
+          publicKeyHex: publicKeyHex || undefined,
+          signAndSubmitTransaction: signAndSubmitTransaction || undefined,
+        }
+      )
+
+      toast.dismiss(loadingToast)
+      toast.success(t('order.success'), {
+        description: `Transaction: ${txHash.slice(0, 10)}...`,
+      })
+      setRecentPurchase({ txHash, product: details.product })
+    } catch (err) {
+      console.error('Order creation failed:', err)
+      toast.dismiss(loadingToast)
+      toast.error(t('common.error'), {
+        description: err instanceof Error ? err.message : t('order.failed'),
+      })
+    } finally {
+      setOrderLoading(false)
+    }
+  }, [address, t, isPrivy, signRawHash, publicKeyHex, signAndSubmitTransaction])
 
   if (loading) {
     return <StreamPageSkeleton />

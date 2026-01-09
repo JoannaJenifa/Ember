@@ -367,7 +367,10 @@
     "memoPlaceholder": "Delivery instructions (optional)",
     "confirmOrder": "Confirm Order",
     "orderCompleted": "Order Completed",
-    "orderConfirmed": "Your order has been confirmed on the blockchain"
+    "orderConfirmed": "Your order has been confirmed on the blockchain",
+    "processing": "Processing your order...",
+    "success": "Order placed successfully!",
+    "failed": "Order failed. Please try again."
   },
   "review": {
     "writeReview": "Write Review",
