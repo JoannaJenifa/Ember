@@ -181,7 +181,7 @@ export function ProductForm({ sellerAddress, productId, onCancel, onSuccess }: P
 
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="price">Price (MOVE) *</Label>
+            <Label htmlFor="price">Price (USDC) *</Label>
             <Input
               id="price"
               type="number"
