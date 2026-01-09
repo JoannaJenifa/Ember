@@ -3,7 +3,7 @@
 import { useWalletContext } from '@/hooks/use-wallet-context';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Wallet, Zap, Shield, Gift, Flame } from 'lucide-react';
+import { Wallet, Zap, Shield, Gift, Sparkles } from 'lucide-react';
 
 interface ConnectPromptProps {
   title?: string;
@@ -39,7 +39,7 @@ export function ConnectPrompt({
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <div className="mx-auto mb-4 h-16 w-16 rounded-full bg-ember/10 flex items-center justify-center">
-            <Flame className="h-8 w-8 text-ember" />
+            <Sparkles className="h-8 w-8 text-ember" />
           </div>
           <CardTitle className="text-2xl">{title}</CardTitle>
           <CardDescription>{description}</CardDescription>

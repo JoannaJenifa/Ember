@@ -39,9 +39,9 @@ export function Navbar({ className }: NavbarProps) {
             <Image
               src="/ember-logo-text.png"
               alt="Ember"
-              width={120}
-              height={40}
-              className="h-10 w-auto"
+              width={160}
+              height={48}
+              className="h-12 w-auto"
               priority
             />
           </Link>
@@ -80,9 +80,9 @@ export function Navbar({ className }: NavbarProps) {
                   <Image
                     src="/ember-logo-text.png"
                     alt="Ember"
-                    width={120}
-                    height={40}
-                    className="h-10 w-auto"
+                    width={160}
+                    height={48}
+                    className="h-12 w-auto"
                   />
                 </div>
                 {allNavLinks.map((link) => (
