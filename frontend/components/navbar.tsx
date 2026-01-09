@@ -3,7 +3,8 @@
 import { WalletButton } from '@/components/wallet-button';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Radio, Grid, ClipboardList, Store, Menu, Users, Flame } from 'lucide-react';
+import { Radio, Grid, ClipboardList, Store, Menu, Users } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
@@ -33,10 +34,16 @@ export function Navbar({ className }: NavbarProps) {
   return (
     <nav className={cn('border-b border-border bg-background', className)}>
       <div className="container mx-auto px-4 h-16 flex items-center">
-        <div className="flex items-center gap-2 shrink-0">
-          <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-            <Flame className="h-8 w-8 text-primary" />
-            <span className="font-bold text-xl hidden sm:block text-primary">Ember</span>
+        <div className="flex items-center shrink-0">
+          <Link href="/" className="hover:opacity-80 transition-opacity">
+            <Image
+              src="/ember-logo-text.png"
+              alt="Ember"
+              width={120}
+              height={40}
+              className="h-10 w-auto"
+              priority
+            />
           </Link>
         </div>
 
@@ -69,9 +76,14 @@ export function Navbar({ className }: NavbarProps) {
             </SheetTrigger>
             <SheetContent side="right" className="w-72">
               <div className="flex flex-col gap-4 mt-8">
-                <div className="flex items-center gap-2 mb-4">
-                  <Flame className="h-8 w-8 text-ember" />
-                  <span className="font-bold text-xl">Ember</span>
+                <div className="mb-4">
+                  <Image
+                    src="/ember-logo-text.png"
+                    alt="Ember"
+                    width={120}
+                    height={40}
+                    className="h-10 w-auto"
+                  />
                 </div>
                 {allNavLinks.map((link) => (
                   <Link

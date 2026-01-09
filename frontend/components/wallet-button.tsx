@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { usePrivy, useLogin } from '@privy-io/react-auth';
 import { useCreateWallet } from '@privy-io/react-auth/extended-chains';
 import { useMoveBalance } from '@/hooks/use-move-balance';
@@ -11,17 +11,18 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { getAccountExplorerUrl } from '@/lib/aptos';
-import { Copy, ExternalLink, LogOut, Wallet, ChevronDown } from 'lucide-react';
+import { Copy, ExternalLink, LogOut, Wallet, Check, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 export function WalletButton() {
   const isPrivyAvailable = usePrivyAvailable();
   const [isCreatingWallet, setIsCreatingWallet] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   // Only use Privy hooks when available
   const privyHook = isPrivyAvailable ? usePrivy() : null;
@@ -41,6 +42,16 @@ export function WalletButton() {
   const isConnected = authenticated && !!movementWallet;
 
   const { balance, isLoading: balanceLoading } = useMoveBalance(walletAddress);
+
+  // Generate DiceBear pixel-art avatar URL using address as seed
+  const avatarUrl = useMemo(() => {
+    if (!walletAddress) return null;
+    return `https://api.dicebear.com/7.x/pixel-art/svg?seed=${walletAddress}`;
+  }, [walletAddress]);
+
+  const shortAddress = walletAddress
+    ? `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`
+    : '';
 
   const handleWalletCreation = async (userToUse: any) => {
     if (!createWalletHook?.createWallet) return;
@@ -88,7 +99,6 @@ export function WalletButton() {
           disableSignup: false,
         });
       } else if (!movementWallet) {
-        // Already authenticated but no wallet - create one
         await handleWalletCreation(user);
       }
     } catch (error) {
@@ -97,16 +107,15 @@ export function WalletButton() {
     }
   };
 
-  const formatAddress = (addr: string) => `${addr.slice(0, 6)}...${addr.slice(-4)}`;
-
-  const copyAddress = () => {
+  const handleCopy = async () => {
     if (walletAddress) {
-      navigator.clipboard.writeText(walletAddress);
-      toast.success('Address copied!');
+      await navigator.clipboard.writeText(walletAddress);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
     }
   };
 
-  const openExplorer = () => {
+  const handleViewExplorer = () => {
     if (walletAddress) {
       window.open(getAccountExplorerUrl(walletAddress), '_blank');
     }
@@ -117,21 +126,23 @@ export function WalletButton() {
     toast.success('Disconnected');
   };
 
+  // Loading state
   if (!ready || isCreatingWallet) {
     return (
-      <Button variant="outline" size="sm" disabled>
-        <Wallet className="h-4 w-4 mr-2" />
+      <Button variant="outline" size="sm" disabled className="h-10 px-3">
+        <Loader2 className="h-4 w-4 animate-spin mr-2" />
         {isCreatingWallet ? 'Connecting...' : 'Loading...'}
       </Button>
     );
   }
 
+  // Not connected state
   if (!isConnected) {
     return (
       <Button
         variant="default"
         size="sm"
-        className="bg-primary hover:bg-primary/90"
+        className="h-10 px-4 bg-primary hover:bg-primary/90"
         onClick={handleConnect}
       >
         <Wallet className="h-4 w-4 mr-2" />
@@ -140,40 +151,65 @@ export function WalletButton() {
     );
   }
 
+  // Connected state with avatar
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="sm" className="gap-2">
-          <div className="h-2 w-2 rounded-full bg-green-500" />
-          <span className="hidden sm:inline">
-            {balanceLoading ? '...' : `${balance} MOVE`}
+        <Button variant="outline" className="h-10 px-3 gap-2">
+          {/* Balance */}
+          <span className="text-sm font-medium">
+            {balanceLoading ? (
+              <Loader2 className="h-3 w-3 animate-spin" />
+            ) : (
+              `${balance} MOVE`
+            )}
           </span>
-          <span className="text-muted-foreground">
-            {walletAddress ? formatAddress(walletAddress) : ''}
-          </span>
-          <ChevronDown className="h-4 w-4" />
+
+          {/* Divider */}
+          <div className="h-5 w-px bg-border" />
+
+          {/* Avatar */}
+          <Avatar className="h-6 w-6">
+            <AvatarImage src={avatarUrl || undefined} alt="Wallet avatar" />
+            <AvatarFallback className="text-xs bg-primary text-primary-foreground">
+              {walletAddress?.slice(2, 4).toUpperCase()}
+            </AvatarFallback>
+          </Avatar>
+
+          {/* Address - hidden on mobile */}
+          <span className="font-mono text-sm hidden sm:inline">{shortAddress}</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-56">
-        <DropdownMenuLabel className="flex flex-col">
-          <span>Privy Wallet</span>
-          <span className="text-xs font-normal text-muted-foreground">
-            {walletAddress ? formatAddress(walletAddress) : ''}
-          </span>
-        </DropdownMenuLabel>
+
+      <DropdownMenuContent align="end" className="w-52">
+        {/* Full address display */}
+        <div className="px-2 py-1.5 text-xs text-muted-foreground font-mono break-all">
+          {walletAddress}
+        </div>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={copyAddress}>
-          <Copy className="h-4 w-4 mr-2" />
-          Copy Address
+
+        <DropdownMenuItem onClick={handleCopy} className="gap-2 cursor-pointer">
+          {copied ? (
+            <Check className="h-4 w-4 text-green-500" />
+          ) : (
+            <Copy className="h-4 w-4" />
+          )}
+          <span>{copied ? 'Copied!' : 'Copy Address'}</span>
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={openExplorer}>
-          <ExternalLink className="h-4 w-4 mr-2" />
-          View on Explorer
+
+        <DropdownMenuItem onClick={handleViewExplorer} className="gap-2 cursor-pointer">
+          <ExternalLink className="h-4 w-4" />
+          <span>View on Explorer</span>
         </DropdownMenuItem>
+
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={handleLogout} className="text-red-500">
-          <LogOut className="h-4 w-4 mr-2" />
-          Disconnect
+
+        <DropdownMenuItem
+          onClick={handleLogout}
+          className="gap-2 text-destructive focus:text-destructive cursor-pointer"
+        >
+          <LogOut className="h-4 w-4" />
+          <span>Disconnect</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
