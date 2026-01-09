@@ -2,7 +2,7 @@
 
 import { usePrivy } from '@privy-io/react-auth';
 import { useWallet } from '@aptos-labs/wallet-adapter-react';
-import { useMemo, useCallback } from 'react';
+import { useMemo } from 'react';
 import { usePrivyAvailable, useMockPrivy } from '@/app/providers';
 
 export type SignRawHashFunction = (hash: string, options?: { address?: string }) => Promise<string>;
@@ -23,22 +23,13 @@ export function useWalletContext(): WalletContext {
   const mockPrivy = useMockPrivy();
 
   const privyHook = isPrivyAvailable ? usePrivy() : null;
-  const { account, connected, signAndSubmitTransaction: nativeSignAndSubmit, disconnect, wallets, connect } = useWallet();
-
-  // Native wallet login - connect to first available wallet
-  const nativeLogin = useCallback(() => {
-    if (wallets && wallets.length > 0) {
-      connect(wallets[0].name);
-    } else {
-      console.warn('No wallets available. Please install a wallet extension.');
-    }
-  }, [wallets, connect]);
+  const { account, connected, signAndSubmitTransaction: nativeSignAndSubmit, disconnect } = useWallet();
 
   return useMemo(() => {
     const ready = isPrivyAvailable ? privyHook?.ready ?? true : mockPrivy.ready;
     const authenticated = isPrivyAvailable ? privyHook?.authenticated ?? false : false;
     const user = isPrivyAvailable ? privyHook?.user : null;
-    const login = isPrivyAvailable ? privyHook?.login ?? (() => {}) : nativeLogin;
+    const login = isPrivyAvailable ? privyHook?.login ?? (() => {}) : mockPrivy.login;
     const privyLogout = isPrivyAvailable ? privyHook?.logout ?? (async () => {}) : mockPrivy.logout;
 
     const privyWallet = user?.linkedAccounts?.find(
@@ -81,5 +72,5 @@ export function useWalletContext(): WalletContext {
       login,
       logout: handleLogout,
     };
-  }, [isPrivyAvailable, privyHook, mockPrivy, nativeLogin, connected, account, nativeSignAndSubmit, disconnect]);
+  }, [isPrivyAvailable, privyHook, mockPrivy, connected, account, nativeSignAndSubmit, disconnect]);
 }
