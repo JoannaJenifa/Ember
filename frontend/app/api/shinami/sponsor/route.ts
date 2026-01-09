@@ -1,86 +1,94 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { GasStationClient } from '@shinami/clients/aptos';
-import { AccountAuthenticator, Deserializer } from '@aptos-labs/ts-sdk';
 
-// Server-side only
-const SHINAMI_KEY = process.env.SHINAMI_KEY;
+// Shinami Gas Station API endpoint for Movement
+const SHINAMI_GAS_STATION_URL = 'https://api.shinami.com/movement/gas/v1/';
 
 /**
  * POST /api/shinami/sponsor
- *
- * Sponsors a signed transaction using Shinami Gas Station.
- * User pays $0 gas - Shinami sponsors the transaction.
- *
- * Request body:
- * - rawTransaction: hex-encoded raw transaction bytes
- * - senderSignature: hex-encoded sender authenticator bytes
+ * Sponsor and submit a signed transaction using Shinami Gas Station
+ * Uses gas_sponsorAndSubmitSignedTransaction - the recommended approach
  */
 export async function POST(request: NextRequest) {
   try {
-    if (!SHINAMI_KEY) {
+    const apiKey = process.env.SHINAMI_KEY;
+
+    if (!apiKey) {
       return NextResponse.json(
-        { error: 'Gas sponsorship not configured' },
+        { success: false, error: 'Shinami not configured' },
         { status: 503 }
       );
     }
 
-    const body = await request.json();
-    const { rawTransaction, senderSignature } = body;
+    const { rawTxHex, senderAuthenticatorHex } = await request.json();
 
-    if (!rawTransaction || !senderSignature) {
+    if (!rawTxHex || !senderAuthenticatorHex) {
       return NextResponse.json(
-        { error: 'Missing rawTransaction or senderSignature' },
+        { success: false, error: 'Missing rawTxHex or senderAuthenticatorHex' },
         { status: 400 }
       );
     }
 
-    const gasClient = new GasStationClient(SHINAMI_KEY);
+    // Format hex strings
+    const formattedTxHex = rawTxHex.startsWith('0x') ? rawTxHex : `0x${rawTxHex}`;
+    const formattedAuthHex = senderAuthenticatorHex.startsWith('0x')
+      ? senderAuthenticatorHex
+      : `0x${senderAuthenticatorHex}`;
 
-    // Deserialize the sender authenticator
-    const sigBytes = hexToBytes(senderSignature);
-    const senderAuth = AccountAuthenticator.deserialize(new Deserializer(sigBytes));
-
-    // Parse raw transaction for the API
-    const rawTxnHex = rawTransaction.startsWith('0x') ? rawTransaction : `0x${rawTransaction}`;
-
-    // Sponsor and submit the transaction
-    // The Gas Station will add fee payer signature and submit
-    const pendingTxn = await gasClient.sponsorAndSubmitSignedTransaction(
-      { rawTransaction: { bcsToHex: () => rawTxnHex } } as any,
-      senderAuth
-    );
-
-    const txHash = (pendingTxn as { hash: string }).hash;
-
-    return NextResponse.json({
-      success: true,
-      hash: txHash
+    // Call Shinami Gas Station API with gas_sponsorAndSubmitSignedTransaction
+    // This method sponsors the transaction, sets the fee payer address, and submits it
+    const response = await fetch(SHINAMI_GAS_STATION_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-API-Key': apiKey,
+      },
+      body: JSON.stringify({
+        jsonrpc: '2.0',
+        method: 'gas_sponsorAndSubmitSignedTransaction',
+        params: [formattedTxHex, formattedAuthHex],
+        id: 1,
+      }),
     });
 
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('[Sponsor API] Shinami error:', response.status, errorText);
+      return NextResponse.json(
+        { success: false, error: `Shinami API error: ${response.status}` },
+        { status: 502 }
+      );
+    }
+
+    const result = await response.json();
+
+    if (result.error) {
+      console.error('[Sponsor API] Shinami RPC error:', result.error);
+      return NextResponse.json(
+        { success: false, error: result.error.message || 'Sponsorship failed' },
+        { status: 400 }
+      );
+    }
+
+    // Result contains PendingTransactionResponse with hash
+    return NextResponse.json({
+      success: true,
+      hash: result.result.hash,
+      pendingTransaction: result.result,
+    });
   } catch (error) {
-    console.error('Shinami sponsor error:', error);
+    console.error('[Sponsor API] Error:', error);
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'Sponsorship failed' },
+      { success: false, error: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     );
   }
 }
 
-/**
- * GET /api/shinami/sponsor
- * Returns whether gas sponsorship is available
- */
+// Health check - also indicates if sponsorship is available
 export async function GET() {
+  const isConfigured = !!process.env.SHINAMI_KEY;
   return NextResponse.json({
-    enabled: !!SHINAMI_KEY,
+    enabled: isConfigured,
+    service: 'Shinami Gas Station',
   });
-}
-
-function hexToBytes(hex: string): Uint8Array {
-  const cleanHex = hex.startsWith('0x') ? hex.slice(2) : hex;
-  const bytes = new Uint8Array(cleanHex.length / 2);
-  for (let i = 0; i < bytes.length; i++) {
-    bytes[i] = parseInt(cleanHex.substr(i * 2, 2), 16);
-  }
-  return bytes;
 }

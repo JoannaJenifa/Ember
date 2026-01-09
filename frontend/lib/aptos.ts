@@ -42,3 +42,9 @@ export const formatMoveAmount = (amount: bigint | number, decimals = 8): string 
   const value = typeof amount === 'bigint' ? Number(amount) : amount;
   return (value / Math.pow(10, decimals)).toFixed(4);
 };
+
+export const toHex = (buffer: Uint8Array): string => {
+  return Array.from(buffer)
+    .map((b) => b.toString(16).padStart(2, '0'))
+    .join('');
+};
