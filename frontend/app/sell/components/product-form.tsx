@@ -13,7 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Loader2, ArrowLeft } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useWalletContext } from '@/hooks/use-wallet-context';
 import { useProduct } from '@/hooks/use-products';
@@ -130,18 +130,13 @@ export function ProductForm({ sellerAddress, productId, onCancel, onSuccess }: P
   }
 
   return (
-    <Card className="p-6 bg-card border-border">
-      <div className="flex items-center gap-4 mb-6">
-        <Button variant="ghost" size="sm" onClick={onCancel}>
-          <ArrowLeft className="h-4 w-4 mr-2" />
-          Back
-        </Button>
-        <h2 className="text-xl font-bold text-foreground">
+    <div className="flex justify-center">
+      <Card className="p-6 bg-card border-border w-full max-w-lg">
+        <h2 className="text-xl font-bold text-foreground text-center mb-6">
           {isEditing ? 'Edit Product' : 'Add New Product'}
         </h2>
-      </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4 max-w-lg">
+        <form onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-2">
           <Label htmlFor="title">Title *</Label>
           <Input
@@ -239,7 +234,8 @@ export function ProductForm({ sellerAddress, productId, onCancel, onSuccess }: P
             )}
           </Button>
         </div>
-      </form>
-    </Card>
+        </form>
+      </Card>
+    </div>
   );
 }
