@@ -6,6 +6,8 @@ export interface Seller {
   addr: string;
   shopName: string;
   description: string;
+  profileImage: string;
+  coverImage: string;
   category: number;
   status: number;
   totalSales: number;
@@ -23,6 +25,8 @@ function parseSeller(data: any): Seller {
     addr: data.addr,
     shopName: data.shop_name,
     description: data.description,
+    profileImage: data.profile_image,
+    coverImage: data.cover_image,
     category: data.category,
     status: data.status,
     totalSales: Number(data.total_sales),

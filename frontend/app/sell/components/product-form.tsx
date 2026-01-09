@@ -18,6 +18,7 @@ import { toast } from 'sonner';
 import { useWalletContext } from '@/hooks/use-wallet-context';
 import { useProduct } from '@/hooks/use-products';
 import { createProduct, updateProduct, updateInventory } from '@/lib/ember/product-transactions';
+import { SingleImageUpload } from '@/components/ui/single-image-upload';
 
 const CATEGORIES = [
   { value: 0, label: 'Fashion & Apparel' },
@@ -40,6 +41,7 @@ export function ProductForm({ sellerAddress, productId, onCancel, onSuccess }: P
   const { isPrivy, publicKeyHex, signRawHash, signAndSubmitTransaction } = useWalletContext();
   const { product, loading: loadingProduct } = useProduct(productId);
   const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -160,12 +162,14 @@ export function ProductForm({ sellerAddress, productId, onCancel, onSuccess }: P
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="imageUrl">Image URL</Label>
-          <Input
-            id="imageUrl"
-            placeholder="https://example.com/image.jpg"
+          <Label>Product Image</Label>
+          <SingleImageUpload
             value={formData.imageUrl}
-            onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
+            onChange={(url) => setFormData({ ...formData, imageUrl: url })}
+            onUploadingChange={setUploading}
+            aspectRatio="square"
+            placeholder="Upload product image"
+            disabled={loading}
           />
         </div>
 
@@ -218,10 +222,10 @@ export function ProductForm({ sellerAddress, productId, onCancel, onSuccess }: P
         </div>
 
         <div className="flex gap-4 pt-4">
-          <Button type="button" variant="outline" onClick={onCancel} disabled={loading}>
+          <Button type="button" variant="outline" onClick={onCancel} disabled={loading || uploading}>
             Cancel
           </Button>
-          <Button type="submit" className="bg-ember hover:bg-ember/90" disabled={loading}>
+          <Button type="submit" className="bg-ember hover:bg-ember/90" disabled={loading || uploading}>
             {loading ? (
               <>
                 <Loader2 className="h-4 w-4 mr-2 animate-spin" />

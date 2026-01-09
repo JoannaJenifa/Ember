@@ -18,6 +18,8 @@ module ember::seller_registry {
         addr: address,
         shop_name: String,
         description: String,
+        profile_image: String,
+        cover_image: String,
         category: Category,
         status: SellerStatus,
         total_sales: u64,
@@ -76,6 +78,8 @@ module ember::seller_registry {
         account: &signer,
         shop_name: String,
         description: String,
+        profile_image: String,
+        cover_image: String,
         category: u8,
         youtube_channel: String,
     ) acquires SellerRegistry {
@@ -89,6 +93,8 @@ module ember::seller_registry {
             addr: seller_addr,
             shop_name,
             description,
+            profile_image,
+            cover_image,
             category: category_from_u8(category),
             status: seller_status_pending(),
             total_sales: 0,
@@ -114,6 +120,8 @@ module ember::seller_registry {
         account: &signer,
         shop_name: String,
         description: String,
+        profile_image: String,
+        cover_image: String,
         youtube_channel: String,
     ) acquires SellerRegistry {
         let seller_addr = signer::address_of(account);
@@ -125,6 +133,8 @@ module ember::seller_registry {
         let seller = smart_table::borrow_mut(&mut registry.sellers, seller_addr);
         seller.shop_name = shop_name;
         seller.description = description;
+        seller.profile_image = profile_image;
+        seller.cover_image = cover_image;
         seller.youtube_channel = youtube_channel;
 
         event::emit(SellerProfileUpdated {

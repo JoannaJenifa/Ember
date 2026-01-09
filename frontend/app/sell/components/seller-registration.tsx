@@ -13,11 +13,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Loader2, Store, ExternalLink } from 'lucide-react';
+import { Loader2, Store } from 'lucide-react';
 import { toast } from 'sonner';
 import { useWalletContext } from '@/hooks/use-wallet-context';
 import { registerSeller } from '@/lib/ember/seller-transactions';
 import { getExplorerUrl } from '@/lib/aptos';
+import { SingleImageUpload } from '@/components/ui/single-image-upload';
 
 const CATEGORIES = [
   { value: 0, label: 'Fashion & Apparel' },
@@ -36,9 +37,12 @@ interface SellerRegistrationProps {
 export function SellerRegistration({ walletAddress }: SellerRegistrationProps) {
   const { isPrivy, publicKeyHex, signRawHash, signAndSubmitTransaction } = useWalletContext();
   const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [formData, setFormData] = useState({
     shopName: '',
     description: '',
+    profileImage: '',
+    coverImage: '',
     category: '',
     youtubeChannel: '',
   });
@@ -56,6 +60,8 @@ export function SellerRegistration({ walletAddress }: SellerRegistrationProps) {
         walletAddress,
         formData.shopName,
         formData.description,
+        formData.profileImage,
+        formData.coverImage,
         parseInt(formData.category),
         formData.youtubeChannel,
         {
@@ -81,6 +87,8 @@ export function SellerRegistration({ walletAddress }: SellerRegistrationProps) {
     }
   };
 
+  const isSubmitDisabled = loading || uploading;
+
   return (
     <div className="max-w-lg mx-auto">
       <Card className="p-6 bg-card border-border">
@@ -95,6 +103,32 @@ export function SellerRegistration({ walletAddress }: SellerRegistrationProps) {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="space-y-2">
+            <Label>Cover Image</Label>
+            <SingleImageUpload
+              value={formData.coverImage}
+              onChange={(url) => setFormData({ ...formData, coverImage: url })}
+              onUploadingChange={setUploading}
+              aspectRatio="cover"
+              placeholder="Upload cover image"
+              disabled={loading}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label>Profile Picture</Label>
+            <div className="w-24">
+              <SingleImageUpload
+                value={formData.profileImage}
+                onChange={(url) => setFormData({ ...formData, profileImage: url })}
+                onUploadingChange={setUploading}
+                aspectRatio="square"
+                placeholder="Profile"
+                disabled={loading}
+              />
+            </div>
+          </div>
+
           <div className="space-y-2">
             <Label htmlFor="shopName">Shop Name *</Label>
             <Input
@@ -149,7 +183,7 @@ export function SellerRegistration({ walletAddress }: SellerRegistrationProps) {
           <Button
             type="submit"
             className="w-full bg-ember hover:bg-ember/90"
-            disabled={loading}
+            disabled={isSubmitDisabled}
           >
             {loading ? (
               <>

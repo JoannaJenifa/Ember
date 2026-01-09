@@ -8,6 +8,8 @@ export async function registerSeller(
   walletAddress: string,
   shopName: string,
   description: string,
+  profileImage: string,
+  coverImage: string,
   category: number,
   youtubeChannel: string,
   context: TransactionContext
@@ -16,7 +18,7 @@ export async function registerSeller(
     walletAddress,
     `${EMBER_ADDRESS}::seller_registry::register_seller`,
     [],
-    [shopName, description, category, youtubeChannel],
+    [shopName, description, profileImage, coverImage, category, youtubeChannel],
     context
   );
 }
@@ -28,6 +30,8 @@ export async function updateProfile(
   walletAddress: string,
   shopName: string,
   description: string,
+  profileImage: string,
+  coverImage: string,
   youtubeChannel: string,
   context: TransactionContext
 ): Promise<string> {
@@ -35,7 +39,7 @@ export async function updateProfile(
     walletAddress,
     `${EMBER_ADDRESS}::seller_registry::update_profile`,
     [],
-    [shopName, description, youtubeChannel],
+    [shopName, description, profileImage, coverImage, youtubeChannel],
     context
   );
 }
