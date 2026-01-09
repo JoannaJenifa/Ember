@@ -1,6 +1,6 @@
 'use client'
 
-import { LabangStream, LabangSeller } from '@/lib/db/supabase'
+import { LabangStream, LabangSeller } from '@/lib/types/stream'
 import { StreamCard } from './stream-card'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Radio, ChevronRight } from 'lucide-react'

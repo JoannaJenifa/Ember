@@ -5,7 +5,7 @@ import { Badge } from '@/components/ui/badge'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Star, CheckCircle, ShieldCheck } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import type { LabangReview } from '@/lib/db/supabase'
+import type { LabangReview } from '@/lib/types/stream'
 import { useTranslation } from '@/lib/i18n'
 
 interface ProductReviewsProps {

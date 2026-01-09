@@ -1,52 +1,102 @@
 'use client'
 
-export interface StreamWithSeller {
-  id: string
-  seller_address: string
-  title: string
-  description?: string
-  thumbnail_url?: string
-  stream_url?: string
-  status: 'scheduled' | 'live' | 'ended'
-  scheduled_start?: string
-  started_at?: string
-  ended_at?: string
-  viewer_count: number
-  category?: string
-  seller?: {
-    address: string
-    shop_name: string
-    is_verified: boolean
-  } | null
-}
+import { useState, useEffect, useCallback } from 'react'
+import { StreamWithSeller } from '@/lib/types/stream'
 
-// TODO: Implement real data fetching from on-chain/indexer
-export function useLiveStreams(_category?: string) {
-  // Return empty data until real integration
+// TODO: Replace with real API/indexer integration when available
+// Streams are not on-chain - they require a backend service
+
+export function useLiveStreams(category?: string) {
+  const [streams, setStreams] = useState<StreamWithSeller[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<Error | null>(null)
+
+  const fetchStreams = useCallback(async () => {
+    setIsLoading(true)
+    setError(null)
+    try {
+      // TODO: Fetch from API when stream backend is implemented
+      // const params = new URLSearchParams()
+      // if (category && category !== 'all') params.set('category', category)
+      // const res = await fetch(`/api/streams/live?${params}`)
+      // const data = await res.json()
+      // setStreams(data.streams)
+      setStreams([])
+    } catch (err) {
+      setError(err instanceof Error ? err : new Error('Failed to fetch streams'))
+    } finally {
+      setIsLoading(false)
+    }
+  }, [category])
+
+  useEffect(() => {
+    fetchStreams()
+  }, [fetchStreams])
+
   return {
-    streams: [] as StreamWithSeller[],
-    isLoading: false,
-    error: null,
-    mutate: () => Promise.resolve(undefined),
+    streams,
+    isLoading,
+    error,
+    mutate: fetchStreams,
   }
 }
 
-export function useUpcomingStreams(_hours = 24) {
-  // Return empty data until real integration
+export function useUpcomingStreams(hours = 24) {
+  const [streams, setStreams] = useState<StreamWithSeller[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<Error | null>(null)
+
+  const fetchStreams = useCallback(async () => {
+    setIsLoading(true)
+    setError(null)
+    try {
+      // TODO: Fetch from API when stream backend is implemented
+      setStreams([])
+    } catch (err) {
+      setError(err instanceof Error ? err : new Error('Failed to fetch streams'))
+    } finally {
+      setIsLoading(false)
+    }
+  }, [hours])
+
+  useEffect(() => {
+    fetchStreams()
+  }, [fetchStreams])
+
   return {
-    streams: [] as StreamWithSeller[],
-    isLoading: false,
-    error: null,
-    mutate: () => Promise.resolve(undefined),
+    streams,
+    isLoading,
+    error,
+    mutate: fetchStreams,
   }
 }
 
-export function useReplays(_options?: { category?: string; sort?: 'popular' | 'latest'; limit?: number }) {
-  // Return empty data until real integration
+export function useReplays(options?: { category?: string; sort?: 'popular' | 'latest'; limit?: number }) {
+  const [streams, setStreams] = useState<StreamWithSeller[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<Error | null>(null)
+
+  const fetchStreams = useCallback(async () => {
+    setIsLoading(true)
+    setError(null)
+    try {
+      // TODO: Fetch from API when stream backend is implemented
+      setStreams([])
+    } catch (err) {
+      setError(err instanceof Error ? err : new Error('Failed to fetch streams'))
+    } finally {
+      setIsLoading(false)
+    }
+  }, [options?.category, options?.sort, options?.limit])
+
+  useEffect(() => {
+    fetchStreams()
+  }, [fetchStreams])
+
   return {
-    streams: [] as StreamWithSeller[],
-    isLoading: false,
-    error: null,
-    mutate: () => Promise.resolve(undefined),
+    streams,
+    isLoading,
+    error,
+    mutate: fetchStreams,
   }
 }

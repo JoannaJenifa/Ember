@@ -8,7 +8,7 @@ import { Spinner } from '@/components/ui/loader'
 import { ReviewCard } from './review-card'
 import { RatingDisplay } from './rating-display'
 import { useTranslation } from '@/lib/i18n'
-import type { LabangReview } from '@/lib/db/supabase'
+import type { LabangReview } from '@/lib/types/stream'
 import type { RatingDistribution } from '@/lib/types/review'
 
 interface ReviewListProps {

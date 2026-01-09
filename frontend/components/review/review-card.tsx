@@ -8,7 +8,7 @@ import { Star, CheckCircle, ShieldCheck } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { PhotoGallery } from './photo-gallery'
 import { useTranslation } from '@/lib/i18n'
-import type { LabangReview } from '@/lib/db/supabase'
+import type { LabangReview } from '@/lib/types/stream'
 import type { Review } from '@/lib/types/review'
 
 interface ReviewCardProps {

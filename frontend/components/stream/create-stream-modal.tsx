@@ -15,7 +15,7 @@ import { Loader2, Youtube, CheckCircle } from 'lucide-react'
 import { useStreamForm } from '@/lib/hooks/use-stream-form'
 import { ImageUpload } from '@/components/product/image-upload'
 import { DateTimePicker } from '@/components/ui/datetime-picker'
-import type { LabangStream } from '@/lib/db/supabase'
+import type { LabangStream } from '@/lib/types/stream'
 import { useTranslation } from '@/lib/i18n'
 
 interface CreateStreamModalProps {

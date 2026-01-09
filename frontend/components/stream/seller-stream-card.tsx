@@ -22,7 +22,7 @@ import {
   BarChart3,
   ShoppingBag,
 } from 'lucide-react'
-import { LabangStream } from '@/lib/db/supabase'
+import { LabangStream } from '@/lib/types/stream'
 import { formatDistanceToNow, format } from 'date-fns'
 import { ko, enUS } from 'date-fns/locale'
 import { useTranslation } from '@/lib/i18n'

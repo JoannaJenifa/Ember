@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Star, Gift } from 'lucide-react'
 import { useTranslation } from '@/lib/i18n'
-import type { LabangProduct } from '@/lib/db/supabase'
+import type { LabangProduct } from '@/lib/types/stream'
 
 interface ReviewPromptProps {
   product: LabangProduct

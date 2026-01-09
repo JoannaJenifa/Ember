@@ -1,37 +1,49 @@
 'use client';
 
+import { useState, useEffect, useCallback } from 'react';
 import type { ProductWithSeller } from '@/lib/types/product';
+import type { LabangStream, LabangSeller } from '@/lib/types/stream';
 
-export interface StreamWithDetails {
-  id: string;
-  seller_id: string;
-  title: string;
-  description: string | null;
-  status: 'scheduled' | 'live' | 'ended';
-  scheduled_start: string;
-  actual_start: string | null;
-  actual_end: string | null;
-  viewer_count: number;
-  thumbnail_url: string | null;
-  stream_url: string | null;
-  created_at: string;
-  updated_at: string;
-  seller?: {
-    id: string;
-    wallet_address: string;
-    display_name: string;
-    avatar_url: string | null;
-    bio: string | null;
-  } | null;
+export interface StreamWithDetails extends LabangStream {
+  seller?: LabangSeller | null;
   products?: ProductWithSeller[];
 }
 
-// TODO: Implement real data fetching from on-chain/indexer
-export function useStream(_streamId: string) {
-  // Return empty data until real integration
-  return {
-    stream: null as StreamWithDetails | null,
-    loading: false,
-    error: 'Stream not found',
-  };
+// TODO: Replace with real API/indexer integration when stream backend is available
+
+export function useStream(streamId: string | null) {
+  const [stream, setStream] = useState<StreamWithDetails | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchStream = useCallback(async () => {
+    if (!streamId) {
+      setStream(null);
+      setLoading(false);
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      // TODO: Fetch from API when stream backend is implemented
+      // const res = await fetch(`/api/streams/${streamId}`)
+      // if (!res.ok) throw new Error('Stream not found')
+      // const data = await res.json()
+      // setStream(data)
+      setStream(null);
+      setError('Stream not found');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Error loading stream');
+    } finally {
+      setLoading(false);
+    }
+  }, [streamId]);
+
+  useEffect(() => {
+    fetchStream();
+  }, [fetchStream]);
+
+  return { stream, loading, error, refetch: fetchStream };
 }

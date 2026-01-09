@@ -13,7 +13,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Spinner } from '@/components/ui/loader'
 import { StarRatingInput } from './star-rating-input'
 import { PhotoUpload } from './photo-upload'
-import type { LabangProduct, LabangOrder } from '@/lib/db/supabase'
+import type { LabangProduct, LabangOrder } from '@/lib/types/stream'
 import { useTranslation } from '@/lib/i18n'
 import { getDemoReview } from '@/lib/demo/templates'
 
