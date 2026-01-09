@@ -35,17 +35,16 @@ export function Navbar({ className }: NavbarProps) {
     <nav className={cn('main-navbar border-b border-border bg-background', className)}>
       <div className="container mx-auto px-4 h-16 flex items-center">
         {/* Logo */}
-        <div className="flex items-center gap-2 shrink-0">
-          <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+        <div className="flex items-center shrink-0">
+          <Link href="/" className="hover:opacity-80 transition-opacity">
             <Image
-              src="/logo.png"
+              src="/ember-logo-text.png"
               alt="Ember"
-              width={32}
-              height={32}
-              className="h-8 w-8"
+              width={120}
+              height={40}
+              className="h-10 w-auto"
               priority
             />
-            <span className="hidden sm:block text-xl font-bold text-ember">Ember</span>
           </Link>
         </div>
 
@@ -85,15 +84,14 @@ export function Navbar({ className }: NavbarProps) {
             </SheetTrigger>
             <SheetContent side="right" className="w-72">
               <div className="flex flex-col gap-4 mt-8">
-                <div className="flex items-center gap-2 mb-4">
+                <div className="mb-4">
                   <Image
-                    src="/logo.png"
+                    src="/ember-logo-text.png"
                     alt="Ember"
-                    width={32}
-                    height={32}
-                    className="h-8 w-8"
+                    width={120}
+                    height={40}
+                    className="h-10 w-auto"
                   />
-                  <span className="text-xl font-bold text-ember">Ember</span>
                 </div>
                 {allNavLinks.map((link) => (
                   <Link
