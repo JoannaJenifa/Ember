@@ -33,7 +33,7 @@ interface SellerRegistrationProps {
 }
 
 export function SellerRegistration({ walletAddress }: SellerRegistrationProps) {
-  const { isPrivy, publicKeyHex, signAndSubmitTransaction } = useWalletContext();
+  const { isPrivy, publicKeyHex, signRawHash, signAndSubmitTransaction } = useWalletContext();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     shopName: '',
@@ -51,7 +51,6 @@ export function SellerRegistration({ walletAddress }: SellerRegistrationProps) {
 
     setLoading(true);
     try {
-      // Note: signRawHash would need to be exposed from useWalletContext for Privy
       const txHash = await registerSeller(
         walletAddress,
         formData.shopName,
@@ -61,6 +60,7 @@ export function SellerRegistration({ walletAddress }: SellerRegistrationProps) {
         {
           isPrivy,
           publicKeyHex,
+          signRawHash: signRawHash || undefined,
           signAndSubmitTransaction: signAndSubmitTransaction || undefined,
         }
       );

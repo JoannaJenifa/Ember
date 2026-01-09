@@ -37,7 +37,7 @@ interface ProductFormProps {
 }
 
 export function ProductForm({ sellerAddress, productId, onCancel, onSuccess }: ProductFormProps) {
-  const { isPrivy, publicKeyHex, signAndSubmitTransaction } = useWalletContext();
+  const { isPrivy, publicKeyHex, signRawHash, signAndSubmitTransaction } = useWalletContext();
   const { product, loading: loadingProduct } = useProduct(productId);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -79,6 +79,7 @@ export function ProductForm({ sellerAddress, productId, onCancel, onSuccess }: P
       const context = {
         isPrivy,
         publicKeyHex,
+        signRawHash: signRawHash || undefined,
         signAndSubmitTransaction: signAndSubmitTransaction || undefined,
       };
 

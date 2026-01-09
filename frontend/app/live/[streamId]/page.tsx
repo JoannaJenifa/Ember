@@ -13,17 +13,16 @@ import { ProductSidebar } from '@/components/stream/product-sidebar'
 import { ProductQuickView } from '@/components/stream/product-quick-view'
 import { StreamChat } from '@/components/stream/stream-chat'
 import { ChatInput } from '@/components/stream/chat-input'
-import { GiftButton } from '@/components/stream/gift-button'
-import { TipButton, type TipData } from '@/components/tips/tip-button'
-import { WatchEarningsWrapper } from '@/components/earn'
-import { RecentActivity } from '@/components/stream/recent-activity'
+// TODO: These components use EVM/wagmi hooks - need to migrate to Move
+// import { GiftButton } from '@/components/stream/gift-button'
+// import { TipButton, type TipData } from '@/components/tips/tip-button'
+// import { WatchEarningsWrapper } from '@/components/earn'
+// import { RecentActivity } from '@/components/stream/recent-activity'
 import { PurchaseModal, type PurchaseDetails } from '@/components/order/purchase-modal'
 import { useStream } from '@/lib/hooks/use-stream'
-import { useAccount, usePublicClient } from '@/lib/web3'
-import { useCreateOrder } from '@/lib/web3/order-escrow'
+import { useWalletContext } from '@/hooks/use-wallet-context'
 import { useTranslation } from '@/lib/i18n'
 import type { ProductWithSeller } from '@/lib/types/product'
-import type { Address } from 'viem'
 
 const EXPLORER_URL = 'https://sepolia.basescan.org/tx/'
 
@@ -34,16 +33,13 @@ interface StreamPageProps {
 export default function StreamPage({ params }: StreamPageProps) {
   const { streamId } = use(params)
   const { stream, loading, error } = useStream(streamId)
-  const { address, isConnected } = useAccount()
-  const { publicClient } = usePublicClient()
+  const { walletAddress: address, isConnected } = useWalletContext()
   const { t } = useTranslation()
-  const { createOrder } = useCreateOrder()
   const [selectedProduct, setSelectedProduct] = useState<ProductWithSeller | null>(null)
   const [quickViewOpen, setQuickViewOpen] = useState(false)
   const [purchaseModalOpen, setPurchaseModalOpen] = useState(false)
   const [purchaseProduct, setPurchaseProduct] = useState<ProductWithSeller | null>(null)
   const [recentPurchase, setRecentPurchase] = useState<{ txHash: string; product: ProductWithSeller } | null>(null)
-  const [recentTip, setRecentTip] = useState<TipData | null>(null)
 
   // Track viewer join/leave for viewer count
   useEffect(() => {
@@ -102,9 +98,6 @@ export default function StreamPage({ params }: StreamPageProps) {
     setPurchaseModalOpen(true)
   }, [])
 
-  const handleTipSuccess = useCallback((tip: TipData) => {
-    setRecentTip(tip)
-  }, [])
 
   const handleConfirmPurchase = useCallback(async (details: PurchaseDetails) => {
     if (!address || !details.product.seller) {
@@ -112,74 +105,11 @@ export default function StreamPage({ params }: StreamPageProps) {
       return
     }
 
-    // Show loading toast
-    const loadingToast = toast.loading(t('order.processingPayment'))
-
-    try {
-      // Convert from wei to VERY (18 decimals)
-      const priceInVery = parseFloat(details.product.priceVery) / 1e18
-      const totalAmount = priceInVery * details.quantity
-
-      // Create order on chain
-      const result = await createOrder({
-        seller: details.product.seller.wallet as Address,
-        productId: details.product.id,
-        amount: totalAmount,
-      })
-
-      if (!result) {
-        throw new Error(t('errors.submitFailed'))
-      }
-
-      // Wait for transaction confirmation
-      if (publicClient) {
-        await publicClient.waitForTransactionReceipt({ hash: result.txHash as `0x${string}` })
-      }
-
-      // Save to database
-      const response = await fetch('/api/orders', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          onchainOrderId: result.orderId,
-          buyerAddress: address,
-          sellerId: details.product.seller.wallet, // Use wallet address for DB lookup
-          productId: details.product.id,
-          quantity: details.quantity,
-          totalPriceVery: totalAmount,
-          shippingName: details.shipping.name,
-          shippingPhone: details.shipping.phone,
-          shippingAddress: details.shipping.address,
-          shippingMemo: details.shipping.memo,
-          txHash: result.txHash,
-        }),
-      })
-
-      if (!response.ok) {
-        console.error('Failed to save order to database')
-      }
-
-      // Dismiss loading toast
-      toast.dismiss(loadingToast)
-
-      // Store recent purchase for optimistic UI update
-      setRecentPurchase({ txHash: result.txHash, product: details.product })
-
-      // Show success toast with View TX button
-      toast.success(t('order.orderCompleted'), {
-        description: t('order.orderConfirmed'),
-        action: {
-          label: t('common.viewTx'),
-          onClick: () => window.open(`${EXPLORER_URL}${result.txHash}`, '_blank'),
-        },
-        duration: 10000,
-      })
-    } catch (err) {
-      toast.dismiss(loadingToast)
-      const errorMessage = err instanceof Error ? err.message : t('common.error')
-      toast.error(t('common.error'), { description: errorMessage })
-    }
-  }, [address, publicClient, createOrder, t])
+    // TODO: Implement Move-based order creation
+    toast.info('Order functionality coming soon', {
+      description: 'Move contract integration in progress'
+    })
+  }, [address, t])
 
   if (loading) {
     return <StreamPageSkeleton />
@@ -200,7 +130,7 @@ export default function StreamPage({ params }: StreamPageProps) {
 
   const displayTitle = stream.title_ko || stream.title
   const sellerName = stream.seller?.shop_name_ko || stream.seller?.shop_name || t('common.seller')
-  const sellerWalletAddress = stream.seller?.wallet_address as Address | undefined
+  const sellerWalletAddress = stream.seller?.wallet_address as string | undefined
   const isLive = stream.status === 'live'
   const youtubeUrl = stream.youtube_url || ''
 
@@ -264,21 +194,7 @@ export default function StreamPage({ params }: StreamPageProps) {
             <div className="space-y-4">
               <StreamChat streamId={streamId} className="h-80" />
               <div className="flex gap-2">
-                {sellerWalletAddress && (
-                  <>
-                    <GiftButton
-                      streamId={streamId}
-                      sellerId={sellerWalletAddress}
-                      isConnected={isConnected}
-                    />
-                    <TipButton
-                      streamId={streamId}
-                      streamerId={sellerWalletAddress}
-                      isConnected={isConnected}
-                      onTipSuccess={handleTipSuccess}
-                    />
-                  </>
-                )}
+                {/* TODO: Gift and Tip buttons need Move migration */}
                 <ChatInput
                   streamId={streamId}
                   userAddress={address}
@@ -291,12 +207,7 @@ export default function StreamPage({ params }: StreamPageProps) {
 
           {/* Sidebar */}
           <div className="space-y-4">
-            <WatchEarningsWrapper
-              streamId={streamId}
-              userAddress={address}
-              isConnected={isConnected}
-            />
-            <RecentActivity streamerAddress={sellerWalletAddress} recentPurchase={recentPurchase} recentTip={recentTip} />
+            {/* TODO: WatchEarningsWrapper and RecentActivity need Move migration */}
             <ProductSidebar
               products={stream.products || []}
               onProductClick={handleProductClick}
@@ -310,14 +221,7 @@ export default function StreamPage({ params }: StreamPageProps) {
 
         {/* Mobile Layout */}
         <div className="lg:hidden">
-          {/* Watch-to-Earn Tracker */}
-          <div className="mb-4">
-            <WatchEarningsWrapper
-              streamId={streamId}
-              userAddress={address}
-              isConnected={isConnected}
-            />
-          </div>
+          {/* TODO: Watch-to-Earn Tracker needs Move migration */}
 
           {/* Video */}
           <div className="relative -mx-4">
@@ -363,21 +267,7 @@ export default function StreamPage({ params }: StreamPageProps) {
             <TabsContent value="chat" className="mt-4 space-y-4">
               <StreamChat streamId={streamId} className="h-64" />
               <div className="flex gap-2">
-                {sellerWalletAddress && (
-                  <>
-                    <GiftButton
-                      streamId={streamId}
-                      sellerId={sellerWalletAddress}
-                      isConnected={isConnected}
-                    />
-                    <TipButton
-                      streamId={streamId}
-                      streamerId={sellerWalletAddress}
-                      isConnected={isConnected}
-                      onTipSuccess={handleTipSuccess}
-                    />
-                  </>
-                )}
+                {/* TODO: Gift and Tip buttons need Move migration */}
                 <ChatInput
                   streamId={streamId}
                   userAddress={address}

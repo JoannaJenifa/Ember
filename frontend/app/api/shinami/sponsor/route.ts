@@ -59,7 +59,19 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const result = await response.json();
+    const responseText = await response.text();
+    console.log('[Sponsor API] Shinami raw response:', responseText);
+
+    let result;
+    try {
+      result = JSON.parse(responseText);
+    } catch {
+      console.error('[Sponsor API] Failed to parse Shinami response:', responseText);
+      return NextResponse.json(
+        { success: false, error: `Invalid response: ${responseText.substring(0, 100)}` },
+        { status: 500 }
+      );
+    }
 
     if (result.error) {
       console.error('[Sponsor API] Shinami RPC error:', result.error);
@@ -69,11 +81,22 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Result contains PendingTransactionResponse with hash
+    console.log('[Sponsor API] Shinami result:', JSON.stringify(result.result, null, 2));
+
+    // Result structure: { pendingTransaction: { hash: "0x...", ... } }
+    const txHash = result.result.pendingTransaction?.hash || result.result.hash;
+    if (!txHash) {
+      console.error('[Sponsor API] No transaction hash in response');
+      return NextResponse.json(
+        { success: false, error: 'No transaction hash returned' },
+        { status: 500 }
+      );
+    }
+
     return NextResponse.json({
       success: true,
-      hash: result.result.hash,
-      pendingTransaction: result.result,
+      hash: txHash,
+      pendingTransaction: result.result.pendingTransaction || result.result,
     });
   } catch (error) {
     console.error('[Sponsor API] Error:', error);

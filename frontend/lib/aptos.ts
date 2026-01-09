@@ -24,7 +24,8 @@ export const aptos = new Aptos(
   })
 );
 
-export const EMBER_ADDRESS = process.env.NEXT_PUBLIC_EMBER_ADDRESS || '0x1';
+// Ember contract address on Movement testnet
+export const EMBER_ADDRESS = '0x84967551d3dc13ec633823193a50e3500d9b3b14cce499d9200bc927b389ce92';
 
 export const getExplorerUrl = (txHash: string): string => {
   const network = MOVEMENT_CONFIGS[CURRENT_NETWORK].explorer;

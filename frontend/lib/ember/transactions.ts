@@ -61,7 +61,11 @@ export async function signAndSubmitSponsoredWithPrivy(
   const signatureHex = await signRawHash(messageHex, { address: walletAddress });
 
   // Clean up keys/signatures
-  const cleanPubKey = publicKeyHex.startsWith('0x') ? publicKeyHex.slice(2) : publicKeyHex;
+  let cleanPubKey = publicKeyHex.startsWith('0x') ? publicKeyHex.slice(2) : publicKeyHex;
+  // Handle Ed25519 public key with prefix byte (66 hex chars = 33 bytes, need 64 hex chars = 32 bytes)
+  if (cleanPubKey.length === 66) {
+    cleanPubKey = cleanPubKey.slice(2);
+  }
   const cleanSig = signatureHex.startsWith('0x') ? signatureHex.slice(2) : signatureHex;
 
   // Build sender authenticator
@@ -69,8 +73,8 @@ export async function signAndSubmitSponsoredWithPrivy(
   const signature = new Ed25519Signature(cleanSig);
   const senderAuth = new AccountAuthenticatorEd25519(publicKey, signature);
 
-  // Serialize for API call
-  const rawTxnHex = rawTxn.rawTransaction.bcsToHex().toString();
+  // Serialize for API call (must serialize entire SimpleTransaction for feePayer txns)
+  const rawTxnHex = rawTxn.bcsToHex().toString();
   const senderAuthHex = senderAuth.bcsToHex().toString();
 
   // Submit via server-side API (Shinami sponsors and submits)
@@ -108,7 +112,11 @@ export async function signAndSubmitWithPrivy(
 
   const signatureHex = await signRawHash(messageHex, { address: walletAddress });
 
-  const cleanPubKey = publicKeyHex.startsWith('0x') ? publicKeyHex.slice(2) : publicKeyHex;
+  let cleanPubKey = publicKeyHex.startsWith('0x') ? publicKeyHex.slice(2) : publicKeyHex;
+  // Handle Ed25519 public key with prefix byte (66 hex chars = 33 bytes, need 64 hex chars = 32 bytes)
+  if (cleanPubKey.length === 66) {
+    cleanPubKey = cleanPubKey.slice(2);
+  }
   const cleanSig = signatureHex.startsWith('0x') ? signatureHex.slice(2) : signatureHex;
 
   const publicKey = new Ed25519PublicKey(cleanPubKey);
