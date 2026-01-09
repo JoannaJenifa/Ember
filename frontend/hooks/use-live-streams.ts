@@ -1,92 +1,52 @@
 'use client'
 
-import useSWR from 'swr'
-import { LabangStream, LabangSeller } from '@/lib/db/supabase'
-
-export interface StreamWithSeller extends LabangStream {
-  seller?: LabangSeller | null
+export interface StreamWithSeller {
+  id: string
+  seller_address: string
+  title: string
+  description?: string
+  thumbnail_url?: string
+  stream_url?: string
+  status: 'scheduled' | 'live' | 'ended'
+  scheduled_start?: string
+  started_at?: string
+  ended_at?: string
+  viewer_count: number
   category?: string
+  seller?: {
+    address: string
+    shop_name: string
+    is_verified: boolean
+  } | null
 }
 
-interface StreamsResponse {
-  success: boolean
-  streams: StreamWithSeller[]
-}
-
-const fetcher = async (url: string): Promise<StreamWithSeller[]> => {
-  const res = await fetch(url)
-  if (!res.ok) throw new Error('Failed to fetch streams')
-  const data: StreamsResponse = await res.json()
-  return data.streams
-}
-
-export function useLiveStreams(category?: string) {
-  const params = new URLSearchParams()
-  if (category && category !== 'all') {
-    params.set('category', category)
-  }
-  const queryString = params.toString()
-  const url = `/api/streams/live${queryString ? `?${queryString}` : ''}`
-
-  const { data, error, isLoading, mutate } = useSWR<StreamWithSeller[]>(
-    url,
-    fetcher,
-    {
-      refreshInterval: 30000, // Refresh every 30 seconds
-      revalidateOnFocus: true,
-    }
-  )
-
+// TODO: Implement real data fetching from on-chain/indexer
+export function useLiveStreams(_category?: string) {
+  // Return empty data until real integration
   return {
-    streams: data ?? [],
-    isLoading,
-    error,
-    mutate,
+    streams: [] as StreamWithSeller[],
+    isLoading: false,
+    error: null,
+    mutate: () => Promise.resolve(undefined),
   }
 }
 
-export function useUpcomingStreams(hours = 24) {
-  const url = `/api/streams/upcoming?hours=${hours}`
-
-  const { data, error, isLoading, mutate } = useSWR<StreamWithSeller[]>(
-    url,
-    fetcher,
-    {
-      refreshInterval: 60000, // Refresh every minute
-    }
-  )
-
+export function useUpcomingStreams(_hours = 24) {
+  // Return empty data until real integration
   return {
-    streams: data ?? [],
-    isLoading,
-    error,
-    mutate,
+    streams: [] as StreamWithSeller[],
+    isLoading: false,
+    error: null,
+    mutate: () => Promise.resolve(undefined),
   }
 }
 
-export function useReplays(options?: { category?: string; sort?: 'popular' | 'latest'; limit?: number }) {
-  const params = new URLSearchParams()
-  if (options?.category && options.category !== 'all') {
-    params.set('category', options.category)
-  }
-  if (options?.sort) {
-    params.set('sort', options.sort)
-  }
-  if (options?.limit) {
-    params.set('limit', options.limit.toString())
-  }
-  const queryString = params.toString()
-  const url = `/api/streams/replays${queryString ? `?${queryString}` : ''}`
-
-  const { data, error, isLoading, mutate } = useSWR<StreamWithSeller[]>(
-    url,
-    fetcher
-  )
-
+export function useReplays(_options?: { category?: string; sort?: 'popular' | 'latest'; limit?: number }) {
+  // Return empty data until real integration
   return {
-    streams: data ?? [],
-    isLoading,
-    error,
-    mutate,
+    streams: [] as StreamWithSeller[],
+    isLoading: false,
+    error: null,
+    mutate: () => Promise.resolve(undefined),
   }
 }
