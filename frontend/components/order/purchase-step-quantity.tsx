@@ -24,7 +24,7 @@ export function PurchaseStepQuantity({
   const { t } = useTranslation()
   const [quantity, setQuantity] = useState(initialQuantity)
   const maxQuantity = parseInt(String(product.inventory)) || 10
-  // Convert from wei to VERY (18 decimals)
+  // Convert from wei to MOVE (18 decimals)
   const priceInVery = parseFloat(product.priceVery) / 1e18
   const totalPrice = priceInVery * quantity
 
@@ -56,7 +56,7 @@ export function PurchaseStepQuantity({
             <p className="text-xs text-muted-foreground line-clamp-2">{product.descriptionKo}</p>
           )}
           <p className="text-base font-bold text-ember mt-1">
-            {formatVeryPrice(product.priceVery)} VERY
+            {formatVeryPrice(product.priceVery)} MOVE
           </p>
         </div>
       </div>
@@ -96,7 +96,7 @@ export function PurchaseStepQuantity({
       <div className="flex justify-between items-center py-4 border-t border-border">
         <span className="text-muted-foreground">{t('order.totalAmount')}</span>
         <span className="text-xl font-bold text-ember">
-          {totalPrice.toFixed(4)} VERY
+          {totalPrice.toFixed(4)} MOVE
         </span>
       </div>
 

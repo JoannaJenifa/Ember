@@ -63,7 +63,7 @@ export function ReviewSuccess({ open, onOpenChange, txHash, reward = 5 }: Review
 
           {/* Reward */}
           <div className="bg-gold/10 border border-gold/20 rounded-lg p-4 animate-in slide-in-from-bottom duration-500 delay-200">
-            <p className="text-lg font-bold text-gold">+{reward} VERY</p>
+            <p className="text-lg font-bold text-gold">+{reward} MOVE</p>
             <p className="text-sm text-muted-foreground">{t('review.thankYou')}</p>
           </div>
 

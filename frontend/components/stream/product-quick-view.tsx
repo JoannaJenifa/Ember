@@ -67,7 +67,7 @@ export function ProductQuickView({ product, open, onClose, onPurchase }: Product
           {/* Price */}
           <div className="flex items-baseline gap-2">
             <span className="text-2xl font-bold text-ember">{formatVeryPrice(product.priceVery)}</span>
-            <span className="text-sm text-muted-foreground">VERY</span>
+            <span className="text-sm text-muted-foreground">MOVE</span>
           </div>
 
           {/* Stock */}
@@ -111,7 +111,7 @@ export function ProductQuickView({ product, open, onClose, onPurchase }: Product
             <div className="flex items-center justify-between py-2 border-t">
               <span className="text-sm text-muted-foreground">{t('order.total')}</span>
               <span className="text-lg font-bold text-ember">
-                {totalPrice.toFixed(4)} <span className="text-sm font-normal">VERY</span>
+                {totalPrice.toFixed(4)} <span className="text-sm font-normal">MOVE</span>
               </span>
             </div>
           )}

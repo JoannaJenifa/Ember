@@ -349,7 +349,7 @@
     "viewDetails": "View Details",
     "cancelOrder": "Cancel Order",
     "confirmDelivery": "Confirm Delivery",
-    "insufficientBalance": "Insufficient balance (Balance: {balance} VERY)",
+    "insufficientBalance": "Insufficient balance (Balance: {balance} MOVE)",
     "fee": "Fee",
     "sellerReceives": "Seller Receives",
     "buyNow": "Buy Now",
@@ -401,7 +401,7 @@
     "thankYou": "Thank you for your review!"
   },
   "earnings": {
-    "todayEarned": "Today earned: {amount} VERY",
+    "todayEarned": "Today earned: {amount} MOVE",
     "watchTime": "Watch time: {minutes}min",
     "nextReward": "Next reward: {minutes}min left",
     "paused": "Paused",
@@ -412,7 +412,7 @@
     "dailyLimit": "Daily Limit",
     "totalEarned": "Total Earned",
     "resetIn": "Resets in: {hours}h {minutes}m",
-    "unclaimed": "Unclaimed: {amount} VERY",
+    "unclaimed": "Unclaimed: {amount} MOVE",
     "claim": "Claim",
     "claiming": "Claiming...",
     "claimFailed": "Failed to claim rewards",
@@ -423,7 +423,7 @@
     "continueWatching": "Continue Watching",
     "clickWithin": "Click within {seconds} seconds",
     "rewardEarned": "Reward Earned!",
-    "earnedAmount": "You earned {amount} VERY"
+    "earnedAmount": "You earned {amount} MOVE"
   },
   "tips": {
     "sendTip": "Send Tip",
@@ -438,9 +438,9 @@
     "sending": "Sending...",
     "tipSent": "Tip sent!",
     "sendFailed": "Failed to send tip",
-    "tipDesc": "Your tip will be sent to the seller as VERY tokens",
+    "tipDesc": "Your tip will be sent to the seller as MOVE tokens",
     "tipReceived": "Tip Received!",
-    "receivedFrom": "Received {amount} VERY from {sender}"
+    "receivedFrom": "Received {amount} MOVE from {sender}"
   },
   "wallet": {
     "connect": "Connect Wallet",
@@ -494,7 +494,7 @@
     "productNameKo": "Korean Name (optional)",
     "description": "Description",
     "descriptionKo": "Korean Description (optional)",
-    "price": "Price (VERY)",
+    "price": "Price (MOVE)",
     "stock": "Stock",
     "category": "Category",
     "images": "Product Images",
@@ -520,7 +520,7 @@
     "soldCount": "{count} sold",
     "shippingInfo": "Shipping Info",
     "freeShipping": "Free Shipping",
-    "shippingFee": "Shipping: {fee} VERY",
+    "shippingFee": "Shipping: {fee} MOVE",
     "addedToStream": "Product added to stream",
     "removedFromStream": "Product removed from stream",
     "failedToAdd": "Failed to add product",

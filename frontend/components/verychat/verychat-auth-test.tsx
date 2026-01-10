@@ -45,7 +45,7 @@ export function VeryChatAuthTest() {
           <Alert variant="destructive">
             <XCircle className="h-4 w-4" />
             <AlertDescription>
-              VeryChat is not configured. Set NEXT_PUBLIC_VERYCHAT_PROJECT_ID in your .env file.
+              VeryChat is not configured. Set NEXT_PUBLIC_MOVECHAT_PROJECT_ID in your .env file.
             </AlertDescription>
           </Alert>
         </CardContent>

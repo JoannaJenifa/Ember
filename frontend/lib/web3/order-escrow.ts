@@ -1,7 +1,7 @@
 /**
  * Order Escrow Contract Hooks
  * Provides React hooks for interacting with the OrderEscrow contract
- * Uses native currency (VERY on VeryChain)
+ * Uses native currency (MOVE on VeryChain)
  */
 
 import { useState, useCallback } from 'react'

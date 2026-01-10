@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils'
 
 interface PriceDisplayProps {
   amount: number
-  currency?: 'KRW' | 'VERY'
+  currency?: 'KRW' | 'MOVE'
   size?: 'sm' | 'md' | 'lg'
   className?: string
 }
@@ -24,7 +24,7 @@ export function PriceDisplay({
   }
 
   const prefix = currency === 'KRW' ? '₩' : ''
-  const suffix = currency === 'VERY' ? ' VERY' : ''
+  const suffix = currency === 'MOVE' ? ' MOVE' : ''
 
   return (
     <span className={cn('font-semibold text-ember', sizeClasses[size], className)}>

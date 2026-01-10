@@ -7,7 +7,7 @@ const SUBGRAPH_URL = `${INDEXER_URL}/subgraphs/name/labang`
 
 export interface SellerRevenue {
   totalRevenue: string // in wei
-  totalRevenueFormatted: number // in VERY
+  totalRevenueFormatted: number // in MOVE
   orderCount: number
   confirmedOrderCount: number
   pendingOrderCount: number
@@ -81,7 +81,7 @@ export function useSellerRevenue(walletAddress: string | null | undefined): UseS
         }
       }
 
-      // Convert to VERY (18 decimals)
+      // Convert to MOVE (18 decimals)
       const totalRevenueFormatted = Number(totalRevenue) / 1e18
 
       setRevenue({

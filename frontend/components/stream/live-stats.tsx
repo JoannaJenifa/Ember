@@ -36,7 +36,7 @@ export function LiveStats({
     },
     {
       label: t('seller.totalSales'),
-      value: `${revenue.toLocaleString()} VERY`,
+      value: `${revenue.toLocaleString()} MOVE`,
       icon: Coins,
       color: 'text-yellow-500',
     },

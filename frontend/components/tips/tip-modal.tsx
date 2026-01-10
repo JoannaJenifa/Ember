@@ -117,7 +117,7 @@ export function TipModal({
                 min={0}
                 step={0.1}
               />
-              <span className="text-sm font-medium text-ember">VERY</span>
+              <span className="text-sm font-medium text-ember">MOVE</span>
             </div>
           </div>
 
@@ -142,15 +142,15 @@ export function TipModal({
             <div className="p-3 rounded-lg bg-background space-y-1">
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">{t('tips.fee', { percent: platformFeePercent })}</span>
-                <span className="text-foreground">{feeInfo.fee} VERY</span>
+                <span className="text-foreground">{feeInfo.fee} MOVE</span>
               </div>
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">{t('tips.sellerReceives')}</span>
-                <span className="text-foreground">{feeInfo.netAmount} VERY</span>
+                <span className="text-foreground">{feeInfo.netAmount} MOVE</span>
               </div>
               <div className="flex justify-between font-bold pt-1 border-t border-border">
                 <span className="text-foreground">{t('order.total')}:</span>
-                <span className="text-ember">{feeInfo.total} VERY</span>
+                <span className="text-ember">{feeInfo.total} MOVE</span>
               </div>
             </div>
           )}

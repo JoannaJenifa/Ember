@@ -990,7 +990,7 @@ const ALL_MAINNET_CHAINS: Record<string, ChainConfig> = {
   verychain: {
     chain: verychain,
     name: 'VeryChain',
-    shortName: 'VERY',
+    shortName: 'MOVE',
     rpcUrl: '/api/rpc/verychain',
     explorerUrl: 'https://www.veryscan.io',
     iconUrl: '/chain-logos/verychain.png',

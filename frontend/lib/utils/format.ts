@@ -1,12 +1,15 @@
 /**
- * Format a price from wei to VERY with appropriate decimal precision
+ * Format a price from wei to MOVE with appropriate decimal precision
  * @param priceWei - Price in wei (18 decimals)
- * @returns Formatted price string (without "VERY" suffix)
+ * @returns Formatted price string (without "MOVE" suffix)
  */
-export function formatVeryPrice(priceWei: string | number | null | undefined): string {
+export function formatMovePrice(priceWei: string | number | null | undefined): string {
   if (!priceWei) return '0'
-  const priceInVery = Number(priceWei) / 1e18
-  if (priceInVery < 0.001) return priceInVery.toFixed(6)
-  if (priceInVery < 1) return priceInVery.toFixed(4)
-  return priceInVery.toFixed(2)
+  const priceInMove = Number(priceWei) / 1e18
+  if (priceInMove < 0.001) return priceInMove.toFixed(6)
+  if (priceInMove < 1) return priceInMove.toFixed(4)
+  return priceInMove.toFixed(2)
 }
+
+// Alias for backwards compatibility
+export const formatVeryPrice = formatMovePrice

@@ -1,18 +1,34 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { GasStationClient } from '@shinami/clients/aptos';
+import {
+  AccountAuthenticator,
+  SimpleTransaction,
+  Deserializer,
+  Hex,
+} from '@aptos-labs/ts-sdk';
 
-// Shinami Gas Station API endpoint for Movement
-const SHINAMI_GAS_STATION_URL = 'https://api.shinami.com/movement/gas/v1/';
+// Lazy-initialized Gas Station client
+let gasClient: GasStationClient | null = null;
+
+function getGasClient(): GasStationClient | null {
+  if (gasClient) return gasClient;
+
+  const apiKey = process.env.SHINAMI_KEY;
+  if (!apiKey) return null;
+
+  gasClient = new GasStationClient(apiKey);
+  return gasClient;
+}
 
 /**
  * POST /api/shinami/sponsor
- * Sponsor and submit a signed transaction using Shinami Gas Station
- * Uses gas_sponsorAndSubmitSignedTransaction - the recommended approach
+ * Sponsor and submit a signed transaction using Shinami SDK
  */
 export async function POST(request: NextRequest) {
   try {
-    const apiKey = process.env.SHINAMI_KEY;
+    const client = getGasClient();
 
-    if (!apiKey) {
+    if (!client) {
       return NextResponse.json(
         { success: false, error: 'Shinami not configured' },
         { status: 503 }
@@ -28,75 +44,33 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Format hex strings
+    // Deserialize the transaction and authenticator
     const formattedTxHex = rawTxHex.startsWith('0x') ? rawTxHex : `0x${rawTxHex}`;
     const formattedAuthHex = senderAuthenticatorHex.startsWith('0x')
       ? senderAuthenticatorHex
       : `0x${senderAuthenticatorHex}`;
 
-    // Call Shinami Gas Station API with gas_sponsorAndSubmitSignedTransaction
-    // This method sponsors the transaction, sets the fee payer address, and submits it
-    const response = await fetch(SHINAMI_GAS_STATION_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-API-Key': apiKey,
-      },
-      body: JSON.stringify({
-        jsonrpc: '2.0',
-        method: 'gas_sponsorAndSubmitSignedTransaction',
-        params: [formattedTxHex, formattedAuthHex],
-        id: 1,
-      }),
-    });
+    const simpleTx = SimpleTransaction.deserialize(
+      new Deserializer(Hex.fromHexString(formattedTxHex).toUint8Array())
+    );
+    const senderAuth = AccountAuthenticator.deserialize(
+      new Deserializer(Hex.fromHexString(formattedAuthHex).toUint8Array())
+    );
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error('[Sponsor API] Shinami error:', response.status, errorText);
-      return NextResponse.json(
-        { success: false, error: `Shinami API error: ${response.status}` },
-        { status: 502 }
-      );
-    }
+    console.log('[Sponsor API] Calling Shinami SDK sponsorAndSubmitSignedTransaction...');
 
-    const responseText = await response.text();
-    console.log('[Sponsor API] Shinami raw response:', responseText);
+    // Use Shinami SDK - returns PendingTransactionResponse directly
+    const pendingTransaction = await client.sponsorAndSubmitSignedTransaction(
+      simpleTx,
+      senderAuth
+    );
 
-    let result;
-    try {
-      result = JSON.parse(responseText);
-    } catch {
-      console.error('[Sponsor API] Failed to parse Shinami response:', responseText);
-      return NextResponse.json(
-        { success: false, error: `Invalid response: ${responseText.substring(0, 100)}` },
-        { status: 500 }
-      );
-    }
-
-    if (result.error) {
-      console.error('[Sponsor API] Shinami RPC error:', result.error);
-      return NextResponse.json(
-        { success: false, error: result.error.message || 'Sponsorship failed' },
-        { status: 400 }
-      );
-    }
-
-    console.log('[Sponsor API] Shinami result:', JSON.stringify(result.result, null, 2));
-
-    // Result structure: { pendingTransaction: { hash: "0x...", ... } }
-    const txHash = result.result.pendingTransaction?.hash || result.result.hash;
-    if (!txHash) {
-      console.error('[Sponsor API] No transaction hash in response');
-      return NextResponse.json(
-        { success: false, error: 'No transaction hash returned' },
-        { status: 500 }
-      );
-    }
+    console.log('[Sponsor API] Success! Hash:', pendingTransaction.hash);
 
     return NextResponse.json({
       success: true,
-      hash: txHash,
-      pendingTransaction: result.result.pendingTransaction || result.result,
+      hash: pendingTransaction.hash,
+      pendingTransaction,
     });
   } catch (error) {
     console.error('[Sponsor API] Error:', error);

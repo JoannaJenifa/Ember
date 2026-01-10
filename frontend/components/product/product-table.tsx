@@ -107,7 +107,7 @@ export function ProductTable({ products, loading, onEdit, onDelete, onToggleStat
               </TableCell>
               <TableCell className="text-right">
                 <span className="font-medium">{formatPrice(product.priceVery || '0')}</span>
-                <span className="text-muted-foreground ml-1">VERY</span>
+                <span className="text-muted-foreground ml-1">MOVE</span>
               </TableCell>
               <TableCell className="text-right">
                 <span className={Number(product.inventory) === 0 ? 'text-destructive' : ''}>

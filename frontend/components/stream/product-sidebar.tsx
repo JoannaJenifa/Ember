@@ -103,7 +103,7 @@ const ProductItem = memo(function ProductItem({ product, onClick, onQuickBuy }: 
       <div className="flex-1 min-w-0">
         <p className="text-sm font-medium line-clamp-1">{displayTitle}</p>
         <p className="text-sm font-bold text-ember">
-          {formatVeryPrice(product.priceVery)} <span className="text-xs font-normal">VERY</span>
+          {formatVeryPrice(product.priceVery)} <span className="text-xs font-normal">MOVE</span>
         </p>
       </div>
 

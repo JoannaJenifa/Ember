@@ -7,7 +7,7 @@ export const ADDRESSES: Record<number, {
   erc721: Record<string, Address>
   other: Record<string, Address>
 }> = {
-  // VeryChain Mainnet - Labang Contracts (uses native currency - VERY)
+  // VeryChain Mainnet - Labang Contracts (uses native currency - MOVE)
   4613: {
     erc20: {},
     erc721: {},

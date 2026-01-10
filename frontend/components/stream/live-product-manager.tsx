@@ -96,7 +96,7 @@ export function LiveProductManager({
                   {sp.product?.descriptionKo || sp.product?.title || 'Product'}
                 </p>
                 <p className="text-xs text-muted-foreground">
-                  {formatVeryPrice(sp.product?.priceVery)} VERY
+                  {formatVeryPrice(sp.product?.priceVery)} MOVE
                 </p>
               </div>
               {sp.is_featured && (
@@ -146,7 +146,7 @@ export function LiveProductManager({
                       {product.descriptionKo || product.title}
                     </p>
                     <p className="text-xs text-muted-foreground">
-                      {formatVeryPrice(product.priceVery)} VERY
+                      {formatVeryPrice(product.priceVery)} MOVE
                     </p>
                   </div>
                 </button>

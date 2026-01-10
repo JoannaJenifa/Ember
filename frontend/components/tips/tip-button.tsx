@@ -73,7 +73,7 @@ export function TipButton({
 
       // Show success toast with View TX button
       toast.success(t('tips.tipSent'), {
-        description: `${params.amount} VERY`,
+        description: `${params.amount} MOVE`,
         action: {
           label: t('common.viewTx'),
           onClick: () => window.open(`${EXPLORER_URL}${result.txHash}`, '_blank'),

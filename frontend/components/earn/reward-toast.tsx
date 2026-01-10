@@ -48,7 +48,7 @@ export function RewardToast({
         <CoinSparkles />
       </div>
       <div>
-        <p className="font-bold">+{amount} VERY</p>
+        <p className="font-bold">+{amount} MOVE</p>
         <p className="text-xs opacity-80">({reason})</p>
       </div>
     </div>

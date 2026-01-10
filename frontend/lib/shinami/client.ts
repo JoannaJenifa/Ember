@@ -7,7 +7,7 @@
  * 1. Build feePayer transaction on frontend (with 0x0 placeholder)
  * 2. User signs the transaction FIRST
  * 3. Send signed tx to backend
- * 4. Backend calls gas_sponsorAndSubmitSignedTransaction (sponsors, sets fee payer, submits)
+ * 4. Backend calls sponsorAndSubmitSignedTransaction via Shinami SDK
  */
 
 import {
@@ -36,6 +36,17 @@ export interface SponsorAndSubmitResult {
 let sponsorshipEnabled: boolean | null = null;
 
 /**
+ * Custom error class to indicate transaction was submitted but confirmation failed
+ * This prevents fallback to user-paid when tx is already on-chain
+ */
+export class TransactionSubmittedError extends Error {
+  constructor(public hash: string, message: string) {
+    super(message);
+    this.name = 'TransactionSubmittedError';
+  }
+}
+
+/**
  * Check if Gas Station sponsorship is available (server-side configured)
  */
 export async function isSponsorshipEnabled(): Promise<boolean> {
@@ -56,7 +67,7 @@ export async function isSponsorshipEnabled(): Promise<boolean> {
 
 /**
  * Send signed transaction to backend for sponsorship and submission
- * Backend uses gas_sponsorAndSubmitSignedTransaction
+ * Backend uses Shinami SDK sponsorAndSubmitSignedTransaction
  */
 async function sponsorAndSubmitSignedTransaction(
   rawTransaction: SimpleTransaction,
@@ -67,6 +78,7 @@ async function sponsorAndSubmitSignedTransaction(
     const rawTxHex = rawTransaction.bcsToHex().toString();
     const senderAuthenticatorHex = senderAuthenticator.bcsToHex().toString();
 
+    console.log('[Shinami Client] Calling /api/shinami/sponsor...');
     const response = await fetch('/api/shinami/sponsor', {
       method: 'POST',
       headers: {
@@ -75,20 +87,25 @@ async function sponsorAndSubmitSignedTransaction(
       body: JSON.stringify({ rawTxHex, senderAuthenticatorHex }),
     });
 
+    console.log('[Shinami Client] Response status:', response.status);
     const result = await response.json();
+    console.log('[Shinami Client] Response body:', JSON.stringify(result, null, 2));
 
     if (!result.success) {
+      console.error('[Shinami Client] Response indicates failure:', result.error);
       return {
         success: false,
         error: result.error || 'Sponsorship and submission failed',
       };
     }
 
+    console.log('[Shinami Client] Success! Hash:', result.hash);
     return {
       success: true,
       hash: result.hash,
     };
   } catch (error) {
+    console.error('[Shinami Client] Fetch error:', error);
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Unknown sponsorship error',
@@ -112,7 +129,10 @@ export async function sponsoredSubmit(
   publicKeyHex: string,
   signRawHash: SignRawHashFunction
 ): Promise<string> {
+  console.log('[Shinami] sponsoredSubmit called for function:', functionId);
+
   // 1. Build the transaction with fee payer enabled (uses 0x0 placeholder)
+  console.log('[Shinami] Step 1: Building transaction with feePayer...');
   const rawTxn = await aptos.transaction.build.simple({
     sender: walletAddress,
     data: {
@@ -122,8 +142,10 @@ export async function sponsoredSubmit(
     },
     withFeePayer: true,
   });
+  console.log('[Shinami] Transaction built successfully');
 
   // 2. Generate signing message and get user signature FIRST
+  console.log('[Shinami] Step 2: Getting user signature via signRawHash...');
   const message = generateSigningMessageForTransaction(rawTxn);
   const messageHex = `0x${toHex(message)}` as `0x${string}`;
   const { signature: rawSignature } = await signRawHash({
@@ -131,8 +153,10 @@ export async function sponsoredSubmit(
     chainType: 'aptos',
     hash: messageHex,
   });
+  console.log('[Shinami] User signature obtained');
 
   // 3. Create sender authenticator
+  console.log('[Shinami] Step 3: Creating sender authenticator...');
   let cleanPublicKey = publicKeyHex.startsWith('0x') ? publicKeyHex.slice(2) : publicKeyHex;
   if (cleanPublicKey.length === 66) {
     cleanPublicKey = cleanPublicKey.slice(2);
@@ -144,18 +168,38 @@ export async function sponsoredSubmit(
       rawSignature.startsWith('0x') ? rawSignature.slice(2) : rawSignature
     )
   );
+  console.log('[Shinami] Authenticator created');
 
   // 4. Send to backend for sponsorship and submission
+  console.log('[Shinami] Step 4: Sending to backend for sponsorship...');
   const result = await sponsorAndSubmitSignedTransaction(rawTxn, senderAuthenticator);
+  console.log('[Shinami] Backend response:', JSON.stringify(result, null, 2));
 
   if (!result.success || !result.hash) {
+    console.error('[Shinami] Backend response missing success or hash');
     throw new Error(result.error || 'Sponsored submission failed');
   }
 
+  console.log('[Shinami] Transaction SUBMITTED to chain! Hash:', result.hash);
+
   // 5. Wait for transaction confirmation
-  const executed = await aptos.waitForTransaction({ transactionHash: result.hash });
-  if (!executed.success) {
-    throw new Error('Sponsored transaction failed on-chain');
+  // IMPORTANT: At this point, tx IS submitted. If waitForTransaction fails,
+  // we must NOT allow fallback to user-paid (would cause double tx)
+  console.log('[Shinami] Step 5: Waiting for confirmation...');
+  try {
+    const executed = await aptos.waitForTransaction({ transactionHash: result.hash });
+    if (!executed.success) {
+      console.error('[Shinami] Tx confirmed but FAILED on-chain');
+      throw new TransactionSubmittedError(result.hash, 'Sponsored transaction failed on-chain');
+    }
+    console.log('[Shinami] Transaction CONFIRMED successfully!');
+  } catch (error) {
+    if (error instanceof TransactionSubmittedError) {
+      throw error;
+    }
+    // waitForTransaction threw (timeout, network error, etc.) - tx may be pending
+    console.error('[Shinami] waitForTransaction threw, but tx IS submitted:', error);
+    throw new TransactionSubmittedError(result.hash, `Transaction submitted but confirmation failed: ${error}`);
   }
 
   return result.hash;

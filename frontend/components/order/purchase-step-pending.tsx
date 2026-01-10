@@ -41,7 +41,7 @@ export function PurchaseStepPending({
 
         // Create order on chain
         setStep('create')
-        // Convert from wei to VERY (18 decimals)
+        // Convert from wei to MOVE (18 decimals)
         const priceInVery = parseFloat(product.priceVery) / 1e18
         const result = await createOrder({
           seller: product.seller.wallet as Address,

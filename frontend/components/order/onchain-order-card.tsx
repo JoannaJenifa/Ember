@@ -55,7 +55,7 @@ export function OnchainOrderCard({ order }: OnchainOrderCardProps) {
           <div className="space-y-1 text-sm">
             <div className="flex items-center gap-2">
               <span className="text-muted-foreground">Amount:</span>
-              <span className="font-semibold text-ember">{order.amountFormatted} VERY</span>
+              <span className="font-semibold text-ember">{order.amountFormatted} MOVE</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="text-muted-foreground">Product ID:</span>

@@ -39,7 +39,7 @@ export function ReviewPrompt({ product, onWriteReview }: ReviewPromptProps) {
           <p className="text-sm text-muted-foreground truncate mb-2">{product.title}</p>
 
           <Badge variant="secondary" className="gap-1 bg-gold/10 text-gold border-gold/20">
-            <Gift className="h-3 w-3" />5 VERY
+            <Gift className="h-3 w-3" />5 MOVE
           </Badge>
         </div>
 

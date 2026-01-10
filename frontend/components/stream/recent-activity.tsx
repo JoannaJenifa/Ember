@@ -150,7 +150,7 @@ function ActivityItem({ activity }: { activity: any }) {
               </span>
               <span className="text-muted-foreground">ordered</span>
               <Badge variant="outline" className="text-xs">
-                {activity.amountFormatted} VERY
+                {activity.amountFormatted} MOVE
               </Badge>
             </>
           ) : (
@@ -160,7 +160,7 @@ function ActivityItem({ activity }: { activity: any }) {
               </span>
               <span className="text-muted-foreground">sent</span>
               {isTip ? (
-                <Badge variant="outline" className="text-xs">{activity.amountFormatted || activity.amountVery} VERY</Badge>
+                <Badge variant="outline" className="text-xs">{activity.amountFormatted || activity.amountVery} MOVE</Badge>
               ) : (
                 <Badge variant="outline" className="text-xs">{activity.quantity}x {activity.gift?.name}</Badge>
               )}
@@ -172,7 +172,7 @@ function ActivityItem({ activity }: { activity: any }) {
         )}
         {isPurchase && activity.product?.priceVery && (
           <p className="text-xs text-ember font-medium">
-            {formatVeryPrice(activity.product.priceVery)} VERY
+            {formatVeryPrice(activity.product.priceVery)} MOVE
           </p>
         )}
       </div>

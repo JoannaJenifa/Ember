@@ -1,7 +1,7 @@
 /**
  * GiftShop Contract Hooks
  * Provides React hooks for interacting with the GiftShop contract
- * Uses native currency (VERY on VeryChain)
+ * Uses native currency (MOVE on VeryChain)
  */
 
 import { useState, useCallback, useEffect } from 'react'

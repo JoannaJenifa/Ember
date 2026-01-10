@@ -97,7 +97,7 @@ export function EarningsModal({
           <div className="border-t pt-4">
             <div className="flex justify-between items-center mb-2">
               <span className="font-medium">{t('earnings.totalEarned')}</span>
-              <span className="text-lg font-bold">{todayEarnings} VERY</span>
+              <span className="text-lg font-bold">{todayEarnings} MOVE</span>
             </div>
             <p className="text-sm text-muted-foreground">
               {t('earnings.resetIn', { hours, minutes })}
@@ -160,7 +160,7 @@ function RewardProgress({
       <Progress value={percentage} className="h-2 mb-1" />
       {detail && (
         <p className="text-xs text-muted-foreground">
-          {detail} = {amount} VERY
+          {detail} = {amount} MOVE
         </p>
       )}
     </div>

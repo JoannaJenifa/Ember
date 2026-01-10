@@ -54,7 +54,7 @@ export function LiveOrders({ orders }: LiveOrdersProps) {
                 </p>
                 <div className="flex items-center justify-between mt-0.5">
                   <span className="text-xs font-medium text-ember">
-                    {order.totalVery.toLocaleString()} VERY
+                    {order.totalVery.toLocaleString()} MOVE
                   </span>
                   <span className="text-xs text-muted-foreground flex items-center gap-1">
                     <Clock className="h-3 w-3" />

@@ -105,7 +105,7 @@ export function GiftModal({
                     {gift.name}
                   </span>
                   <span className="text-xs text-ember">
-                    {gift.priceFormatted} VERY
+                    {gift.priceFormatted} MOVE
                   </span>
                 </button>
               ))}
@@ -153,7 +153,7 @@ export function GiftModal({
               <div className="flex justify-between items-center p-3 rounded-lg bg-background">
                 <span className="text-sm text-muted-foreground">{t('order.total')}:</span>
                 <span className="text-lg font-bold text-ember">
-                  {formatUnits(totalCost, 18)} VERY
+                  {formatUnits(totalCost, 18)} MOVE
                 </span>
               </div>
             )}

@@ -92,7 +92,7 @@ export function OrderCard({
                 {statusLabel?.ko}
               </Badge>
               <span className="text-ember font-bold">
-                {order.totalVery || order.total_price_very || '0'} VERY
+                {order.totalVery || order.total_price_very || '0'} MOVE
               </span>
             </div>
           </div>

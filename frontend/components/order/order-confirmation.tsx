@@ -80,7 +80,7 @@ export function OrderConfirmation({
                 {t('order.quantity')}: {order.quantity}
               </p>
               <p className="text-ember font-medium">
-                {order.totalVery || order.total_price_very || '0'} VERY
+                {order.totalVery || order.total_price_very || '0'} MOVE
               </p>
             </div>
           </div>

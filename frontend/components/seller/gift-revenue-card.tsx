@@ -120,15 +120,15 @@ export function GiftRevenueCard({ streamerAddress, className }: GiftRevenueCardP
         <RevenueStat
           icon={<Gift className="h-5 w-5 text-ember" />}
           label={t('seller.pendingGifts')}
-          value={`${giftRevenueFormatted} VERY`}
-          subValue={`${t('seller.total')} ${totalGiftsFormatted} VERY`}
+          value={`${giftRevenueFormatted} MOVE`}
+          subValue={`${t('seller.total')} ${totalGiftsFormatted} MOVE`}
           loading={loadingGifts}
         />
         <RevenueStat
           icon={<DollarSign className="h-5 w-5 text-ember" />}
           label={t('seller.pendingTips')}
-          value={`${tipBalanceFormatted} VERY`}
-          subValue={`${t('seller.total')} ${totalTipsFormatted} VERY`}
+          value={`${tipBalanceFormatted} MOVE`}
+          subValue={`${t('seller.total')} ${totalTipsFormatted} MOVE`}
           loading={loadingTips}
         />
       </div>
@@ -137,7 +137,7 @@ export function GiftRevenueCard({ streamerAddress, className }: GiftRevenueCardP
         <div className="pt-4 border-t border-border">
           <div className="flex justify-between items-center">
             <span className="text-sm text-muted-foreground">{t('seller.totalWithdrawable')}</span>
-            <span className="text-xl font-bold text-ember">{totalPending.toFixed(2)} VERY</span>
+            <span className="text-xl font-bold text-ember">{totalPending.toFixed(2)} MOVE</span>
           </div>
         </div>
       )}

@@ -25,7 +25,7 @@ export function PurchaseStepSummary({
   onBack,
 }: PurchaseStepSummaryProps) {
   const { t } = useTranslation()
-  // Convert from wei to VERY (18 decimals)
+  // Convert from wei to MOVE (18 decimals)
   const priceInVery = parseFloat(product.priceVery) / 1e18
   const totalPrice = priceInVery * quantity
 
@@ -47,7 +47,7 @@ export function PurchaseStepSummary({
           <div className="flex-1 min-w-0">
             <h3 className="font-medium text-foreground truncate">{product.title}</h3>
             <p className="text-sm text-muted-foreground">
-              {formatVeryPrice(product.priceVery)} VERY × {quantity}
+              {formatVeryPrice(product.priceVery)} MOVE × {quantity}
             </p>
           </div>
         </div>
@@ -82,7 +82,7 @@ export function PurchaseStepSummary({
       <div className="flex justify-between items-center py-4 border-t border-b border-border">
         <span className="font-medium text-foreground">{t('order.totalAmount')}</span>
         <span className="text-xl font-bold text-ember">
-          {totalPrice.toFixed(4)} VERY
+          {totalPrice.toFixed(4)} MOVE
         </span>
       </div>
 

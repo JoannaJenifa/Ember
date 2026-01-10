@@ -130,7 +130,7 @@ const ChatMessageItem = memo(function ChatMessageItem({ message }: { message: Ch
           <Gift className="h-4 w-4" />
           <span className="font-medium">{message.username}</span>
           <span className="text-xs">
-            {t('tips.tip')} {message.giftAmount} VERY
+            {t('tips.tip')} {message.giftAmount} MOVE
           </span>
         </div>
       </div>

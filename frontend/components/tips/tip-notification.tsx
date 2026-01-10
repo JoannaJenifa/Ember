@@ -78,7 +78,7 @@ export function TipNotification({
               transition={{ duration: 0.4, delay: 0.3 }}
               className="text-2xl font-bold text-white"
             >
-              {amount} VERY
+              {amount} MOVE
             </motion.div>
 
             {/* Sender */}
