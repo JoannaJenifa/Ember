@@ -37,7 +37,8 @@
     "processing": "Processing...",
     "saving": "Saving...",
     "saveChanges": "Save Changes",
-    "viewTx": "View TX"
+    "viewTx": "View TX",
+    "viewTransaction": "View Transaction"
   },
   "nav": {
     "home": "Home",
@@ -454,7 +455,23 @@
     "copied": "Copied!",
     "viewExplorer": "View on Explorer",
     "notConfigured": "Wallet not configured",
-    "initializing": "Initializing..."
+    "initializing": "Initializing...",
+    "faucet": "Faucet",
+    "connectFirst": "Please connect your wallet first"
+  },
+  "faucet": {
+    "title": "Token Faucet",
+    "description": "Mint free tUSDC for testing on Movement testnet",
+    "token": "Token",
+    "amount": "Amount",
+    "recipient": "Recipient",
+    "mint": "Mint",
+    "minting": "Minting...",
+    "success": "Tokens Minted!",
+    "sentToWallet": "sent to your wallet",
+    "mintMore": "Mint More",
+    "needGas": "Need native MOVE for gas fees?",
+    "getMove": "Get MOVE from public faucet"
   },
   "register": {
     "walletRequired": "Wallet Connection Required",

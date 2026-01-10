@@ -16,13 +16,15 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { getAccountExplorerUrl } from '@/lib/aptos';
-import { Copy, ExternalLink, LogOut, Wallet, Check, Loader2 } from 'lucide-react';
+import { Copy, ExternalLink, LogOut, Wallet, Check, Loader2, Droplets } from 'lucide-react';
 import { toast } from 'sonner';
+import { FaucetDialog } from '@/components/faucet-dialog';
 
 export function WalletButton() {
   const isPrivyAvailable = usePrivyAvailable();
   const [isCreatingWallet, setIsCreatingWallet] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [faucetOpen, setFaucetOpen] = useState(false);
 
   // Only use Privy hooks when available
   const privyHook = isPrivyAvailable ? usePrivy() : null;
@@ -202,6 +204,11 @@ export function WalletButton() {
           <span>View on Explorer</span>
         </DropdownMenuItem>
 
+        <DropdownMenuItem onClick={() => setFaucetOpen(true)} className="gap-2 cursor-pointer">
+          <Droplets className="h-4 w-4" />
+          <span>Get Test USDC</span>
+        </DropdownMenuItem>
+
         <DropdownMenuSeparator />
 
         <DropdownMenuItem
@@ -212,6 +219,14 @@ export function WalletButton() {
           <span>Disconnect</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
+
+      {walletAddress && (
+        <FaucetDialog
+          open={faucetOpen}
+          onOpenChange={setFaucetOpen}
+          address={walletAddress}
+        />
+      )}
     </DropdownMenu>
   );
 }
